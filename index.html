@@ -5,12 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>PeerPrep</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" type="text/css" href="./css/styles.css">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
   </head>
   <body>
     <main>
-        <h1>Welcome to PeerPrep</h1>  
+        <h1>Welcome to PeerPrep</h1> 
+
+        <h2>Enter a new question</h2>
+        <div class="form-center">
+          <form id="questionForm">
+            <label for="questionTitle">Title:</label>
+            <input type="text" placeholder="Title" id="questionTitle" name="questionTitle">
+            <br><br>
+            <label for="questionDescription">Description:</label>
+            <input type="text" placeholder="Description" id="questionDescription" name="questionDescription">
+            <br><br>
+            <label for="questionComplexity">Complexity:</label>
+            <select name="questionComplexity">
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+            <br><br>
+            <label for="questionCategory">Category:</label>
+            <input type="text" placeholder="Category" id="questionCategory" name="questionCategory">
+            <br><br>
+            <button type="submit">Add Question</button>
+            <button id="clearAllButton" type="button">Clear All</button>
+          </form>
+        </div>
+
+        <div class="table-conatiner">
+          <table>
+            <caption>
+              Questions
+            </caption>
+            <tr>
+              <th>Title</th>
+              <th>Complexity</th>
+              <th>Category</th>
+            </tr>
+            <tr>
+              <td>Reverse a String</td>
+              <td>Easy</td>
+              <td>Strings, Algorithms</td>
+            </tr>
+            <tr>
+              <td>Linked List Cycle Detection</td>
+              <td>Easy</td>
+              <td>Data Structures, Algorithms</td>
+            </tr>
+            <tr>
+              <td>Roman to Integer</td>
+              <td>Easy</td>
+              <td>Algorithms</td>
+            </tr>
+            <tr>
+              <td>Add Binary</td>
+              <td>Easy</td>
+              <td>Bit Manipulation, Algorithms</td>
+            </tr>
+            <tr>
+              <td>Fibonacci Number</td>
+              <td>Easy</td>
+              <td>Recursion, Algorithms</td>
+            </tr>
+            <tr>
+              <td>Implement Stack using Queues</td>
+              <td>Easy</td>
+              <td>Data Structures</td>
+            </tr>
+            <tr>
+              <td>Combine Two Tables</td>
+              <td>Easy</td>
+              <td>Databases</td>
+            </tr>
+            <tr>
+              <td>Repeated DNA Sequences</td>
+              <td>Medium</td>
+              <td>Algorithms, Bit Manipulatio n</td>
+            </tr>
+            <tr>
+              <td>Course Schedule</td>
+              <td>Medium</td>
+              <td>Data Structures, Algorithms</td>
+            </tr>
+            <tr>
+              <td>LRU Cache Design</td>
+              <td>Medium</td>
+              <td>Data Structures</td>
+            </tr>
+            <tr>
+              <td>Longest Common Subsequence</td>
+              <td>Medium</td>
+              <td>Strings, Algorithms</td>
+            </tr>
+          </table>
+        </div>
     </main>
 	<script src="index.js"></script>
   </body>
