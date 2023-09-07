@@ -20,6 +20,18 @@ Run `npm test` to run all tests.
 
 ## API
 
+### GET /api/v1/status
+
+#### Response
+
+##### Body
+
+```json
+{
+    "status": "Running"
+}
+```
+
 ### POST /api/v1/questions
 
 #### Request
