@@ -8,7 +8,7 @@ name: Node.js CI
 # your repository's default branch.
 on:
   push:
-    branches: [ main ]
+    branches: [ branch-* ]
   pull_request:
     branches: [ main ]
 
