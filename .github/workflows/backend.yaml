@@ -17,8 +17,7 @@ jobs:
   # This line defines a job with the ID build that is stored within the jobs key.
   build:
     # The runs-on key in this example configures the job to run on a GitHub-hosted runner or a self-hosted runner, depending on the repository running the workflow.
-    # runs-on: [ ubuntu-latest, windows-latest, macos-latest ]
-    runs-on: ubuntu-latest
+    runs-on: [ ubuntu-latest, windows-latest, macos-latest ]
 
     # This job uses a matrix strategy to run the job once on version 18.x of Node.js.
     strategy:
