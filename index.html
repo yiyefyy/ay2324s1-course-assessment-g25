@@ -6,13 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>PeerPrep</title>
     <link rel="stylesheet" type="text/css" href="./css/styles.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
   </head>
   <body>
     <main>
         <h1>Welcome to PeerPrep</h1> 
 
-        <h2>Enter a new question</h2>
+        <h2>Add a new question</h2>
         <div class="form-center">
           <form id="questionForm">
             <label for="questionTitle">Title:</label>
@@ -38,6 +37,7 @@
 
         <div class="table-conatiner">
           <table>
+            
             <caption>
               Questions
             </caption>
@@ -46,64 +46,13 @@
               <th>Complexity</th>
               <th>Category</th>
             </tr>
-            <tr>
-              <td>Reverse a String</td>
-              <td>Easy</td>
-              <td>Strings, Algorithms</td>
-            </tr>
-            <tr>
-              <td>Linked List Cycle Detection</td>
-              <td>Easy</td>
-              <td>Data Structures, Algorithms</td>
-            </tr>
-            <tr>
-              <td>Roman to Integer</td>
-              <td>Easy</td>
-              <td>Algorithms</td>
-            </tr>
-            <tr>
-              <td>Add Binary</td>
-              <td>Easy</td>
-              <td>Bit Manipulation, Algorithms</td>
-            </tr>
-            <tr>
-              <td>Fibonacci Number</td>
-              <td>Easy</td>
-              <td>Recursion, Algorithms</td>
-            </tr>
-            <tr>
-              <td>Implement Stack using Queues</td>
-              <td>Easy</td>
-              <td>Data Structures</td>
-            </tr>
-            <tr>
-              <td>Combine Two Tables</td>
-              <td>Easy</td>
-              <td>Databases</td>
-            </tr>
-            <tr>
-              <td>Repeated DNA Sequences</td>
-              <td>Medium</td>
-              <td>Algorithms, Bit Manipulatio n</td>
-            </tr>
-            <tr>
-              <td>Course Schedule</td>
-              <td>Medium</td>
-              <td>Data Structures, Algorithms</td>
-            </tr>
-            <tr>
-              <td>LRU Cache Design</td>
-              <td>Medium</td>
-              <td>Data Structures</td>
-            </tr>
-            <tr>
-              <td>Longest Common Subsequence</td>
-              <td>Medium</td>
-              <td>Strings, Algorithms</td>
-            </tr>
+            <!-- This is where questions will be dynamically added -->
           </table>
         </div>
+
+        <!-- Button to check local storage content -->
+        <button id="checkLocalStorageButton">Check Local Storage</button>
     </main>
-	<script src="index.js"></script>
+	<script src="src/index.js"></script>
   </body>
 </html>
