@@ -20,8 +20,10 @@
  */
 
 import 'dotenv/config';
+import './data-sources/mongoose/connection.js';
 
 import express from 'express';
+import questionRouter from './api/v1/questionRouter.js';
 
 // Create an express app
 const app = express();
@@ -47,3 +49,6 @@ app.get('/api/v1/status', (req, res) => {
   // Send the JSON object as a response
   res.json(status);
 });
+
+// Configure the app to use the question router
+app.use('/api/v1/questions', questionRouter); 
