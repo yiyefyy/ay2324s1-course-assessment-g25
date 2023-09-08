@@ -16,14 +16,16 @@ on:
 jobs:
   # This line defines a job with the ID build that is stored within the jobs key.
   build:
-    # The runs-on key in this example configures the job to run on a GitHub-hosted runner or a self-hosted runner, depending on the repository running the workflow.
-    runs-on: [ ubuntu-latest, windows-latest, macos-latest ]
-
     # This job uses a matrix strategy to run the job once on version 18.x of Node.js.
     strategy:
       matrix:
+        # The platform key defines the operating system that the job runs on.
+        platform: [ ubuntu-latest, windows-latest, macos-latest ]
         # node-version: [14.x, 16.x, 18.x, 20.x]
         node-version: [ 18.x ]
+
+    # The runs-on key in this example configures the job to run on a GitHub-hosted runner or a self-hosted runner, depending on the repository running the workflow.
+    runs-on: ${{ matrix.platform }}
     
     # The steps key groups together all the steps that will run as part of the check-links job. Each job in a workflow has its own steps section.
     steps:
