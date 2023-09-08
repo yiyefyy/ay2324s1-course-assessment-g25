@@ -9,6 +9,7 @@
  * @version 1.0.0
  * @date 2023-09-07
  * 
+ * @requires dotenv
  * @requires express
  * 
  * To start the server, run `npm start` in the backend folder.
