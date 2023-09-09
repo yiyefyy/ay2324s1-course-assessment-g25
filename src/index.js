@@ -122,6 +122,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const clearAllButton = document.getElementById("clearAllButton");
     clearAllButton.addEventListener("click", function () {
         localStorage.removeItem("questions");
+        // Clear the content of the question details container
+        const questionDetailsContainer = document.getElementById("questionDetailsContainer");
+        questionDetailsContainer.innerHTML = "";
+        
+        // Refresh the question list
         displayQuestions();
     });
 
