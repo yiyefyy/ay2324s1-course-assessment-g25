@@ -20,20 +20,38 @@ document.addEventListener("DOMContentLoaded", function () {
         questions.forEach((question, index) => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td>${question.title}</td>
-                <td>${question.complexity}</td>
-                <td>${question.category}</td>
+            <td class="question-id">${index + 1}</td>
+            <td class="question-title">${question.title}</td>
+            <td>${question.complexity}</td>
+            <td>${question.category}</td>
             `;
 
             // Add an id to each row for easier manipulation
-            row.setAttribute("id", `question-row-${index}`);
+            // row.setAttribute("id", `question-row-${index}`);
+
+            // Add a click event listener to the row
+            row.addEventListener("click", function () {
+                displayQuestionDetails(question); // Call function to display details
+            });
 
             questionTableBody.appendChild(row);
         });
     }
 
-    // Display initial list of questions
-    displayQuestions();
+    // Function to display question details
+    function displayQuestionDetails(question) {
+        const detailsContainer = document.querySelector(".question-details");
+    
+        // Create a template for displaying question details
+        const detailsHTML = `
+            <h2>${question.id}. ${question.title}</h2>
+            <p><strong>Description:</strong> ${question.description}</p>
+            <p><strong>Complexity:</strong> ${question.complexity}</p>
+            <p><strong>Category:</strong> ${question.category}</p>
+        `;
+
+        detailsContainer.innerHTML = detailsHTML;
+}
 
     // Handle form submission to add a new question
     const addQuestionForm = document.getElementById("questionForm");
@@ -41,21 +59,23 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
 
         // Retrieve form values
+        // const id = document.getElementById("question").value;
         const title = document.getElementById("questionTitle").value;
         const description = document.getElementById("questionDescription").value;
         const category = document.getElementById("questionCategory").value;
         const complexity = document.querySelector("select[name='questionComplexity']").value;
 
+        // Get the existing questions from local storage
+        const questions = getQuestionsFromLocalStorage();
+
         // Create a new question object
         const newQuestion = {
+            id: questions.length + 1, // Assign the next available ID
             title,
             description,
             category,
             complexity,
         };
-
-        // Get the existing questions from local storage
-        const questions = getQuestionsFromLocalStorage();
 
         // Add the new question to the existing questions
         questions.push(newQuestion);
@@ -87,4 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Local storage is empty.");
         }
     });
+
+    // Display initial list of questions
+    displayQuestions();
 });
