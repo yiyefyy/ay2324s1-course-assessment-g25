@@ -148,36 +148,35 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    // Function to display questions from local storage in the table
-    function displayQuestionsFromLocalStorage() {
-        const questionTableBody = document.getElementById("questionTableBody");
-        questionTableBody.innerHTML = "";
+    // // Function to display questions from local storage in the table
+    // function displayQuestionsFromLocalStorage() {
+    //     const questionTableBody = document.getElementById("questionTableBody");
+    //     questionTableBody.innerHTML = "";
+    //     const questions = getQuestionsFromLocalStorage(); 
+    //     questions.forEach((question, index) => {
+    //         const row = document.createElement("tr");
+    //         row.innerHTML = `
+    //             <td>${question.id}</td>
+    //             <td>${question.title}</td>
+    //             <td>${question.complexity}</td>
+    //             <td>${question.category}</td>
+    //         `;
 
-        const questions = getQuestionsFromLocalStorage(); 
-        questions.forEach((question, index) => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${question.id}</td>
-                <td>${question.title}</td>
-                <td>${question.complexity}</td>
-                <td>${question.category}</td>
-            `;
-
-            questionTableBody.appendChild(row);
-        });
-    }
+    //         questionTableBody.appendChild(row);
+    //     });
+    // }
 
 
     // Button to check local storage content
     const checkLocalStorageButton = document.getElementById("checkLocalStorageButton");
     checkLocalStorageButton.addEventListener("click", function () {
-        // const content = localStorage.getItem("questions");
-        // if (content) {
-        //     console.log(JSON.parse(content));
-        // } else {
-        //     console.log("Local storage is empty.");
-        // }
-        displayQuestionsFromLocalStorage();
+        const content = localStorage.getItem("questions");
+        if (content) {
+            console.log(JSON.parse(content));
+        } else {
+            console.log("Local storage is empty.");
+        }
+        // displayQuestionsFromLocalStorage();
     });
 
     // Display initial list of questions

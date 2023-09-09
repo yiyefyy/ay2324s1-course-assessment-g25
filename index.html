@@ -18,13 +18,15 @@
             <input type="text" placeholder="Title" id="questionTitle" name="questionTitle">
             <br><br>
             <label for="questionDescription">Description:</label>
-            <input type="text" placeholder="Description" id="questionDescription" name="questionDescription">
+            <textarea placeholder="Description" id="questionDescription" name="questionDescription" wrap="soft"></textarea>
+
+            <!-- <input type="text" placeholder="Description" id="questionDescription" name="questionDescription"> -->
             <br><br>
             <label for="questionComplexity">Complexity:</label>
             <select name="questionComplexity" id="questionComplexity">
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
             </select>
             <br><br>
             <label for="questionCategory">Category:</label>
@@ -41,6 +43,7 @@
 
         <div class="table-conatiner">
           <table>
+            
             <caption>
               Questions
             </caption>
