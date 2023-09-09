@@ -81,6 +81,11 @@ document.addEventListener("DOMContentLoaded", function () {
         detailsContainer.innerHTML = detailsHTML;
 }
 
+    // Function to check if a question with the same title already exists
+    function isDuplicateQuestion(title, questions) {
+        return questions.some((question) => question.title === title);
+    }
+
     // Handle form submission to add a new question
     const addQuestionForm = document.getElementById("questionForm");
     addQuestionForm.addEventListener("submit", function (e) {
@@ -95,6 +100,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Get the existing questions from local storage
         const questions = getQuestionsFromLocalStorage();
+
+        // Check if a question with the same title already exists
+        if (isDuplicateQuestion(title, questions)) {
+            alert("A question with the same title already exists. Please enter a unique title.");
+            return; // Exit the function without adding the question
+        }
 
         // Create a new question object
         const newQuestion = {
