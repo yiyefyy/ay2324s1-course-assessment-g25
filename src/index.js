@@ -98,6 +98,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const category = document.getElementById("questionCategory").value;
         const complexity = document.querySelector("select[name='questionComplexity']").value;
 
+        // Check if the title is empty or contains only whitespace
+        if (title.trim() === "") {
+            alert("Title cannot be empty.");
+            return; // Exit the function without adding the question
+        }
+
         // Get the existing questions from local storage
         const questions = getQuestionsFromLocalStorage();
 
@@ -141,15 +147,37 @@ document.addEventListener("DOMContentLoaded", function () {
         displayQuestions();
     });
 
+
+    // Function to display questions from local storage in the table
+    function displayQuestionsFromLocalStorage() {
+        const questionTableBody = document.getElementById("questionTableBody");
+        questionTableBody.innerHTML = "";
+
+        const questions = getQuestionsFromLocalStorage(); 
+        questions.forEach((question, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${question.id}</td>
+                <td>${question.title}</td>
+                <td>${question.complexity}</td>
+                <td>${question.category}</td>
+            `;
+
+            questionTableBody.appendChild(row);
+        });
+    }
+
+
     // Button to check local storage content
     const checkLocalStorageButton = document.getElementById("checkLocalStorageButton");
     checkLocalStorageButton.addEventListener("click", function () {
-        const content = localStorage.getItem("questions");
-        if (content) {
-            console.log(JSON.parse(content));
-        } else {
-            console.log("Local storage is empty.");
-        }
+        // const content = localStorage.getItem("questions");
+        // if (content) {
+        //     console.log(JSON.parse(content));
+        // } else {
+        //     console.log("Local storage is empty.");
+        // }
+        displayQuestionsFromLocalStorage();
     });
 
     // Display initial list of questions
