@@ -46,6 +46,15 @@
               <th>Category</th>
             </tr>
             <!-- This is where questions will be dynamically added -->
+            <tr>
+              <td class="question-id">${question.id}</td>
+              <td class="question-title">${question.title}</td>
+              <td>${question.complexity}</td>
+              <td>${question.category}</td>
+              <td>
+                  <button class="delete-button" data-index="${index}">Delete</button>
+              </td>
+          </tr>
           </table>
         </div>
 

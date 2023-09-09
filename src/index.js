@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <td class="question-title">${question.title}</td>
             <td>${question.complexity}</td>
             <td>${question.category}</td>
+            <td><button class="delete-button" data-index="${index + 1}">Delete</button></td> <!-- Add data-index attribute -->
             `;
 
             // Add an id to each row for easier manipulation
@@ -34,8 +35,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 displayQuestionDetails(question); // Call function to display details
             });
 
+            // Add a click event listener to the delete button
+            row.querySelector(".delete-button").addEventListener("click", function () {
+                deleteQuestion(index); // Call function to delete question
+            });
+
             questionTableBody.appendChild(row);
         });
+    }
+
+
+    // Function to delete a question
+    function deleteQuestion(index) {
+        const questions = getQuestionsFromLocalStorage();
+
+        if (index >= 0 && index < questions.length) {
+            // Remove the question at the specified index
+            questions.splice(index, 1);
+
+            // Update the IDs of the remaining questions
+            for (let i = index; i < questions.length; i++) {
+                questions[i].id = i + 1;
+            }
+
+            // Save the updated questions to local storage
+            saveQuestionsToLocalStorage(questions);
+
+            // Refresh the question list
+            displayQuestions();
+        }
     }
 
     // Function to display question details
