@@ -1,5 +1,5 @@
 # This defines the name of the workflow as it will appear in the "Actions" tab of the GitHub repository.
-name: Node.js CI
+name: Frontend CI and Tests
 
 # The on key lets you define the events that trigger when the workflow is run. You can define multiple events here.
 on:
@@ -16,15 +16,16 @@ on:
 jobs:
   # This line defines a job with the ID build that is stored within the jobs key.
   build:
-    # The runs-on key in this example configures the job to run on a GitHub-hosted runner or a self-hosted runner, depending on the repository running the workflow.
-    # runs-on: [ ubuntu-latest, windows-latest, macos-latest ]
-    runs-on: ubuntu-latest
-
     # This job uses a matrix strategy to run the job once on version 18.x of Node.js.
     strategy:
       matrix:
+        # The platform key defines the operating system that the job runs on.
+        platform: [ ubuntu-latest, windows-latest, macos-latest ]
         # node-version: [14.x, 16.x, 18.x, 20.x]
         node-version: [ 18.x ]
+
+    # The runs-on key in this example configures the job to run on a GitHub-hosted runner or a self-hosted runner, depending on the repository running the workflow.
+    runs-on: ${{ matrix.platform }}
     
     # The steps key groups together all the steps that will run as part of the check-links job. Each job in a workflow has its own steps section.
     steps:
@@ -42,22 +43,22 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-          cache-dependency-path: ./backend/package-lock.json
+          cache-dependency-path: ./frontend/package-lock.json
 
       - name: Install dependencies
       # The run key tells the job to execute a command on the runner. 
       # In this example, npm ci is used to install the npm software packages for the project.
         run: npm ci
-        working-directory: ./backend
+        working-directory: ./frontend
 
       - name: Build
         # This step runs the `build` script if there is one specified under the 
       # `scripts` key in your `package.json` file.
         run: npm run build --if-present
-        working-directory: ./backend
+        working-directory: ./frontend
 
       - name: Test
       # This step runs the `test` script that is specified under the `scripts` 
       # key in your `package.json` file.
         run: npm test
-        working-directory: ./backend
+        working-directory: ./frontend
