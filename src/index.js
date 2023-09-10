@@ -147,7 +147,6 @@ document.addEventListener("DOMContentLoaded", function () {
         displayQuestions();
     });
 
-
     // // Function to display questions from local storage in the table
     // function displayQuestionsFromLocalStorage() {
     //     const questionTableBody = document.getElementById("questionTableBody");
@@ -165,7 +164,6 @@ document.addEventListener("DOMContentLoaded", function () {
     //         questionTableBody.appendChild(row);
     //     });
     // }
-
 
     // Button to check local storage content
     const checkLocalStorageButton = document.getElementById("checkLocalStorageButton");
