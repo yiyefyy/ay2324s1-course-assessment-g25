@@ -14,6 +14,14 @@ import QuestionController from '../../controllers/QuestionController.js';
 
 const questionRouter = express.Router();
 
+// Handle GET Requests to /api/v1/questions
+questionRouter.get('/', async (req, res) => {
+  const page = req.query.page ? parseInt(req.query.page) : 1;
+  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+  const result = await QuestionController.list(page, limit);
+  res.send(result);
+});
+
 // Handle POST requests to /api/v1/questions
 questionRouter.post('/', async (req, res) => {
   const result = await QuestionController.create(req.body);
