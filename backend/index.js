@@ -24,6 +24,9 @@ import './data-sources/mongoose/connection.js';
 
 import express from 'express';
 import questionRouter from './api/v1/questionRouter.js';
+import userRouter from './api/v1/userRouter.js';
+
+
 
 // Create an express app
 const app = express();
@@ -33,6 +36,12 @@ app.use(express.json());
 
 // Prepare a port for the server to listen on
 const PORT = process.env.PORT || 3000;
+
+//set engine to view 
+app.set("view engine", "ejs");
+
+//send details to backend
+app.use(express.urlencoded({extended: false}));
 
 // Configure the app to listen on the port
 app.listen(PORT, () => {
@@ -52,3 +61,6 @@ app.get('/api/v1/status', (req, res) => {
 
 // Configure the app to use the question router
 app.use('/api/v1/questions', questionRouter); 
+
+//Configure app to use the user router
+app.use('/user', userRouter);
