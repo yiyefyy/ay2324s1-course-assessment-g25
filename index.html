@@ -15,10 +15,10 @@
         <div class="form-center">
           <form id="questionForm">
             <label for="questionTitle">Title:</label>
-            <input type="text" placeholder="Title" id="questionTitle" name="questionTitle" autocomplete="off">
+            <input type="text" placeholder="Title" id="questionTitle" name="questionTitle" autocomplete="off" maxlength="100">
             <br><br>
             <label for="questionDescription">Description:</label>
-            <textarea placeholder="Description" id="questionDescription" name="questionDescription" wrap="soft"></textarea>
+            <textarea placeholder="Description" id="questionDescription" name="questionDescription" wrap="soft" maxlength="700"></textarea>
             <!-- <input type="text" placeholder="Description" id="questionDescription" name="questionDescription"> -->
             <br><br>
             <label for="questionComplexity">Complexity:</label>
@@ -29,7 +29,7 @@
             </select>
             <br><br>
             <label for="questionCategory">Category:</label>
-            <input type="text" placeholder="Category" id="questionCategory" name="questionCategory" autocomplete="off">
+            <input type="text" placeholder="Category" id="questionCategory" name="questionCategory" autocomplete="off" maxlength="100">
             <br><br>
             <div class="button-container">
               <button type="submit">Add Question</button>
