@@ -88,11 +88,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to display question details
     function displayQuestionDetails(question) {
         const detailsContainer = document.querySelector(".question-details");
+
+        // Replace newline characters with <br> tags and preserve indentation
+        const descriptionHTML = question.description.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
     
         // Create a template for displaying question details
         const detailsHTML = `
             <h2>${question.id}. ${question.title}</h2>
-            <p><strong>Description:</strong> ${question.description}</p>
+            <p><strong>Description:</strong><br>${descriptionHTML}</p>
             <p><strong>Complexity:</strong> ${question.complexity}</p>
             <p><strong>Category:</strong> ${question.category}</p>
         `;
