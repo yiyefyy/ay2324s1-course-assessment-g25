@@ -49,7 +49,16 @@ document.addEventListener("DOMContentLoaded", function () {
     function deleteQuestion(index) {
         const questions = getQuestionsFromLocalStorage();
 
-        if (index >= 0 && index < questions.length) {
+    if (index >= 0 && index < questions.length) {
+        const confirmationModal = document.getElementById("confirmationModal");
+        const confirmDeleteButton = document.getElementById("confirmDeleteButton");
+        const cancelDeleteButton = document.getElementById("cancelDeleteButton");
+
+        // Show the confirmation modal
+        confirmationModal.style.display = "block";
+
+        // Handle the "Yes" button click
+        confirmDeleteButton.onclick = function () {
             // Remove the question at the specified index
             questions.splice(index, 1);
 
@@ -63,7 +72,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Refresh the question list
             displayQuestions();
-        }
+
+            // Close the confirmation modal
+            confirmationModal.style.display = "none";
+        };
+
+        // Handle the "No" button click
+        cancelDeleteButton.onclick = function () {
+            // Close the confirmation modal without deleting the question
+            confirmationModal.style.display = "none";
+        };
+    }
     }
 
     // Function to display question details
