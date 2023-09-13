@@ -11,7 +11,7 @@
 
 import express from 'express';
 // import { user } from 'pg/lib/defaults.js';
-import {registerUser, createUser, getUserById, updateUser, deleteUser} from '../../controllers/UserController.js'; 
+import {createUser, getUserById, updateUser, deleteUser} from '../../controllers/UserController.js'; 
 
 const userRouter = express.Router();
 
