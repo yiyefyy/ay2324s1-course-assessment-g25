@@ -26,8 +26,6 @@ import express from 'express';
 import questionRouter from './api/v1/questionRouter.js';
 import userRouter from './api/v1/userRouter.js';
 
-
-
 // Create an express app
 const app = express();
 
@@ -63,4 +61,4 @@ app.get('/api/v1/status', (req, res) => {
 app.use('/api/v1/questions', questionRouter); 
 
 //Configure app to use the user router
-app.use('/user', userRouter);
+app.use('/api/v1/users', userRouter);

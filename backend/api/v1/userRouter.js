@@ -1,23 +1,48 @@
+/**
+ * User Router
+ * 
+ * This file contains the routes for the User API endpoints.
+ * 
+ * @module backend/api/v1/questionRouter
+ * 
+ * @requires express
+ * @requires backend/controllers/QuestionController
+ */
+
 import express from 'express';
-import {registerUser} from '../../controllers/UserController.js';
+// import { user } from 'pg/lib/defaults.js';
+import {registerUser, createUser, getUserById, updateUser, deleteUser} from '../../controllers/UserController.js'; 
 
+const userRouter = express.Router();
 
-const userModel = express.Router();
+// Handle POST requests to /api/v1/users
+userRouter.post('/',  createUser);
 
-userModel.get('/login', (req, res) => {
+// Handle GET requests to /api/v1/questions/:userId
+userRouter.get('/:userId', getUserById);
+
+// Handle PUT requests to /api/v1/questions/:userId
+userRouter.put('/:userId', updateUser);
+
+// Handle DELETE requests to /api/v1/questions/:userId
+userRouter.delete('/:userId', deleteUser);
+
+// IRRELEVANT code that renders to the ejs views 
+/* 
+userRouter.get('/login', (req, res) => {
     res.render("login.ejs");
 });
 
-userModel.get('/dashboard', (req, res) => {
-    res.render("dashboard.ejs", { user: '/*to leyi: u can write a getuser to get user name*/' });
-})
+userRouter.get('/dashboard', (req, res) => {
+    res.render("dashboard.ejs", { user: 'to leyi: u can write a getuser to get user name' }); 
+}) 
 
-userModel.get('/register', (req, res) => {
+userRouter.get('/register', (req, res) => {
     res.render("register.ejs");
 })
 
-userModel.post('/register', registerUser);
+userRouter.post('/register', registerUser); */ 
 
-export default userModel;
+export default userRouter;
 
 

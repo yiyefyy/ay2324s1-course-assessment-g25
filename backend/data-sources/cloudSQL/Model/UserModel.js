@@ -10,10 +10,10 @@ const UserModel = sequelize.define(
         },
         email: {
             type: Datatypes.STRING
-          },
-          password: {
+        },
+        password: {
             type: Datatypes.STRING
-          }
+        }
     }
 );
 

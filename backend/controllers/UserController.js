@@ -14,7 +14,67 @@ const pool = sqlConnection;
 
 pool.connect();
 
-export const registerUser = async (req, res) => {
+export const createUser = async (req, res) => {
+    const { name, email, password, password2 } = req.body
+
+    // check if passwords are equal 
+    if (password !== password2) {
+        return res.status(400).json({ Error: "Passwords do not match" });
+    }
+
+    pool.query('INSERT INTO public."User" (name, email, password) VALUES ($1, $2, $3) RETURNING *', 
+    [name, email, password], (err, results) => {
+      if (err) {
+        throw err
+    }
+    // console.log("User created with email: ", email)
+    res.status(200).json(results.rows[0])
+    })
+  } 
+
+export const getUserById = async (req, res) => {
+    const id = parseInt(req.params.userId)
+  
+    pool.query('SELECT * FROM public."User" WHERE id = $1', [id], (err, results) => {
+      if (err) {
+        throw err
+      }
+      res.status(200).json(results.rows[0])
+    })
+  }
+  
+export const updateUser = async (req, res) => {
+    const id = parseInt(req.params.userId)
+    console.log(req.body)
+    const { name, email } = req.body
+  
+    pool.query(
+      'UPDATE public."User" SET name = $1, email = $2 WHERE id = $3 RETURNING *',
+      [name, email, id],
+      (err, results) => {
+        if (err) {
+          throw err
+        }
+        // console.log("User modified with ID: ", id)
+        res.status(200).json(results.rows[0])
+      }
+    )
+  }
+
+export const deleteUser = (req, res) => {
+    const id = parseInt(req.params.userId)
+
+    pool.query('DELETE FROM public."User" WHERE id = $1 RETURNING *', [id], (err, results) => {
+        if (err) {
+        throw err
+        }
+        // console.log("User deleted with ID: ", id)
+        res.status(200).json(results.rows[0])
+    })
+}
+
+// to be deleted after integrating duplicate emails part into createUser
+/* export const registerUser = async (req, res) => {
     let { name, email, password, password2 } = req.body;
     console.log({
         name, email, password, password2
@@ -42,4 +102,4 @@ export const registerUser = async (req, res) => {
         }
     );
     pool.end;
-}
+} */
