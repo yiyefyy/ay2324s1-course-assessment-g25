@@ -31,15 +31,23 @@ export const createUser = async (req, res) => {
         return res.status(400).json({ Error: "Passwords do not match" });
     }
 
-    pool.query('INSERT INTO public."User" (name, email, password) VALUES ($1, $2, $3) RETURNING *', 
-    [name, email, password], (err, results) => {
-      if (err) {
-        throw err
-    }
-    // console.log("User created with email: ", email)
-    res.status(200).json(results.rows[0])
-    })
-  } 
+    pool.query(
+      'SELECT * from public."User" WHERE email = $1', [email], (err, results) => {
+          if (err) {
+              throw err
+          }
+          if (results.rows != 0) {
+            res.status(400).json({Error: "Email has been registered already"});
+          } else {
+            pool.query('INSERT INTO public."User" (name, email, password) VALUES ($1, $2, $3) RETURNING *', 
+            [name, email, password], (err, results) => {
+              if (err) {
+                throw err
+            }
+            res.status(200).json(results.rows[0])
+            })
+          }})
+}
 
 export const getUserById = async (req, res) => {
     const id = parseInt(req.params.userId)
@@ -47,9 +55,12 @@ export const getUserById = async (req, res) => {
     pool.query('SELECT * FROM public."User" WHERE id = $1', [id], (err, results) => {
       if (err) {
         throw err
-      }
+      }   
+      if (results.rows == 0) {
+        res.status(400).json({Error: "User not found"});
+      } else {
       res.status(200).json(results.rows[0])
-    })
+      }})
   }
   
 export const updateUser = async (req, res) => {
