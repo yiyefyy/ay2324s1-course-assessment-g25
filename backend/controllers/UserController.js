@@ -14,6 +14,15 @@ const pool = sqlConnection;
 
 pool.connect();
 
+export const getUsers = (req, res) => {
+  pool.query('SELECT * FROM public."User" ORDER BY id ASC', (err, results) => {
+    if (err) {
+      throw err
+    }
+    res.status(200).json(results.rows)
+  })
+}
+
 export const createUser = async (req, res) => {
     const { name, email, password, password2 } = req.body
 
