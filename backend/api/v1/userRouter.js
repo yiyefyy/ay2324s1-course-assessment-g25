@@ -11,7 +11,7 @@
 
 import express from 'express';
 // import { user } from 'pg/lib/defaults.js';
-import {getUsers, createUser, getUserById, updateUser, deleteUser} from '../../controllers/UserController.js'; 
+import {getUsers, createUser, getUserById, updateUser, deleteUser, getUserByEmail} from '../../controllers/UserController.js'; 
 
 const userRouter = express.Router();
 
@@ -23,6 +23,9 @@ userRouter.post('/',  createUser);
 
 // Handle GET requests to /api/v1/users/:userId
 userRouter.get('/:userId', getUserById);
+
+// Handle GET requests to /api/v1/users/:email
+userRouter.get('/byEmail/:email', getUserByEmail);
 
 // Handle PUT requests to /api/v1/users/:userId
 userRouter.put('/:userId', updateUser);

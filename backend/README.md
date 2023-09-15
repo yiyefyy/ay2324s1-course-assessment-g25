@@ -197,6 +197,21 @@ Run `npm test` to run all tests.
 }
 ```
 
+### GET /api/v1/users/byEmail/:email
+
+#### Response
+
+##### Body
+
+```json
+{
+    "id": "1",
+    "name": "bob",
+    "email": "bob123@mail.com",
+    "password": "bob123"
+}
+```
+
 ### PUT /api/v1/users/:userId
 
 #### Request

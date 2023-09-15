@@ -63,6 +63,22 @@ export const getUserById = async (req, res) => {
       res.status(200).json(results.rows[0])
       }})
   }
+
+  export const getUserByEmail = async (req, res) => {
+    const email = req.params.email
+    console.log("email received", email)
+  
+    pool.query('SELECT * FROM public."User" WHERE email = $1', [email], (err, results) => {
+      if (err) {
+        throw err
+      }   
+      if (results.rows == 0) {
+        res.status(400).json({Error: "email User not found"});
+      } else {
+      console.log("GET user by email result is", results.rows[0])
+      res.status(200).json(results.rows[0])
+      }})
+  }
   
 export const updateUser = async (req, res) => {
     const id = parseInt(req.params.userId)
