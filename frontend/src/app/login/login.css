@@ -1,7 +1,0 @@
-.form-group {
-    @apply mb-4;
-  }
-  
-  .form-label {
-    @apply block text-sm font-medium text-gray-700;
-  }

@@ -31,6 +31,7 @@ export const createUser = async (req, res) => {
         return res.status(400).json({ Error: "Passwords do not match" });
     }
 
+    // check if email has been registered already 
     pool.query(
       'SELECT * from public."User" WHERE email = $1', [email], (err, results) => {
           if (err) {

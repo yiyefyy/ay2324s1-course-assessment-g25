@@ -1,12 +1,11 @@
 import Image from 'next/image'
-import App from "./app";
-import Login from "./login/page.js"
+import SignIn from "./sign_in/page.js"
 
 export default function Home() {
   return (
     
     <>
-      <Login/>
+      <SignIn/>
     </>
   ) 
 
