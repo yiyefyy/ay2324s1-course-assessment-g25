@@ -2,6 +2,7 @@
 const nextConfig = {
   output: "export",
   basePath: "/ay2324s1-course-assessment-g25",
+  assetPrefix: "/ay2324s1-course-assessment-g25",
 }
 
 module.exports = nextConfig
