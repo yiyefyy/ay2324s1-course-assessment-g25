@@ -3,11 +3,10 @@
   } */
 "use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import axios from 'axios';
-
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function SignIn() {
     const [name, setName] = useState('');
@@ -102,7 +101,7 @@ export default function SignIn() {
                         </button>
                     </div>
                     <div className="m-10;">
-                        <Link href="../sign_in"
+                        <Link href="/sign_in"
                             className="w-full font-semibold focus:translate-x-1;" >
                             Existing user? Sign in here.
                         </Link>
