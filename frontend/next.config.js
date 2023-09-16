@@ -1,8 +1,12 @@
 /** @type {import('next').NextConfig} */
+const pathPrefix = process.env.NODE_ENV === "production" 
+  ? "/ay2324s1-course-assessment-g25" 
+  : ""
+
 const nextConfig = {
   output: "export",
-  basePath: "/ay2324s1-course-assessment-g25",
-  assetPrefix: "/ay2324s1-course-assessment-g25",
+  basePath: pathPrefix,
+  assetPrefix: pathPrefix,
 }
 
 module.exports = nextConfig
