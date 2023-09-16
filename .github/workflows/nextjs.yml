@@ -12,13 +12,13 @@ on:
 
    # The push key defines a Git push event, 
   # which triggers the workflow when you push commits to the repository.
-  push:
-    branches: [ branch-* ]
+  # push:
+  #   branches: [ branch-* ]
 
   # The pull_request key defines a Git pull request event,
   # which triggers the workflow when you create or update a pull request.
-  pull_request:
-    branches: [ master ]
+  # pull_request:
+  #   branches: [ master ]
 
 # The permissions key defines the permissions policy for the workflow.
 # contents: Read access to files in the repository
