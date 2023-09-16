@@ -25,15 +25,16 @@ export default function SignIn() {
         if (email !== '' && name !== '' && password !== '' && password2 !== '') {
             if (password !== password2) {
                 setError('Please check your password!')
+            } else {
+                await axios.post('http://localhost:8080/api/v1/users', { name, email, password, password2 }).then(
+                    (res) => {
+                        router.push('../sign_in')
+                    }
+                ).catch(
+                    error => console.log(error),
+                    setError('Email already registered!'),
+                )
             }
-            await axios.post('http://localhost:8080/api/v1/users', { name, email, password, password2 }).then(
-                (res) => {
-                router.push('../sign_in')
-                }
-            ).catch(
-                error => console.log(error),
-                setError('Email already registered!'),
-            )
 
         } else {
             console.log("fill in all fields")
