@@ -97,11 +97,11 @@ jobs:
         working-directory: ${{ env.working-directory }}
 
       - name: Build with Next.js
-        run: npm next build
+        run: npx --no-install next build
         working-directory: ${{ env.working-directory }}
 
       - name: Static HTML export with Next.js
-        run: npm next export
+        run: npx --no-install next export
         working-directory: ${{ env.working-directory }}
 
       - name: Upload artifact
