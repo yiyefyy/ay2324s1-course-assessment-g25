@@ -6,7 +6,7 @@ export default function Homepage() {
             {/* Navigation Bar */}
             <nav className="bg-blue-500 p-4">
                 <div className="container mx-auto">
-                <Link href="../profile" className="text-white text-2xl font-bold">
+                <Link href="/profile" className="text-white text-2xl font-bold">
                     View Profile
                 </Link> 
                 {/* Add more navigation links here */}

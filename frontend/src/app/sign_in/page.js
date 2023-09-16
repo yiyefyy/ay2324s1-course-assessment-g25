@@ -3,9 +3,8 @@
   } */
 "use client";
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'
-
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -17,7 +16,7 @@ export default function SignIn() {
     // Perform login logic here
     console.log('Email:', email);
     console.log('Password:', password);
-    router.push('../homepage');
+    router.push('/homepage');
   };
 
   return (
