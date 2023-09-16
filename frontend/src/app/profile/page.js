@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
@@ -18,12 +18,24 @@ export default function Profile() {
 
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
-
     const [error, setError] = useState('')
 
-    const userName = localStorage.getItem('name');
-    const userEmail = localStorage.getItem('email')
-    const id = localStorage.getItem('id');
+    const [storedEmail, setStoredEmail] = useState('');
+    const [storedId, setStoredId] = useState('');
+    const [storedName, setStoredName] = useState('');
+
+    useEffect(() => {
+        const userName = localStorage.getItem('name');
+        const userEmail = localStorage.getItem('email')
+        const id = localStorage.getItem('id');
+        if(userName && userEmail && id) {
+            setStoredName(userName)
+            setStoredEmail(userEmail)
+            setStoredId(id)
+        }
+    })
+
+    
 
     const router = useRouter();
 
@@ -31,7 +43,7 @@ export default function Profile() {
         e.preventDefault();
 
         if (name !== '' && email !== '') {
-            await axios.put('http://localhost:8080/api/v1/users/' + id, { name, email }).then(
+            await axios.put('http://localhost:8080/api/v1/users/' + storedId, { name, email }).then(
                 (res) => {
                     console.log(res.data),
                         localStorage.setItem('name', res.data.name),
@@ -92,13 +104,13 @@ export default function Profile() {
                 <div className="bg-white  overflow-hidden">
                     <div className="p-7">
                         {/* User Information */}
-                        <h1 className="text-lg font-semibold mb-2">Hi, {userName}</h1>
+                        <h1 className="text-lg font-semibold mb-2">Hi, {storedName}</h1>
 
                         {/* Contact Information */}
                         <div className="mt-4">
                             <p className="text-black">
                                 <span className="font-semibold">Email:</span>{" "}
-                                {userEmail}
+                                {storedEmail}
                             </p>
                         </div>
                         <>
