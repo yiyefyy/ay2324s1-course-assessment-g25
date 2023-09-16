@@ -25,6 +25,7 @@ import './data-sources/mongoose/connection.js';
 import express from 'express';
 import questionRouter from './api/v1/questionRouter.js';
 import userRouter from './api/v1/userRouter.js';
+import pkg from 'cors';
 
 // Create an express app
 const app = express();
@@ -32,8 +33,9 @@ const app = express();
 // Configure the app to parse requests with JSON payloads
 app.use(express.json());
 
+
 // Prepare a port for the server to listen on
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 //set engine to view 
 app.set("view engine", "ejs");
