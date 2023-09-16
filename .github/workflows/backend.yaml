@@ -1,5 +1,5 @@
 # The name key defines the name of the workflow.
-name: Frontend CI and Tests
+name: Backend CI and Tests
 
 # The on key defines the events that triggers the workflow.
 on:
@@ -20,7 +20,7 @@ on:
 # The jobs key defines a set of jobs that are run in parallel.
 jobs:
   # This key defines the name of the job.
-  test:
+  test-cases:
     strategy:
       matrix:
         platform: [ ubuntu-latest, windows-latest, macos-latest ]

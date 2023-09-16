@@ -20,7 +20,7 @@ on:
 # The jobs key defines a set of jobs that are run in parallel.
 jobs:
   # This key defines the name of the job.
-  test:
+  test-cases:
     strategy:
       matrix:
         platform: [ ubuntu-latest, windows-latest, macos-latest ]
