@@ -1,11 +1,9 @@
 "use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import axios from 'axios'
-import { Concert_One } from 'next/font/google';
-
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -28,7 +26,7 @@ export default function SignIn() {
         localStorage.setItem('name', res.data.name),
         localStorage.setItem('email', res.data.email),
         localStorage.setItem('id', res.data.id)
-        router.push('../homepage');
+        router.push('/homepage');
       }
       console.log('Email:', email);
       console.log('Password:', password);
@@ -72,7 +70,7 @@ export default function SignIn() {
           </div>
           {error && <div className='text-sm text-red-500'>* {error}</div>}
           <div className="m-10;">
-            <Link ="/sign_up"
+            <Link href="/sign_up"
               className="w-full font-semibold focus:translate-x-1;" >
               New user? Sign up now!
             </Link>
