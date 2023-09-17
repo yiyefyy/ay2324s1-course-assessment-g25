@@ -72,7 +72,7 @@ export default function SignIn() {
           </div>
           {error && <div className='text-sm text-red-500'>* {error}</div>}
           <div className="m-10;">
-            <Link href="../sign_up"
+            <Link ="/sign_up"
               className="w-full font-semibold focus:translate-x-1;" >
               New user? Sign up now!
             </Link>
