@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import * as FaIcons from 'react-icons/fa';
@@ -7,7 +8,6 @@ import { SideBar } from '../../components/sideBar';
 import { IconContext } from 'react-icons/lib';
 import axios from 'axios';
 import {useRouter} from 'next/navigation'
-
 
 export default function Profile() {
     const [sidebar, setsidebar] = useState(false);
@@ -35,8 +35,6 @@ export default function Profile() {
         }
     })
 
-    
-
     const router = useRouter();
 
     const handleSave = async (e) => {
@@ -60,7 +58,7 @@ export default function Profile() {
     const handleDelete = async (e) => {
         e.preventDefault();
 
-        await axios.delete('http://localhost:8080/api/v1/users/' + id).then(
+        await axios.delete('http://localhost:8080/api/v1/users/' + storedId).then(
             (res) => {
                 console.log(res.data),
                     router.push('../sign_in')
