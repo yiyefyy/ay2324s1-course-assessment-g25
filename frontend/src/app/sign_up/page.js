@@ -98,7 +98,7 @@ export default function SignIn() {
                         </button>
                     </div>
                     <div className="m-10;">
-                        <Link href="../sign_in"
+                        <Link href="/sign_in"
                             className="w-full font-semibold focus:translate-x-1;" >
                             Existing user? Sign in here.
                         </Link>
