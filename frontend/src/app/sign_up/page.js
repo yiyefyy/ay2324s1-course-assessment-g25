@@ -1,6 +1,3 @@
-/* export default function login() {
-    return <h1>Log In</h1>;
-  } */
 "use client";
 
 import { useState } from 'react';
@@ -14,26 +11,26 @@ export default function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
+    const [error, setError] = useState('')
+
     const router = useRouter();
 
-    const [error, setError] = useState('')
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Perform login logic here
 
         if (email !== '' && name !== '' && password !== '' && password2 !== '') {
             if (password !== password2) {
-                setError('Please check your password!')
+                setError('Passwords must match.')
             } else {
-                await axios.post('http://localhost:8080/api/v1/users', { name, email, password, password2 }).then(
-                    (res) => {
-                        router.push('../sign_in')
-                    }
-                ).catch(
-                    error => console.log(error),
-                    setError('Email already registered!'),
-                )
+                try {
+                    await axios.post('http://localhost:8080/api/v1/users', { name, email, password, password2 })
+
+                    // push to sign_in page if no errors 
+                    router.push('../sign_in')
+                } catch (err) {
+                    setError(err.response.data.Error)
+                } 
             }
 
         } else {
@@ -44,13 +41,12 @@ export default function SignIn() {
         console.log('Email:', email);
         console.log('Password:', password);
         console.log('Password2:', password2);
-
     };
 
     return (
         <div className="min-h-screen flex flex-col justify-center items-center bg-gray-300;">
             <div className="max-w-md px-6 py-8 bg-green-50 shadow-md rounded-lg;">
-                <h1 className="text-2xl mb-6 text-center font-semibold">Sign In</h1>
+                <h1 className="text-2xl mb-6 text-center font-semibold">Sign Up</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4;">
                         <label className="block text-sm font-medium text-gray-700;">Name:</label>
