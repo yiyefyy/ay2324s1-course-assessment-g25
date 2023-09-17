@@ -1,6 +1,3 @@
-/* export default function login() {
-    return <h1>Log In</h1>;
-  } */
 "use client";
 
 import Link from 'next/link';
@@ -17,19 +14,18 @@ export default function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Perform logic
 
     if (email === '' || password === '') {
       setError('Please fill in all fields!')
     } else {
-      const res = await axios.get('http://localhost:8080/api/v1/users/byEmail/' + email).catch((error) => { setError('Invalid email!') })
+      const res = await axios.get('http://localhost:8080/api/v1/users/byEmail/' + email).catch((error) => { setError(error.response.data.Error) })
 
       if (res.data.password !== password) {
         setError('Invalid password!')
       } else {
         localStorage.setItem('name', res.data.name),
-          localStorage.setItem('email', res.data.email),
-          localStorage.setItem('id', res.data.id)
+        localStorage.setItem('email', res.data.email),
+        localStorage.setItem('id', res.data.id)
         router.push('/homepage');
       }
       console.log('Email:', email);
