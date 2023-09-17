@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import * as FaIcons from 'react-icons/fa';
+import { useEffect, useState } from 'react';
 import * as AiIcons from 'react-icons/ai';
-import { SideBar } from '../../components/sideBar';
+import * as FaIcons from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
+import { SideBar } from '../../components/sideBar';
 
 export default function Homepage() {
     const [sidebar, setsidebar] = useState(false);
