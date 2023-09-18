@@ -37,11 +37,11 @@ export default function Home() {
         <Container className={styles.section}>
           <div className={styles.heroInfo}>
             <h1 className={styles.heroTitle}>
-              Kickstart your collaborative&nbsp;app
+              Crack the code with PeerPrep
             </h1>
             <p className={styles.heroLead}>
-              Use the Liveblocks Starter Kit to build your document-based
-              collaborative app in&nbsp;minutes.
+              Join a community of driven learners and mentors to sharpen your
+              skills with PeerPrep.
             </p>
           </div>
           <div className={styles.heroActions}>
@@ -63,55 +63,50 @@ export default function Home() {
             <Feature
               description={
                 <>
-                  A collaborative whiteboard app with included share menu,
-                  documents listing, users, groups, permissions, and more.
+                  Feature 1
                 </>
               }
-              title="Liveblocks"
+              title="Feature 1"
             />
             <Feature
               description={
                 <>
-                  Best practices followed, using a mixture of SSR and custom API
-                  endpoints. Modify documents from both client and server.
+                  Feature 2
                 </>
               }
-              title="Next.js"
+              title="Feature 2"
             />
             <Feature
               description={
                 <>
-                  Adjust our reusable interface & design system to fit your needs.
+                  Feature 3
                 </>
               }
-              title="User Interface"
+              title="Feature 3"
             />
             <Feature
               description={
                 <>
-                  All custom client and server functions are fully typed, and easy
-                  to update.
+                  Feature 4
                 </>
               }
-              title="TypeScript"
+              title="Feature 4"
             />
             <Feature
               description={
                 <>
-                  Complete authentication, compatible with any NextAuth provider,
-                  including GitHub, Google, Auth0, and many more.
+                  Feature 5
                 </>
               }
-              title="NextAuth.js"
+              title="Feature 5"
             />
             <Feature
               description={
                 <>
-                  See data update live using the SWR (state-while-revalidate)
-                  library.
+                  Feature 6
                 </>
               }
-              title="SWR"
+              title="Feature 6"
             />
           </div>
         </Container>
