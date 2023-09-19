@@ -69,3 +69,28 @@ jobs:
       # key in your `package.json` file.
         run: npm test
         working-directory: ${{ env.working-directory }}
+
+      - name: Upload coverage
+      # This step uses the actions/upload-artifact action to upload the
+      # coverage folder as an artifact of the workflow run.
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: ${{ env.working-directory }}/coverage
+
+      - name: Upload build
+      # This step uses the actions/upload-artifact action to upload the
+      # build folder as an artifact of the workflow run.
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: ${{ env.working-directory }}/build
+
+      - name: Upload test results
+      # This step uses the actions/upload-artifact action to upload the
+      # test-results folder as an artifact of the workflow run.
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: ${{ env.working-directory }}/test-results
+
