@@ -114,7 +114,6 @@ jobs:
       matrix:
         platform: [ ubuntu-latest ]
         node-version: [ 18.x ]
-        # node-version: [14.x, 16.x, 18.x, 20.x]
 
     # The runs-on key tells the job to run on a specific operating system.
     runs-on: ${{ matrix.platform }}
