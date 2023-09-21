@@ -23,14 +23,9 @@ export default function Homepage() {
     useEffect(() => {
         const name = localStorage.getItem('name');
         if (name) {
-            setStoredName(name)
+            setStoredName(name);
         }
-        
-        // Load questions from localStorage on the client-side
-        const storedQuestions = localStorage.getItem("questions");
-        const parsedQuestions = storedQuestions ? JSON.parse(storedQuestions) : [];
-        setQuestions(parsedQuestions);
-    }, []);
+    }, [setStoredName]); 
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
