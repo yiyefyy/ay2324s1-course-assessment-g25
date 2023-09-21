@@ -5,7 +5,7 @@ import * as AiIcons from 'react-icons/ai';
 import * as FaIcons from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
 import { SideBar } from '../../components/sideBar';
-import 'frontend/src/app/styles.css';
+import '../styles.css';
 
 export default function Homepage() {
     const [sidebar, setsidebar] = useState(false);
