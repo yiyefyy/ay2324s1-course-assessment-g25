@@ -12,6 +12,7 @@ export default function Homepage() {
     const showSideBar = () => setsidebar(!sidebar);
     const [storedName, setStoredName] = useState('');
     const [questions, setQuestions] = useState([]);
+    const [selectedQuestion, setSelectedQuestion] = useState(null);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -50,7 +51,7 @@ export default function Homepage() {
         }
     
         if (isDuplicateQuestion(title, questions)) {
-            alert("A question with the same title already exists. Please enter a unique title.");
+            alert("A question with the same title already exists. \nPlease enter a unique title.");
             return;
         }
     
@@ -89,6 +90,33 @@ export default function Homepage() {
         updatedQuestions.splice(index, 1);
         setQuestions(updatedQuestions);
         localStorage.setItem("questions", JSON.stringify(updatedQuestions));
+    };
+
+    const displayQuestionDetails = (question) => {
+        const detailsContainer = document.querySelector(".question-details");
+    
+        // Replace newline characters with <br> tags and preserve indentation
+        const descriptionHTML = question.description.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
+    
+        // Create a template for displaying question details
+        const detailsHTML = `
+            <h2>${question.id}. ${question.title}</h2>
+            <p><strong>Description:</strong><br>${descriptionHTML}</p>
+            <p><strong>Complexity:</strong> ${question.complexity}</p>
+            <p><strong>Category:</strong> ${question.category}</p>
+        `;
+    
+        detailsContainer.innerHTML = detailsHTML;
+    };
+
+    const handleQuestionClick = (question) => {
+        setSelectedQuestion(question);
+    };
+
+    const handleClearAll = () => {
+        setQuestions([]);
+        
+        localStorage.removeItem("questions");
     };
 
 
@@ -433,13 +461,20 @@ export default function Homepage() {
                     <textarea
                         placeholder="Description"
                         id="questionDescription"
-                        name="questionDescription"
+                        name="description" // Make sure the name matches the property in formData
                         wrap="soft"
                         maxLength="700"
+                        onChange={handleInputChange} // Add an onChange event handler
+                        value={formData.description} // Bind the value to your component state
                     ></textarea>
                     <br /><br />
                     <label htmlFor="questionComplexity">Complexity:</label>
-                    <select name="questionComplexity" id="questionComplexity">
+                    <select
+                        name="complexity"
+                        id="questionComplexity"
+                        onChange={handleInputChange}
+                        value={formData.complexity}
+                    >
                         <option value="Easy">Easy</option>
                         <option value="Medium">Medium</option>
                         <option value="Hard">Hard</option>
@@ -450,14 +485,16 @@ export default function Homepage() {
                         type="text"
                         placeholder="Category"
                         id="questionCategory"
-                        name="questionCategory"
+                        name="category"  // Change the name attribute to "category"
                         autoComplete="off"
                         maxLength="100"
+                        onChange={handleInputChange}
+                        value={formData.category}
                     />
                     <br /><br />
                     <div className="button-container">
-                        <button type="submit">Add Question</button>
-                        <button id="clearAllButton" type="button">Clear All</button>
+                        <button id="addQuestionButton" type="submit">Add Question</button>
+                        <button id="clearAllButton" type="button" onClick={handleClearAll}>Clear All</button>
                     </div>
                     </form>
                 </div>
@@ -488,7 +525,7 @@ export default function Homepage() {
                     <tbody>
                         {/* This is where questions will be dynamically added */}
                         {questions.map((question, index) => (
-                            <tr key={index}>
+                            <tr key={index} onClick={() => handleQuestionClick(question)}>
                                 <td className="question-id">{index + 1}</td>
                                 <td className="question-title">{question.title}</td>
                                 <td>{question.complexity}</td>
@@ -496,19 +533,27 @@ export default function Homepage() {
                                 <td>
                                     <button
                                         className="delete-button"
+                                        data-index={index}
                                         onClick={() => handleDelete(index)}
                                     >
                                         Delete
-                                     </button>
-                                 </td>
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                     </table>
                 </div>
 
-                <div className="question-details" id="questionDetailsContainer">
-                    {/* Details of the selected question will be displayed here */}
+                <div className="question-details mt-10 mb-10" id="questionDetailsContainer">
+                    {selectedQuestion && (
+                        <>
+                            <h2>{selectedQuestion.title}</h2>
+                            <p><strong>Description:</strong><br/>{selectedQuestion.description}</p>
+                            <p><strong>Complexity:</strong> {selectedQuestion.complexity}</p>
+                            <p><strong>Category:</strong> {selectedQuestion.category}</p>
+                        </>
+                    )}
                 </div>
 
                 {/* Button to check local storage content */}
