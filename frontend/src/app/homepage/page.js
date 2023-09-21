@@ -7,9 +7,7 @@ import { IconContext } from 'react-icons/lib';
 import { SideBar } from '../../components/sideBar';
 import '/Users/wangxinyi/Desktop/3219 Assignment/frontend/src/app/styles.css';
 
-
 export default function Homepage() {
-
     const [sidebar, setsidebar] = useState(false);
     const showSideBar = () => setsidebar(!sidebar);
     const [storedName, setStoredName] = useState('');
@@ -83,6 +81,14 @@ export default function Homepage() {
 
     const isDuplicateQuestion = (title, questions) => {
         return questions.some((question) => question.title === title);
+    };
+
+
+    const handleDelete = (index) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions.splice(index, 1);
+        setQuestions(updatedQuestions);
+        localStorage.setItem("questions", JSON.stringify(updatedQuestions));
     };
 
 
@@ -402,12 +408,13 @@ export default function Homepage() {
                 </div>
             </IconContext.Provider>
 
-            <p className="p-7 text-lg font-semibold mb-2">Welcome to PeerPrep, {storedName}</p>
-            <p className="p-7 text-lg font-semibold mb-2">Here are some questions to get you started:</p>
-
+            <div className="text-center mt-10 mb-10">
+                <p className="text-3xl font-semibold mb-4">Welcome to PeerPrep, {storedName}</p>
+                <p className="text-lg font-normal">Here are some questions to get you started</p>
+            </div>
 
             <main>
-                <h2>Add a new question</h2>
+                <h2>Add a new question here: </h2>
                 <div className="form-center">
                     <form id="questionForm" onSubmit={handleSubmit}>
                     <label htmlFor="questionTitle">Title:</label>
@@ -455,14 +462,14 @@ export default function Homepage() {
                     </form>
                 </div>
 
-                {/* Add a modal for confirmation */}
+                {/* Add a modal for confirmation
                 <div id="confirmationModal" className="modal">
                     <div className="modal-content">
                     <p>Are you sure you want to delete this question?</p>
                     <button id="confirmDeleteButton">Yes</button>
                     <button id="cancelDeleteButton">No</button>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="table-conatiner">
                     <table>
@@ -489,8 +496,7 @@ export default function Homepage() {
                                 <td>
                                     <button
                                         className="delete-button"
-                                        data-index={index}
-                                        onClick={() => deleteQuestion(index)}
+                                        onClick={() => handleDelete(index)}
                                     >
                                         Delete
                                      </button>
