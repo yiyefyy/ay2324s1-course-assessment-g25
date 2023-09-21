@@ -556,10 +556,10 @@ export default function Homepage() {
                     )}
                 </div>
 
-                {/* Button to check local storage content */}
+                {/* Button to check local storage content
                 <div className="button-container">
                     <button id="checkLocalStorageButton">Check Local Storage in Console</button>
-                </div>
+                </div> */}
             </main>
         </div>
 
