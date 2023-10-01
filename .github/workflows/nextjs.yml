@@ -45,7 +45,6 @@ jobs:
       matrix:
         platform: [ ubuntu-latest ]
         node-version: [ 18.x ]
-        # node-version: [14.x, 16.x, 18.x, 20.x]
 
     # The runs-on key tells the job to run on a specific operating system.
     runs-on: ${{ matrix.platform }}
@@ -115,7 +114,6 @@ jobs:
       matrix:
         platform: [ ubuntu-latest ]
         node-version: [ 18.x ]
-        # node-version: [14.x, 16.x, 18.x, 20.x]
 
     # The runs-on key tells the job to run on a specific operating system.
     runs-on: ${{ matrix.platform }}
@@ -124,11 +122,12 @@ jobs:
     env:
       working-directory: ./frontend
 
-    # The environment key sets environment variables that are available to 
-    # all jobs and steps in the workflow.
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    # # The environment key sets environment variables that are available to 
+    # # all jobs and steps in the workflow.
+    # environment:
+    #   # The environment name must only contain alphanumeric characters and underscores.
+    #   name: github-pages
+    #   url: ${{ steps.deployment.outputs.page_url }}
 
     # The needs key lists any jobs that must complete successfully before
     needs: build
