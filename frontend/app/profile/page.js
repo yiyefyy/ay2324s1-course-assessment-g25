@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
-import { SideBar } from '../../components/sideBar';
-import { IconContext } from 'react-icons/lib';
+import * as FaIcons from 'react-icons/fa';
+
+import { useEffect, useState } from 'react';
+
+import { SideBar } from '@/components/sideBar';
 import axios from 'axios';
-import {useRouter} from 'next/navigation'
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { IconContext } from 'react-icons/lib';
 
 export default function Profile() {
     const [sidebar, setsidebar] = useState(false);

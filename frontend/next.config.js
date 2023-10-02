@@ -4,9 +4,10 @@ const pathPrefix = process.env.NODE_ENV === "production"
   : ""
 
 const nextConfig = {
-  output: "export",
-  basePath: pathPrefix,
   assetPrefix: pathPrefix,
+  basePath: pathPrefix,
+  // output: "export",
+  reactStrictMode: true,
 }
 
 module.exports = nextConfig
