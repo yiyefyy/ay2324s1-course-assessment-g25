@@ -12,17 +12,17 @@ import Link from 'next/link'
 import { IconContext } from 'react-icons/lib'
 
 export default function Dashboard() {
-  const [sidebar, setsidebar] = useState(false);
-  const showSideBar = () => setsidebar(!sidebar);
-  const [storedName, setStoredName] = useState('');
-  const [questions, setQuestions] = useState([]);
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [sidebar, setsidebar] = useState(false as boolean);
+  const showSideBar = () => setsidebar(!sidebar as boolean);
+  const [storedName, setStoredName] = useState('' as string);
+  const [questions, setQuestions] = useState([] as any[]);
+  const [selectedQuestion, setSelectedQuestion] = useState(null as any);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     category: '',
     complexity: 'Easy',
-  });
+  } as any);
 
   useEffect(() => {
     const name = localStorage.getItem('name');
@@ -31,15 +31,15 @@ export default function Dashboard() {
     }
   }, [setStoredName]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setFormData((prevData: any) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
 
     const { title, description, category, complexity } = formData;
@@ -79,20 +79,22 @@ export default function Dashboard() {
     console.log("New question added:", newQuestion); // Log the new question for debugging
   };
 
-  const isDuplicateQuestion = (title, questions) => {
-    return questions.some((question) => question.title === title);
+  const isDuplicateQuestion = (title: string, questions: any) => {
+    return questions.some((question: any) => question.title === title);
   };
 
 
-  const handleDelete = (index) => {
+  const handleDelete = (index: number) => {
     const updatedQuestions = [...questions];
     updatedQuestions.splice(index, 1);
     setQuestions(updatedQuestions);
     localStorage.setItem("questions", JSON.stringify(updatedQuestions));
   };
 
-  const displayQuestionDetails = (question) => {
+  const displayQuestionDetails = (question: any) => {
     const detailsContainer = document.querySelector(".question-details");
+
+    if (!detailsContainer) return;
 
     // Replace newline characters with <br> tags and preserve indentation
     const descriptionHTML = question.description.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
@@ -108,7 +110,7 @@ export default function Dashboard() {
     detailsContainer.innerHTML = detailsHTML;
   };
 
-  const handleQuestionClick = (question) => {
+  const handleQuestionClick = (question: any) => {
     setSelectedQuestion(question);
   };
 
@@ -165,7 +167,7 @@ export default function Dashboard() {
               id="questionTitle"
               name="title"
               autoComplete="off"
-              maxLength="100"
+              maxLength={100}
               onChange={handleInputChange} // Add an onChange event handler
               value={formData.title} // Bind the value to your component state
             />
@@ -176,7 +178,7 @@ export default function Dashboard() {
               id="questionDescription"
               name="description" // Make sure the name matches the property in formData
               wrap="soft"
-              maxLength="700"
+              maxLength={700}
               onChange={handleInputChange} // Add an onChange event handler
               value={formData.description} // Bind the value to your component state
             ></textarea>
@@ -200,7 +202,7 @@ export default function Dashboard() {
               id="questionCategory"
               name="category"  // Change the name attribute to "category"
               autoComplete="off"
-              maxLength="100"
+              maxLength={100}
               onChange={handleInputChange}
               value={formData.category}
             />
