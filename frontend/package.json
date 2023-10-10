@@ -16,6 +16,7 @@
     "eslint-config-next": "latest",
     "next": "^13.5.4",
     "next-auth": "latest",
+    "next-google-fonts": "^2.2.0",
     "nodemon": "latest",
     "postcss": "latest",
     "react": "latest",

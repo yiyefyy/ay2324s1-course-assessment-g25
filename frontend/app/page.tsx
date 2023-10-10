@@ -1,10 +1,52 @@
 import SignInButtonWrapper from '@/wrappers/SignInButtonWrapper';
+import MatchButtonWrapper from '../wrappers/MatchButtonWrapper';
 import { getServerSession } from 'next-auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { authOptions } from './api/auth/[...nextauth]/authOptions';
+import { useEffect } from 'react';
+import { GoogleFonts } from 'next-google-fonts';
+import Head from 'next/head';
+import CustomButton from '../components/customButton';
+import { SignInIcon } from '../icons';
+import { signIn } from "next-auth/react";
 
-export default async function Home() {
+
+export default function Home() {
+
+  return (
+    <>
+
+
+      <div className="bg-white min-h-screen">
+        <div className="bg-[#B9E8DF] flex justify-between items-center h-20 px-32">
+          <div>
+            FANCY P 
+          </div>
+          <SignInButtonWrapper>
+            Sign in
+          </SignInButtonWrapper>        
+        </div>
+        <main className='my-10 mx-32'>
+          <h1 className='font-dmserif font-semibold text-7xl mb-5'>PeerPrep</h1>
+          <h2 className='font-dmserif italic text-xl'>prep with peers for technical assessments</h2>
+          <div id='matchRequestBox' className='flex items-center justify-between bg-white shadow-md py-4 px-8 rounded-md my-10'>
+            <div className='flex'>
+              <h1 className='font-dmserif font-semibold text-xl'>prepare for a </h1>
+              <h1 className='font-dmserif font-semibold text-xl'>question today</h1>
+            </div>
+
+            <MatchButtonWrapper>MATCH</MatchButtonWrapper>
+          </div>
+        </main>
+      </div>
+    </>
+
+
+  )
+}
+
+/* export default async function Home() {
   const session = await getServerSession(authOptions);
 
   return (
@@ -51,7 +93,6 @@ export default async function Home() {
       )}
 
       <div>
-        {/* <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]"> */}
         <SignInButtonWrapper>
           Sign in
         </SignInButtonWrapper>
@@ -129,4 +170,4 @@ export default async function Home() {
 
     </main>
   )
-}
+} */
