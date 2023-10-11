@@ -17,8 +17,6 @@ export default function Home() {
 
   return (
     <>
-
-
       <div className="bg-white min-h-screen">
         <div className="bg-theme flex justify-between items-center h-20 px-32">
           <div>
@@ -37,7 +35,6 @@ export default function Home() {
               <DifficultySelectionWrapper/>
               <h1 className='font-dmserif font-semibold text-xl'>question today</h1>
             </div>
-
             <MatchButtonWrapper>MATCH</MatchButtonWrapper>
           </div>
         </main>

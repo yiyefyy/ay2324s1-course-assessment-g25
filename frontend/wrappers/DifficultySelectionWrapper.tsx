@@ -1,16 +1,13 @@
 'use client'
 
-
-// import { CheckIcon } from '@heroicons/react/20/solid'
-// import { CheckIcon } from '../icons'
 import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
 const difficulty = [
-  { id: 1, name: 'Easy' },
-  { id: 2, name: 'Medium' },
-  { id: 3, name: 'Hard' },
+  { id: 1, name: 'easy' },
+  { id: 2, name: 'medium' },
+  { id: 3, name: 'hard' },
 ]
 
 export default function DifficultySelectionWrapper() {
@@ -20,12 +17,12 @@ export default function DifficultySelectionWrapper() {
     <div className="relative w-64 px-5">
     <Listbox value={selectedDifficulty} onChange={setSelectedDifficulty}>
       <div className="relative mt-1">
-        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-theme py-2 text-white text-bold shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-500 border py-2 text-theme font-dmserif font-semibold text-lg focus:outline-none focus-visible:border-theme focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
           <span className="block truncate flex items-center justify-between px-2"> 
 
             <span className="block truncate">{selectedDifficulty.name}</span>
                 <ChevronUpDownIcon
-                className="h-5 w-5 text-gray-400"
+                className="h-5 w-5 "
                 aria-hidden="true"
                 />
           </span>
@@ -42,7 +39,7 @@ export default function DifficultySelectionWrapper() {
                 key={itemIdx}
                 className={({ active }) =>
                   `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                    active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
+                    active ? 'bg-theme text-gray-500' : 'text-gray-500'
                   }`
                 }
                 value={item}

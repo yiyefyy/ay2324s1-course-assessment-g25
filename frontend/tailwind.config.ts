@@ -6,6 +6,7 @@ const config: Config = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './wrappers/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
@@ -19,6 +20,12 @@ const config: Config = {
         dmserif: ["DM Serif Display", "serif"],
       }, 
       backgroundColor: {
+        theme: '#B9E8DF'
+      },
+      borderColor: {
+        theme: '#B9E8DF'
+      },
+      textColor: {
         theme: '#B9E8DF'
       }
     },
