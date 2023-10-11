@@ -1,10 +1,11 @@
-import SignInButtonWrapper from '@/wrappers/SignInButtonWrapper';
+import SignInButtonWrapper from '../wrappers/SignInButtonWrapper';
 import MatchButtonWrapper from '../wrappers/MatchButtonWrapper';
+import DifficultySelectionWrapper from '../wrappers/DifficultySelectionWrapper';
 import { getServerSession } from 'next-auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { authOptions } from './api/auth/[...nextauth]/authOptions';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { GoogleFonts } from 'next-google-fonts';
 import Head from 'next/head';
 import CustomButton from '../components/customButton';
@@ -19,7 +20,7 @@ export default function Home() {
 
 
       <div className="bg-white min-h-screen">
-        <div className="bg-[#B9E8DF] flex justify-between items-center h-20 px-32">
+        <div className="bg-theme flex justify-between items-center h-20 px-32">
           <div>
             FANCY P 
           </div>
@@ -33,6 +34,7 @@ export default function Home() {
           <div id='matchRequestBox' className='flex items-center justify-between bg-white shadow-md py-4 px-8 rounded-md my-10'>
             <div className='flex'>
               <h1 className='font-dmserif font-semibold text-xl'>prepare for a </h1>
+              <DifficultySelectionWrapper/>
               <h1 className='font-dmserif font-semibold text-xl'>question today</h1>
             </div>
 
