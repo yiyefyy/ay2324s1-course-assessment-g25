@@ -14,10 +14,10 @@ export default function DifficultySelectionWrapper() {
   const [selectedDifficulty, setSelectedDifficulty] = useState(difficulty[0])
 
   return (
-    <div className="relative w-64 px-5">
+    <div className="relative w-56 px-5">
     <Listbox value={selectedDifficulty} onChange={setSelectedDifficulty}>
       <div className="relative mt-1">
-        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-500 border py-2 text-theme font-dmserif font-semibold text-lg focus:outline-none focus-visible:border-theme focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-500 border py-2 text-theme font-dmserif font-semibold text-xl focus:outline-none focus-visible:border-theme focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
           <span className="block truncate flex items-center justify-between px-2"> 
 
             <span className="block truncate">{selectedDifficulty.name}</span>
