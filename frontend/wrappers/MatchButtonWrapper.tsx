@@ -29,10 +29,8 @@ export default function MatchButtonWrapper({
     if (session) {
       // User is logged in
       openModal()
-      console.log('User is logged in', session.user.name);
     } else {
       // User is not logged in
-      console.log('User is not logged in');
       signIn()
     }  }
 
