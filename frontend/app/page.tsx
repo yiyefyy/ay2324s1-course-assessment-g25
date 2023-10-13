@@ -12,7 +12,6 @@ import Link from 'next/link';
 import { authOptions } from './api/auth/[...nextauth]/authOptions';
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import CustomButton from '../components/customButton';
 import { SignInIcon } from '../icons';
 import { signIn } from "next-auth/react";
 
