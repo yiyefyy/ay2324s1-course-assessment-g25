@@ -40,7 +40,7 @@ export default function MatchButtonWrapper({
     }
 
     useEffect(() => {
-      let interval;
+      let interval: number;
   
       if (isOpen) {
         interval = window.setInterval(() => {
