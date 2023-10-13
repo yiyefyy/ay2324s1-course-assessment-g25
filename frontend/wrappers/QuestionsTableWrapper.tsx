@@ -4,9 +4,15 @@ import { GET } from '../app/api/v1/questions/route'
 import { NextRequest } from "next/server";
 import { useEffect, useState } from 'react'
 
+interface Question {
+    title: string;
+    complexity: string;
+    category: string;
+}
+
 export default function QuestionsTableWrapper() {
 
-    const [questions, setQuestions] = useState([]);
+    const [questions, setQuestions] = useState<Question[]>([]);
 
     const BASE_URL = process.env.BASE_URL || 'http://localhost:8080'
 
