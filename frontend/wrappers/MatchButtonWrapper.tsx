@@ -10,7 +10,7 @@ export default function MatchButtonWrapper({
   session
 }: {
   children: React.ReactNode;
-  session: Session
+  session: Session | null; 
 }) {
 
   let [isOpen, setIsOpen] = useState(false)
