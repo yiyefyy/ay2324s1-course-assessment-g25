@@ -56,9 +56,9 @@ export default function QuestionsTableWrapper() {
                 className={index % 2 === 1 ? 'bg-theme bg-opacity-20' : 'bg-white'}
               >
                 <td className="py-1 pl-1">{index + 1}</td>
-                <td className="py-1 ">{question.title}</td>
-                <td className="py-1 ">{question.complexity}</td>
-                <td className="py-1 ">{question.category}</td>
+                <td className="py-1 ">{question.title || ''}</td>
+                <td className="py-1 ">{question.complexity || ''}</td>
+                <td className="py-1 ">{question.category || ''}</td>
                 <td className="py-1">
                   <button
                     className="delete-button bg-red-500 text-white px-3 py-1 rounded font-medium"
