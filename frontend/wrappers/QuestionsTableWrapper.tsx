@@ -16,7 +16,7 @@ export default function QuestionsTableWrapper() {
             const response = await GET(new NextRequest(BASE_URL + '/api/v1/questions?page=1&limit=10', { method: 'GET' }));
             const data = await response.json();
             setQuestions(data); 
-          } catch (error) {
+          } catch (error: any) {
             console.error('Error fetching data:', error.message);
           }
         };
