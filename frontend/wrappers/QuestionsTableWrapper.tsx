@@ -24,14 +24,14 @@ export default function QuestionsTableWrapper() {
         fetchData();
       }, []);
 
-    const handleDelete = (index) => {
+    const handleDelete = (index: any) => {
         /* const updatedQuestions = [...questions];
         updatedQuestions.splice(index, 1);
         setQuestions(updatedQuestions);
         localStorage.setItem("questions", JSON.stringify(updatedQuestions)); */
     };
 
-    const handleQuestionClick = (question) => {
+    const handleQuestionClick = (question: any) => {
         /* setSelectedQuestion(question); */
     };
 
