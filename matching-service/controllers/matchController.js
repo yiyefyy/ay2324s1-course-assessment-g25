@@ -1,5 +1,5 @@
-const {axios} = require("axios")
 const { Match, Pair } = require('../models');
+const { axios } = require('axios')
 
 const findMatch = async (req, res, next) => {
     try {
@@ -9,18 +9,17 @@ const findMatch = async (req, res, next) => {
         const match = await Match.findOne({
             where: {
                 complexity,
-                username: { $ne: username1 }
+                /* username: { $ne: username1 } */
             },
-            raw: true,
         });
 
         if ((match instanceof Match) && match.username != username1) {
             if (match.username !== username1) {
                 const username2 = match.username;
-                const qns = await axios.get('https://localhost:8080/questions/')
+                const qns = async() => {await axios.get(`https://localhost:8080/api/v1/questions`)}
                 let qn;
-                for (const question of qns.data) {
-                    if (question.complexity === complexity) {
+                for (const question of qns) {
+                    if (question.complexity == complexity) {
                         qn = question;
                         break;
                     }
@@ -29,7 +28,7 @@ const findMatch = async (req, res, next) => {
                     username1: username1,
                     username2: username2,
                     complexity: complexity,
-                    question: qn.id
+                    question: qn._id
                 })
                 res.status(200).json({ res: pair })
             }
@@ -39,22 +38,23 @@ const findMatch = async (req, res, next) => {
                 complexity: complexity
             })
 
-            setTimeout(async () => {
+            /* setTimeout(async () => { */
+            const startTime = Date.now();
+            while (!match && Date.now() - startTime < 30000) {
                 const match = await Match.findOne({
                     where: {
                         complexity,
-                        username: { $ne: username1 },
+                        /* username: { $ne: username1 }, */
                     },
-                    raw: true,
                 });
 
-                if (match && match.username !== username1) {
+                if (match instanceof match && match.username !== username1) {
                     const username2 = match.username;
-                    const qns = await axios.get('https://localhost:8080/questions/');
+                    const qns = async() => {await axios.get(`https://localhost:8080/api/v1/questions`)}
 
                     let qn;
-                    for (const question of qns.data) {
-                        if (question.complexity === complexity) {
+                    for (const question of qns) {
+                        if (question.complexity == complexity) {
                             qn = question;
                             break;
                         }
@@ -65,15 +65,17 @@ const findMatch = async (req, res, next) => {
                             username1: username1,
                             username2: username2,
                             complexity: complexity,
-                            question: qn.id,
+                            question: qn._id,
                         });
 
                         res.status(200).json({ res: pair });
                     }
+
                 }
-            }, 30000);
+            }
+            res.status(404).json({ error: 'No match found, please try again later' });
         }
-        res.status(404).json({ error: 'No match found, please try again later' });
+
     } catch (err) {
         next(err)
     }
@@ -84,12 +86,12 @@ const cancelFindMatch = async (req, res, next) => {
         const name = req.params.username;
 
         const match = await Match.findOne({
-            where: { username: username1 }
+            where: { username: name }
         })
         if (!match) {
             res.status(404).json({ error: "Match does not exist!" });
         } else {
-            await Match.destroy({where: {username: name}})
+            await Match.destroy({ where: { username: name } })
         }
         res.sendStatus(204)
 
@@ -102,10 +104,12 @@ const getPairByUsername = async (req, res, next) => {
     try {
         const username = req.params.username;
         const pair = await Pair.findOne({
-            $or: [
-                { username1: username },
-                { username2: username }
-            ]
+            where: {
+                [Op.or]: [
+                    { username1: username },
+                    { username2: username }
+                ]
+            }
         })
         if (pair instanceof Pair) {
             res.status(200).json({ res: pair })
@@ -117,23 +121,45 @@ const getPairByUsername = async (req, res, next) => {
     }
 }
 
+const getAllPairs = async (req, res, next) => {
+    try {
+        const pairList = await Pair.findAll();
+        res.status(200).json({ res: pairList })
+    } catch (err) {
+        next(err)
+    }
+}
+
+const getAllMatch = async (req, res, next) => {
+    try {
+        const matchList = await Match.findAll();
+        res.status(200).json({ res: matchList })
+    } catch (err) {
+        next(err)
+    }
+}
+
 const deletePair = async (req, res, next) => {
     try {
         const username = req.params.username
         const pair = await Pair.findOne({
-            $or: [
-                { username1: username },
-                { username2: username }
-            ]
+            where: {
+                [Op.or]: [
+                    { username1: username },
+                    { username2: username }
+                ]
+            }
         })
         if (!pair) {
-            res.status(404).json({ error: 'Pair is not found'})
+            res.status(404).json({ error: 'Pair is not found' })
         }
         await Pair.destroy({
-            $or: [
-                { username1: username },
-                { username2: username }
-            ]
+            where: {
+                [Op.or]: [
+                    { username1: username },
+                    { username2: username }
+                ]
+            }
         })
     } catch (err) {
         next(err)
@@ -144,7 +170,9 @@ module.exports = {
     findMatch,
     cancelFindMatch,
     getPairByUsername,
-    deletePair
+    deletePair,
+    getAllPairs,
+    getAllMatch
 }
 
 
