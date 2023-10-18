@@ -16,11 +16,11 @@ module.exports = (sequelize, DataTypes) => {
         complexity: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
+        }/* ,
         question: {
             type: DataTypes.STRING,
-            allowNull: false
-        }
+            allowNull: true
+        } */
     }, {
         tableName: 'pairs',
         timestamps: false, // If you don't want Sequelize to manage createdAt and updatedAt columns

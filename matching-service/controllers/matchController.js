@@ -1,10 +1,12 @@
 const { Match, Pair } = require('../models');
-const { axios } = require('axios')
+/* const { axios } = require('axios') */
+const { Op } = require('sequelize');
 
 const findMatch = async (req, res, next) => {
     try {
         const username1 = req.body.username;
         const complexity = req.body.complexity;
+        //const qn_id = req.params.qn_id
 
         const match = await Match.findOne({
             where: {
@@ -16,19 +18,19 @@ const findMatch = async (req, res, next) => {
         if ((match instanceof Match) && match.username != username1) {
             if (match.username !== username1) {
                 const username2 = match.username;
-                const qns = async() => {await axios.get(`https://localhost:8080/api/v1/questions`)}
+                /* const qns = async() => {await axios.get(`https://localhost:8080/api/v1/questions`)}
                 let qn;
                 for (const question of qns) {
                     if (question.complexity == complexity) {
                         qn = question;
                         break;
                     }
-                }
+                } */
                 const pair = await Pair.create({
                     username1: username1,
                     username2: username2,
                     complexity: complexity,
-                    question: qn._id
+                    //question: qn_id
                 })
                 res.status(200).json({ res: pair })
             }
@@ -50,7 +52,7 @@ const findMatch = async (req, res, next) => {
 
                 if (match instanceof match && match.username !== username1) {
                     const username2 = match.username;
-                    const qns = async() => {await axios.get(`https://localhost:8080/api/v1/questions`)}
+                    /* const qns = async() => {await axios.get(`https://localhost:8080/api/v1/questions`)}
 
                     let qn;
                     for (const question of qns) {
@@ -58,18 +60,19 @@ const findMatch = async (req, res, next) => {
                             qn = question;
                             break;
                         }
-                    }
+                    } */
 
-                    if (qn) {
-                        const pair = await Pair.create({
-                            username1: username1,
-                            username2: username2,
-                            complexity: complexity,
-                            question: qn._id,
-                        });
+                    const pair = await Pair.create({
+                        username1: username1,
+                        username2: username2,
+                        complexity: complexity,
+                        //question: qn_id,
+                    });
+                    await Match.destroy({ where: { username: username1 } })
+                    await Match.destroy({ where: { username: username2 } })
 
-                        res.status(200).json({ res: pair });
-                    }
+                    res.status(200).json({ res: pair });
+
 
                 }
             }
