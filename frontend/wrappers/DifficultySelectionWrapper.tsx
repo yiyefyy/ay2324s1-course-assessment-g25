@@ -15,7 +15,9 @@ export default function DifficultySelectionWrapper() {
   const [selectedDifficulty, setSelectedDifficulty] = useState(difficulty[0])
 
   useEffect(() => {
-    localStorage.setItem('selectedDifficulty', JSON.stringify(selectedDifficulty));
+    const name = selectedDifficulty.name;
+    console.log(name)
+    localStorage.setItem('selectedDifficulty', name);
   }, [selectedDifficulty]);
 
   return (

@@ -15,7 +15,7 @@ const findMatch = async (req, res, next) => {
             },
         });
 
-        if ((match instanceof Match) && match.username != username1) {
+        if (match && match.username != username1) {
             if (match.username !== username1) {
                 const username2 = match.username;
                 /* const qns = async() => {await axios.get(`https://localhost:8080/api/v1/questions`)}
@@ -32,6 +32,8 @@ const findMatch = async (req, res, next) => {
                     complexity: complexity,
                     //question: qn_id
                 })
+                await Match.destroy({ where: { username: username1 } })
+                await Match.destroy({ where: { username: username2 } })
                 res.status(200).json({ res: pair })
             }
         } else {
@@ -50,7 +52,7 @@ const findMatch = async (req, res, next) => {
                     },
                 });
 
-                if (match instanceof match && match.username !== username1) {
+                if (match && match.username !== username1) {
                     const username2 = match.username;
                     /* const qns = async() => {await axios.get(`https://localhost:8080/api/v1/questions`)}
 
@@ -95,9 +97,9 @@ const cancelFindMatch = async (req, res, next) => {
             res.status(404).json({ error: "Match does not exist!" });
         } else {
             await Match.destroy({ where: { username: name } })
+            res.sendStatus(204)
         }
         res.sendStatus(204)
-
     } catch (err) {
         next(err)
     }

@@ -38,7 +38,8 @@ export default function MatchButtonWrapper({
   }
 
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [otherMatch, setOtherMatch] = useState('')
+  const [otherMatch, setOtherMatch] = useState('');
+  const [isPairCreated, setIsPairCreated] = useState(false);
 
 
   async function handleMatch() {
@@ -50,7 +51,7 @@ export default function MatchButtonWrapper({
 
       setQuestions(filteredQuestions);
 
-      const username = session?.user?.name;
+      const username = session?.user?.name ?? localStorage.getItem("name") ?? 'null';
       if (username == null) {
         return
       } else {
@@ -67,36 +68,39 @@ export default function MatchButtonWrapper({
 
   async function cancelMatch() {
     try {
-      await deleteMatch(session?.user?.name ?? 'null')
+      await deleteMatch(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
     } catch (error) {
 
     }
   }
-
-  async function getPair() {
-    try {
-      const pair = await fetchPair(session?.user?.name ?? 'null')
-      if (pair) {
-        if (pair.username1 === session?.user?.name) {
-          setOtherMatch(pair.username2)
+  useEffect(() => {
+    async function getPair() {
+      try {
+        const pair = await fetchPair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+        if (pair) {
+          if (pair.username1 === session?.user?.name) {
+            setOtherMatch(pair.username2)
+          } else {
+            setOtherMatch(pair.username1)
+          }
+          setIsPairCreated(true);
         } else {
-          setOtherMatch(pair.username1)
+          setIsPairCreated(false);
         }
-        return true
-      } else {
-        return false
-      }
-    } catch {
+      } catch {
 
+      }
     }
-  }
+    getPair()
+    const intervalId = setInterval(getPair, 30000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleButtonClick = () => {
     console.log("button pressed")
     if (session) {
       // User is logged in
       handleMatch()
-      getPair()
       openModal()
     } else {
       // User is not logged in
@@ -168,13 +172,13 @@ export default function MatchButtonWrapper({
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      {otherMatch} 
-                    </p>
-                  </div>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
                       {seconds} seconds left
                     </p>
+                    {isPairCreated ? (
+                    <p className="text-sm text-gray-500">
+                      You have been matched with {otherMatch}
+                    </p>
+                    ): null}
                   </div>
 
                   <div className="mt-4">
