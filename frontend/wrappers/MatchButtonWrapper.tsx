@@ -4,7 +4,7 @@ import { Session } from 'next-auth';
 import { signIn } from "next-auth/react";
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState, useEffect } from 'react'
-import { startMatch, deleteMatch, MATCH, fetchPair, PAIR } from '../app/api/match/routes'
+import { startMatch, deleteMatch, MATCH, fetchPair, PAIR, deletePair } from '../app/api/match/routes'
 import { GET } from '../app/api/v1/questions/route'
 import { NextRequest } from 'next/server';
 
@@ -69,6 +69,7 @@ export default function MatchButtonWrapper({
   async function cancelMatch() {
     try {
       await deleteMatch(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+      await deletePair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
     } catch (error) {
 
     }
