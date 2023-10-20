@@ -73,10 +73,11 @@ export default function MatchButtonWrapper({
 
     }
   }
-  useEffect(() => {
+/*   useEffect(() => { */
     async function getPair() {
       try {
         const pair = await fetchPair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+        console.log(pair)
         if (pair) {
           if (pair.username1 === session?.user?.name) {
             setOtherMatch(pair.username2)
@@ -91,10 +92,10 @@ export default function MatchButtonWrapper({
 
       }
     }
-    getPair()
+ /*    getPair()
     const intervalId = setInterval(getPair, 30000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [seconds]); */
 
   const handleButtonClick = () => {
     console.log("button pressed")
@@ -116,6 +117,7 @@ export default function MatchButtonWrapper({
 
   useEffect(() => {
     let interval: number;
+    getPair();
 
     if (isOpen) {
       interval = window.setInterval(() => {
@@ -164,21 +166,25 @@ export default function MatchButtonWrapper({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
+                  {isPairCreated ? (
+                    <Dialog.Title
+                      as="h3"
+                      className="text-lg font-medium leading-6 text-gray-900"
+                    >
+                      You have been matched with {otherMatch}
+                    </Dialog.Title>
+                  ) : <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
                     Matching you with a peer...
-                  </Dialog.Title>
+                  </Dialog.Title>}
+
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
                       {seconds} seconds left
                     </p>
-                    {isPairCreated ? (
-                    <p className="text-sm text-gray-500">
-                      You have been matched with {otherMatch}
-                    </p>
-                    ): null}
+
                   </div>
 
                   <div className="mt-4">
