@@ -111,6 +111,7 @@ export default function MatchButtonWrapper({
 
   const handleCloseClick = () => {
     cancelMatch()
+    setOtherMatch('')
     closeModal()
     setSeconds(30)
   }
