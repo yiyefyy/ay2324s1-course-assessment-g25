@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
@@ -10,8 +10,15 @@ const difficulty = [
   { id: 3, name: 'hard' },
 ]
 
+
 export default function DifficultySelectionWrapper() {
   const [selectedDifficulty, setSelectedDifficulty] = useState(difficulty[0])
+
+  useEffect(() => {
+    const name = selectedDifficulty.name;
+    console.log(name)
+    localStorage.setItem('selectedDifficulty', name);
+  }, [selectedDifficulty]);
 
   return (
     <div className="relative w-56 px-5">

@@ -4,17 +4,30 @@ import { Session } from 'next-auth';
 import { signIn } from "next-auth/react";
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState, useEffect } from 'react'
+import { startMatch, deleteMatch, MATCH, fetchPair, PAIR, deletePair } from '../app/api/match/routes'
+import { GET } from '../app/api/v1/questions/route'
+import { NextRequest } from 'next/server';
+
+interface Question {
+  title: string;
+  complexity: string;
+  category: string;
+}
 
 export default function MatchButtonWrapper({
   children,
   session
 }: {
   children: React.ReactNode;
-  session: Session | null; 
+  session: Session | null;
 }) {
 
   let [isOpen, setIsOpen] = useState(false)
   const [seconds, setSeconds] = useState(30);
+  const [pair, setPair] = useState<MATCH>({
+    username: '',
+    complexity: 'easy'
+  });
 
   function closeModal() {
     setIsOpen(false)
@@ -24,44 +37,110 @@ export default function MatchButtonWrapper({
     setIsOpen(true)
   }
 
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [otherMatch, setOtherMatch] = useState('');
+  const [isPairCreated, setIsPairCreated] = useState(false);
+
+
+  async function handleMatch() {
+    try {
+
+      const response = await GET(new NextRequest('http://localhost:8080' + '/api/v1/questions?page=1&limit=10', { method: 'GET' }));
+      const data = await response.json();
+      const filteredQuestions = data.filter((qn: Question) => qn.complexity === localStorage.getItem('selectedDifficulty'));
+
+      setQuestions(filteredQuestions);
+
+      const username = session?.user?.name ?? localStorage.getItem("name") ?? 'null';
+      if (username == null) {
+        return
+      } else {
+        setPair({
+          username: username,
+          complexity: localStorage.getItem('selectedDifficulty') ?? 'easy',
+        });
+        await startMatch(pair)
+      }
+    } catch (error) {
+      //handle error
+    }
+  }
+
+  async function cancelMatch() {
+    try {
+      await deleteMatch(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+      await deletePair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+    } catch (error) {
+
+    }
+  }
+/*   useEffect(() => { */
+    async function getPair() {
+      try {
+        const pair = await fetchPair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+        console.log(pair)
+        if (pair) {
+          if (pair.username1 === session?.user?.name) {
+            setOtherMatch(pair.username2)
+          } else {
+            setOtherMatch(pair.username1)
+          }
+          setIsPairCreated(true);
+        } else {
+          setIsPairCreated(false);
+        }
+      } catch {
+
+      }
+    }
+ /*    getPair()
+    const intervalId = setInterval(getPair, 30000);
+    return () => clearInterval(intervalId);
+  }, [seconds]); */
+
   const handleButtonClick = () => {
     console.log("button pressed")
     if (session) {
       // User is logged in
+      handleMatch()
       openModal()
     } else {
       // User is not logged in
       signIn()
-    }  }
+    }
+  }
 
-    const handleCloseClick = () => {
-      closeModal()
-      setSeconds(30)
+  const handleCloseClick = () => {
+    cancelMatch()
+    setOtherMatch('')
+    closeModal()
+    setSeconds(30)
+  }
+
+  useEffect(() => {
+    let interval: number;
+    getPair();
+
+    if (isOpen) {
+      interval = window.setInterval(() => {
+        if (seconds > 0) {
+          setSeconds((prevSeconds) => prevSeconds - 1);
+        } else {
+          window.clearInterval(interval);
+        }
+      }, 1000);
     }
 
-    useEffect(() => {
-      let interval: number;
-  
-      if (isOpen) {
-        interval = window.setInterval(() => {
-          if (seconds > 0) {
-            setSeconds((prevSeconds) => prevSeconds - 1);
-          } else {
-            window.clearInterval(interval);
-          }
-        }, 1000);
-      }
-  
-      return () => window.clearInterval(interval);
-    }, [isOpen, seconds]);
-    
+    return () => window.clearInterval(interval);
+  }, [isOpen, seconds]);
+
 
   return (
     <>
-      <button 
+      <button
         onClick={handleButtonClick}
         className="flex items-center bg-theme text-gray-800 font-dmserif font-medium text-lg border rounded py-2 px-5 shadow-md cursor-pointer font-dmserif transition-all duration-300 hover:shadow-lg active:scale-95">
-          {children}
+        {children}
       </button>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -89,16 +168,25 @@ export default function MatchButtonWrapper({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
+                  {isPairCreated ? (
+                    <Dialog.Title
+                      as="h3"
+                      className="text-lg font-medium leading-6 text-gray-900"
+                    >
+                      You have been matched with {otherMatch}
+                    </Dialog.Title>
+                  ) : <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
                     Matching you with a peer...
-                  </Dialog.Title>
+                  </Dialog.Title>}
+
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      {seconds} seconds left 
+                      {seconds} seconds left
                     </p>
+
                   </div>
 
                   <div className="mt-4">
