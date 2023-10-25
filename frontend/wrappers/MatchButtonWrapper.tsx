@@ -8,6 +8,10 @@ import { startMatch, deleteMatch, MATCH, fetchPair, PAIR, deletePair } from '../
 import { GET } from '../app/api/v1/questions/route'
 import { NextRequest } from 'next/server';
 
+import { RoomProvider } from "../liveblocks.config";
+import { Editor } from "@monaco-editor/react";
+import { ClientSideSuspense } from "@liveblocks/react";
+
 interface Question {
   title: string;
   complexity: string;
@@ -169,12 +173,21 @@ export default function MatchButtonWrapper({
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   {isPairCreated ? (
-                    <Dialog.Title
-                      as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900"
-                    >
-                      You have been matched with {otherMatch}
-                    </Dialog.Title>
+                    // <Dialog.Title
+                    //   as="h3"
+                    //   className="text-lg font-medium leading-6 text-gray-900"
+                    // >
+                    //   You have been matched with {otherMatch}
+                    // </Dialog.Title>
+
+                    
+                    <RoomProvider id="my-room" initialPresence={{}}>
+                      <ClientSideSuspense fallback="Loading…">
+                        {() => <Editor />}
+                      </ClientSideSuspense>
+                    </RoomProvider>
+                    
+
                   ) : <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
