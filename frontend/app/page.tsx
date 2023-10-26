@@ -35,10 +35,10 @@ export default async function Home() {
           </div>
           {session
           ?<UserIconWrapper session={session}></UserIconWrapper>
-          :<>
+          :<div className='flex flex-row '>
             <SignInButtonWrapper>Sign in</SignInButtonWrapper> 
-              
-          </>     
+            <SignUpButtonWrapper>Sign up</SignUpButtonWrapper>
+          </div>     
           }
         </div>
         <main className='my-10 mx-40'>
