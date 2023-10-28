@@ -1,13 +1,26 @@
 "use client";
 import React, { useState } from "react";
+import { POST } from '../app/api/v1/questions/route'
+import { NextRequest } from "next/server";
+import { Session } from 'next-auth';
+import { useAddButtonPress } from '../app/manageQuestions/ManageQuestionsContext'
 
-export default function AddQuestionForm() {
+export default function AddQuestionForm({
+    session
+  }: {
+    session: Session | null;
+  }) {
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    category: "",
+    complexity: ""
   });
 
-  const handleChange = (e) => {
+  const { setAddButtonPressed } = useAddButtonPress()
+
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -15,12 +28,31 @@ export default function AddQuestionForm() {
     }));
   };
 
-  const saveChanges = async () => {
+
+  const addQuestion = async () => {
     try {
-      // Handle saving the form data, e.g., send it to an API.
-      console.log("Form data:", formData);
+      const requestBody = {
+        owner: session.user.name,
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        complexity: formData.complexity
+      };
+
+      const BASE_URL = process.env.BASE_URL || 'http://localhost:8080'
+
+      const response = await POST(new NextRequest(BASE_URL + '/api/v1/questions', { method: 'POST' }), requestBody);
+      if (response.status == 200) { // succesfully added 
+        setAddButtonPressed(true)
+        setFormData((prevData) => ({
+            title: "",
+            description: "",
+            category: "",
+            complexity: ""
+          })
+        )
+      }
     } catch (error) {
-      // Handle errors, e.g., display an error message
       console.error("Error saving form data:", error);
     }
   }
@@ -29,7 +61,7 @@ export default function AddQuestionForm() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        saveChanges();
+        addQuestion();
       }}
       className="flex flex-col space-y-4 bg-gray-100 px-2 pb-5 pt-2 w-full sm:px-16"
     >
@@ -56,9 +88,33 @@ export default function AddQuestionForm() {
           className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
         />
       </div>
+      <div>
+        <label className="block text-xs text-gray-600 uppercase">Category</label>
+        <input
+          id="category"
+          name="category"
+          type="text"
+          value={formData.category}
+          onChange={handleChange}
+          required
+          className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
+        />
+      </div>
+      <div>
+        <label className="block text-xs text-gray-600 uppercase">Complexity</label>
+        <input
+          id="complexity"
+          name="complexity"
+          type="text"
+          value={formData.complexity}
+          onChange={handleChange}
+          required
+          className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
+        />
+      </div>
       <button
         type="submit"
-        className="border-black bg-black text-white hover:bg-white hover:text-black flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none"
+        className="border-black bg-black text-white hover:bg-theme hover:text-black flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none"
       >
         Add
       </button>
