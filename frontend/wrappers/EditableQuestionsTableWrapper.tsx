@@ -99,7 +99,7 @@ export default function EditableQuestionsTableWrapper({
 
     const handleEdit = (formData: any) => {
         setFormData(formData)
-        setSelectedDifficulty(difficulty.find((item) => item.name === formData.complexity))
+        setSelectedDifficulty(difficulty.find((item) => item.name === formData.complexity) || { id: 0, name: "" });
         openModal()
     }
 
