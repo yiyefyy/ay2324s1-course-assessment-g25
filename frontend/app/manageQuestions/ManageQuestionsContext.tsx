@@ -1,10 +1,14 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 const ManageQuestionsContext = createContext(null);
 
-export function ManageQuestionsProvider({ children }) {
+type ManageQuestionsProviderProps = {
+  children: ReactNode;
+};
+
+export function ManageQuestionsProvider({children} :  ManageQuestionsProviderProps) {
   const [addButtonPressed, setAddButtonPressed] = useState(false);
 
   return (
