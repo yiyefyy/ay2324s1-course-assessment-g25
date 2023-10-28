@@ -75,7 +75,7 @@ export default function EditableQuestionsTableWrapper({
                 const data = await response.json();
                 console.log(data)
 
-                const filteredData = data.filter(item => item.owner === session.user.name);
+                const filteredData = data.filter(item => item.owner === session ? session.user.name : '');
 
                 setQuestions(filteredData);
                 setAddButtonPressed(false)

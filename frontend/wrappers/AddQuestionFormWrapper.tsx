@@ -46,7 +46,7 @@ export default function AddQuestionForm({
         }));
 
       const requestBody = {
-        owner: session.user.name,
+        owner: session ? session.user.name : '',
         title: formData.title,
         description: formData.description,
         category: formData.category,
