@@ -3,15 +3,14 @@
 PeerPrep is a technical interview preparation platform and peer matching system designed to help students practice whiteboard-style interview questions with their peers. With PeerPrep, you can easily find a study partner who shares your passion for technical interview success. This README provides an overview of the platform and its features, as well as essential information for developers and users.
 
 ## Table of Contents
-Introduction
-Features
-Tech Stack
-Installation
-Usage
-Contributing
-License
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Tech Stack](#tech-stack)
+4. [Installation](#installation)
+5. [Usage](#usage)
+6. [Deployment](#deployment)
 
-## Features
+## Features <a name="features"></a>
 PeerPrep is designed to simplify the technical interview preparation process. Some key features of the application include:
 
 - User Registration and Authentication: Students can create an account and log in to access the platform's features securely.
@@ -25,7 +24,7 @@ PeerPrep is designed to simplify the technical interview preparation process. So
 - Graceful Termination: Users can gracefully terminate their collaborative sessions when they are done.
 
 
-## Tech Stack
+## Tech Stack <a name="tech-stack"></a>
 PeerPrep is built using a modern tech stack to ensure robustness and scalability:
 
 - Frontend:
@@ -57,7 +56,7 @@ PeerPrep is built using a modern tech stack to ensure robustness and scalability
     - Liveblocks with WebSocket support
 
 
-## Installation
+## Installation <a name="installation"></a>
 To run PeerPrep locally for development purposes, follow these steps:
 
 1. Clone the GitHub repository to your local machine.
@@ -92,7 +91,7 @@ To run PeerPrep locally for development purposes, follow these steps:
 
 5. Your PeerPrep application should now be accessible at `http://localhost:3000`.
 
-## Usage
+## Usage <a name="usage"></a>
 Using PeerPrep is straightforward:
 
 1. Create an account and log in.
@@ -105,6 +104,7 @@ Using PeerPrep is straightforward:
 
 5. When you are done, terminate the session gracefully.
 
+## Deployment <a name="deployment"></a>
 
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
 
@@ -113,6 +113,7 @@ Using PeerPrep is straightforward:
 [![Frontend CI and Tests](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/frontend.yaml/badge.svg)](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/frontend.yaml)
 
 [![Backend CI and Tests](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/backend.yaml/badge.svg)](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/backend.yaml)
+
 
 
 PeerPrep is designed to make technical interview preparation more accessible and collaborative. We welcome contributions, bug reports, and feature requests to help improve the platform. Feel free to reach out to us with any questions or feedback. Happy coding!
