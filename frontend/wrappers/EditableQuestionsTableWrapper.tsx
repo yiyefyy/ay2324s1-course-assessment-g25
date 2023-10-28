@@ -62,10 +62,6 @@ export default function EditableQuestionsTableWrapper({
         setIsOpen(true)
     }
 
-    const handleCloseClick = () => {
-        closeModal()
-    }
-
     const BASE_URL = process.env.BASE_URL || 'http://localhost:8080'
 
     useEffect(() => {
@@ -75,7 +71,7 @@ export default function EditableQuestionsTableWrapper({
                 const data = await response.json();
                 console.log(data)
 
-                const filteredData = data.filter(item => item.owner === session ? session.user.name : '');
+                const filteredData = data.filter(item => item.owner === session?.user?.name || '');
 
                 setQuestions(filteredData);
                 setAddButtonPressed(false)
