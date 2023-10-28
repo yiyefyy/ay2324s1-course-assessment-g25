@@ -42,14 +42,15 @@ PeerPrep is built using a modern tech stack to ensure robustness and scalability
 - Authentication:
     - nextAuth
 
-- CI/CD:
+- CI/CD and Cloud:
     - GitHub for version control
     - Google Cloud Platform (GCP) for continuous integration and continuous deployment
 
 - Containerization:
     - Docker
+    - Docker Compose
     
-- Matching Service:
+- Message Broker:
     - RabbitMQ
 
 - Collaborative Service:
