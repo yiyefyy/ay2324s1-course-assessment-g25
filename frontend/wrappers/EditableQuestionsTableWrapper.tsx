@@ -6,7 +6,9 @@ import { Fragment, useState, useEffect } from 'react'
 import { Session } from 'next-auth';
 import { DELETE, PUT } from '../app/api/v1/questions/route'
 import { useAddButtonPress } from '../app/manageQuestions/ManageQuestionsContext'
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, Transition, Listbox } from '@headlessui/react'
+import { CrossIcon } from '../icons/Cross'
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
 interface Question {
     title: string;
@@ -32,9 +34,17 @@ export default function EditableQuestionsTableWrapper({
         title: "",
         description: "",
         category: "",
-        complexity: "", 
+        complexity: "",
         _id: ""
     });
+
+    const difficulty = [
+        { id: 1, name: 'Easy' },
+        { id: 2, name: 'Medium' },
+        { id: 3, name: 'Hard' },
+      ]
+    
+    const [selectedDifficulty, setSelectedDifficulty] = useState(difficulty[0])
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -81,10 +91,7 @@ export default function EditableQuestionsTableWrapper({
             const questionId = index
             const endpoint = `/api/v1/questions/${questionId}`;
             const response = await DELETE(new NextRequest(BASE_URL + endpoint), endpoint);
-            if (response.status == 204) { // succesfully added 
-                setAddButtonPressed(true)
-            }
-            console.log(response)
+            setAddButtonPressed(true)
         } catch (error: any) {
             console.error('Error deleting question:', error.message);
         }
@@ -96,36 +103,30 @@ export default function EditableQuestionsTableWrapper({
 
     const handleEdit = (formData: any) => {
         setFormData(formData)
+        setSelectedDifficulty(difficulty.find((item) => item.name === formData.complexity))
         openModal()
     }
 
     const editQuestion = async () => {
         try {
             const requestBody = {
-              title: formData.title,
-              description: formData.description,
-              category: formData.category,
-              complexity: formData.complexity
+                title: formData.title,
+                description: formData.description,
+                category: formData.category,
+                complexity: formData.complexity
             };
-      
+
             const BASE_URL = process.env.BASE_URL || 'http://localhost:8080'
             const endpoint = `/api/v1/questions/${formData._id}`;
 
             const response = await PUT(new NextRequest(BASE_URL + endpoint, { method: 'PUT' }), endpoint, requestBody);
             if (response.status == 200) { // succesfully added 
-              setAddButtonPressed(true)
-              closeModal()
-              /* setFormData((prevData) => ({
-                  title: "",
-                  description: "",
-                  category: "",
-                  complexity: ""
-                }) 
-              ) */
+                setAddButtonPressed(true)
+                closeModal()
             }
-          } catch (error) {
+        } catch (error) {
             console.error("Error updating question:", error);
-          }
+        }
     }
 
     return (
@@ -201,8 +202,12 @@ export default function EditableQuestionsTableWrapper({
                                 leaveTo="opacity-0 scale-95"
                             >
                                 <Dialog.Panel className="w-full max-w-screen-ld mx-auto transform overflow-hidden rounded-2xl bg-theme bg-opacity-80 px-20 py-6 text-left align-middle shadow-xl transition-all">
-                                    <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                                    </Dialog.Title>
+                                    <button
+                                        onClick={closeModal}
+                                        className="absolute top-4 right-4 cursor-pointer text-gray-600 hover:text-gray-900"
+                                    >
+                                        <CrossIcon />
+                                    </button>
 
                                     <form
                                         onSubmit={(e) => {
@@ -248,15 +253,53 @@ export default function EditableQuestionsTableWrapper({
                                         </div>
                                         <div>
                                             <label className="block text-xs text-gray-600 uppercase">Complexity</label>
-                                            <input
-                                                id="complexity"
-                                                name="complexity"
-                                                type="text"
-                                                value={formData.complexity}
-                                                onChange={handleChange}
-                                                required
-                                                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
-                                            />
+                                            <Listbox value={selectedDifficulty} onChange={setSelectedDifficulty}>
+                                                <div className="relative mt-1">
+                                                    <Listbox.Button className="relative w-full cursor-default rounded-md border bg-white border-gray-300 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm">
+                                                        <span className="block truncate flex items-center justify-between px-3">
+
+                                                            <span className="block truncate">{selectedDifficulty.name}</span>
+                                                            <ChevronUpDownIcon
+                                                                className="h-5 w-5 "
+                                                                aria-hidden="true"
+                                                            />
+                                                        </span>
+                                                    </Listbox.Button>
+                                                    <Transition
+                                                        as={Fragment}
+                                                        leave="transition ease-in duration-100"
+                                                        leaveFrom="opacity-100"
+                                                        leaveTo="opacity-0"
+                                                    >
+                                                        <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                                            {difficulty.map((item, itemIdx) => (
+                                                                <Listbox.Option
+                                                                    key={itemIdx}
+                                                                    className={({ active }) =>
+                                                                        `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-theme text-gray-500' : 'text-gray-500'
+                                                                        }`
+                                                                    }
+                                                                    value={item}
+                                                                >
+                                                                    {({ selected }) => (
+                                                                        <span className="block truncate flex items-center justify-between px-2">
+                                                                            <span
+                                                                                className={`block truncate ${selected ? 'font-medium' : 'font-normal'
+                                                                                    }`}
+                                                                            >
+                                                                                {item.name}
+                                                                            </span>
+                                                                            {selected ? (
+                                                                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                            ) : null}
+                                                                        </span>
+                                                                    )}
+                                                                </Listbox.Option>
+                                                            ))}
+                                                        </Listbox.Options>
+                                                    </Transition>
+                                                </div>
+                                            </Listbox>
                                         </div>
                                         <button
                                             type="submit"
