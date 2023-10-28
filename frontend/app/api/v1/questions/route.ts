@@ -55,3 +55,17 @@ export async function DELETE(request: NextRequest, url: string) {
   const data = await response.json();
   return NextResponse.json(data);
 }
+
+export async function PUT(request: NextRequest, url: string, body: any) {
+  console.log("IN PUT");
+  const response = await fetch(BASE_URL + url, {
+    method: 'PUT', 
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+
+  const data = await response.json();
+  return NextResponse.json(data);
+}
