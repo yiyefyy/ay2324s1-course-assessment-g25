@@ -30,7 +30,7 @@ export default async function manageQuestions() {
                         <PlusIcon className='mr-2'></PlusIcon>
                         <h1 className='font-dmserif text-xl text-black font-bold'>Add Question</h1>
                     </div>
-                    <h2 className='font-dmserif text-base text-gray-600'>Contribute a question to PeerPrep's crowd-sourced question base!</h2>
+                    <h2 className='font-dmserif text-base text-gray-600'>Contribute a question to the crowd-sourced questions database!</h2>
                     <div id='matchRequestBox' className='flex flex-col items-left bg-gray-100 shadow-md py-4 rounded-md mt-5 mb-10'>
                         <AddQuestionForm session={session}/>
                     </div>
