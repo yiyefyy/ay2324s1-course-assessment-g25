@@ -1,5 +1,6 @@
 import SignInButtonWrapper from '../wrappers/SignInButtonWrapper';
 import MatchButtonWrapper from '../wrappers/MatchButtonWrapper';
+import WhiteboardButtonWrapper from '../wrappers/WhiteboardButtonWrapper';
 import DifficultySelectionWrapper from '../wrappers/DifficultySelectionWrapper';
 import UserIconWrapper from '../wrappers/UserIconWrapper';
 import SideBarWrapper from '../wrappers/SideBarWrapper';
@@ -48,7 +49,20 @@ export default async function Home() {
             </div>
             <MatchButtonWrapper session={session}>MATCH</MatchButtonWrapper>
           </div>
-          <QuestionsTableWrapper/>
+          
+          {/* TO BE DELETED : I use this button to test the whiteboard */}
+          {/* <WhiteboardButtonWrapper>
+            <button>Go to Whiteboard</button>
+          </WhiteboardButtonWrapper> */}
+
+          {/* <div className="button-wrapper">
+            <Link href="/whiteboard">
+              <div className="button">Go to Whiteboard</div>
+            
+          </Link>
+          </div> */}
+
+
         </main>
       </div>
     </>
