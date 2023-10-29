@@ -50,17 +50,10 @@ export default async function Home() {
             <MatchButtonWrapper session={session}>MATCH</MatchButtonWrapper>
           </div>
           
-          {/* TO BE DELETED : I use this button to test the whiteboard */}
-          {/* <WhiteboardButtonWrapper>
+          {/* TO BE DELETED : I use this whiteboard wrapper button to test the whiteboard */}
+          <WhiteboardButtonWrapper>
             <button>Go to Whiteboard</button>
-          </WhiteboardButtonWrapper> */}
-
-          {/* <div className="button-wrapper">
-            <Link href="/whiteboard">
-              <div className="button">Go to Whiteboard</div>
-            
-          </Link>
-          </div> */}
+          </WhiteboardButtonWrapper>
 
 
         </main>

@@ -8,10 +8,8 @@ interface WhiteboardButtonWrapperProps {
 const WhiteboardButtonWrapper = ({ children }: WhiteboardButtonWrapperProps) => {
   return (
     <div className="button-wrapper">
-      <Link href="../app/whiteboard">
-        
+      <Link href="/whiteboard">
           <div className="button">{children}</div>
-        
       </Link>
     </div>
   );
