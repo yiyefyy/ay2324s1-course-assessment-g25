@@ -98,6 +98,7 @@ export default function EditableQuestionsTableWrapper({
     };
 
     const handleEdit = (formData: any) => {
+
         setFormData(formData)
         setSelectedDifficulty(difficulty.find((item) => item.name === formData.complexity) || { id: 0, name: "" });
         openModal()
@@ -105,11 +106,15 @@ export default function EditableQuestionsTableWrapper({
 
     const editQuestion = async () => {
         try {
+            setFormData((prevData) => ({
+                ...prevData,
+                ["complexity"]: selectedDifficulty.name
+            }));
             const requestBody = {
                 title: formData.title,
                 description: formData.description,
                 category: formData.category,
-                complexity: formData.complexity
+                complexity: selectedDifficulty.name
             };
 
             const BASE_URL = process.env.BASE_URL || 'http://localhost:8080'
