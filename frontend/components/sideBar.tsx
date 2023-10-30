@@ -9,7 +9,7 @@ export const SideBar = [
     },
     {
         title: 'Manage questions',
-        path: '../',
+        path: '../manageQuestions',
         icon: <IoIcons.IoIosPaper/>
 
     },
