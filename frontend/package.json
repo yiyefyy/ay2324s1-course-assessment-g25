@@ -14,7 +14,7 @@
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@nextui-org/react": "^2.1.13",
-    "@prisma/client": "^5.5.0",
+    "@prisma/client": "^5.5.1",
     "autoprefixer": "latest",
     "axios": "latest",
     "clsx": "latest",
@@ -41,7 +41,7 @@
     "eslint-config-next": "latest",
     "jest": "latest",
     "postcss": "latest",
-    "prisma": "^5.5.0",
+    "prisma": "^5.5.1",
     "serve": "latest",
     "tailwindcss": "latest",
     "typescript": "latest"
