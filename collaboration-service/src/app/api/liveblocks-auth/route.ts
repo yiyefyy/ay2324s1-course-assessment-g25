@@ -1,9 +1,8 @@
 import { Liveblocks } from "@liveblocks/node";
 import { NextRequest } from "next/server";
 
-// Authenticating your Liveblocks application
-// https://liveblocks.io/docs/rooms/authentication/access-token-permissions/nextjs
 
+// SET UP AN AUTHENTICATION ENDPOINT
 const API_KEY = process.env.LIVEBLOCKS_SECRET_KEY;
 
 const liveblocks = new Liveblocks({

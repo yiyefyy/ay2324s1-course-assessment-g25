@@ -2,6 +2,8 @@ import { createClient } from "@liveblocks/client";
 import { createRoomContext } from "@liveblocks/react";
 import LiveblocksProvider from "@liveblocks/yjs";
 
+// SET UP THE LIVEBLOCKS CLIENT
+
 // Try changing the lostConnectionTimeout value to increase
 // or reduct the time it takes to reconnect
 const client = createClient({
