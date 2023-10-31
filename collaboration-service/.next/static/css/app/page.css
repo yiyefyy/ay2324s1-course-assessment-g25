@@ -84,7 +84,7 @@
 }
 
 .Toolbar_button__885oU:hover {
-  color: #111827;
+  color: '#B9E8DF';
   box-shadow: rgba(0, 0, 0, 0.16) 0 5px 8px 0, rgba(0, 0, 0, 0.04) 0 0 0 1px;
 }
 
@@ -101,6 +101,7 @@
   position: relative;
   border-radius: 12px;
   background: #fff;
+  
   width: 100%;
   height: 100%;
   color: #111827;
@@ -111,11 +112,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background : '#B9E8DF';
 }
 
 .CollaborativeEditor_editorContainer__WOR3i {
   position: relative;
   flex-grow: 1;
   overflow: auto;
+  background : '#B9E8DF';
 }
 

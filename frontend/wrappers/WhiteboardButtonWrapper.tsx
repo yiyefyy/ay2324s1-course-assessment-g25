@@ -8,8 +8,8 @@ interface WhiteboardButtonWrapperProps {
 const WhiteboardButtonWrapper = ({ children }: WhiteboardButtonWrapperProps) => {
   return (
     <div className="button-wrapper">
-      <Link href="http://localhost:3002">
-      {/* <Link href="/collaboration-service/src/app"> */}
+      <Link href="http://localhost:3001">
+      {/* <Link href="/whiteboard"> */}
           <div className="button">{children}</div>
       </Link>
     </div>

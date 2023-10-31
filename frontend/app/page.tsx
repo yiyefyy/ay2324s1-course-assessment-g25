@@ -17,6 +17,9 @@ import Head from 'next/head';
 import { SignInIcon } from '../icons';
 import { signIn } from "next-auth/react";
 
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+
 
 export default async function Home() {
 
@@ -58,6 +61,7 @@ export default async function Home() {
           <WhiteboardButtonWrapper>
             <button>Go to Whiteboard</button>
           </WhiteboardButtonWrapper>
+
 
 
         </main>
