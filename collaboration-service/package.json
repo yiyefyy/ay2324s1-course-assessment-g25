@@ -10,9 +10,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@codemirror/lang-javascript": "^6.1.9",
+    "@codemirror/lang-java": "^6.0.1",
+    "@codemirror/lang-javascript": "^6.2.1",
     "@liveblocks/client": "^1.5.2",
-    "@liveblocks/node": "^1.5.2",
+    "@liveblocks/node": "^1.5.3",
     "@liveblocks/react": "^1.5.2",
     "@liveblocks/yjs": "^1.5.2",
     "@types/node": "^18.11.18",

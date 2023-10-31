@@ -19,6 +19,7 @@ import { signIn } from "next-auth/react";
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
+//import LOGO from '../public/logo.jpg';
 
 
 export default async function Home() {
@@ -28,6 +29,7 @@ export default async function Home() {
 
   return (
     <>
+  
       <div className="bg-white min-h-screen">
         <div className="bg-theme flex justify-between items-center h-20 px-5">
           <div className='flex items-center'>
@@ -35,7 +37,9 @@ export default async function Home() {
               <FaIcons.FaBars />
             </Link> */}
             <SideBarWrapper/>
-            FANCY P 
+            
+            <img src="/logo.svg" alt="Logo" width="128" height="128"/>
+
           </div>
           {session
           ?<UserIconWrapper session={session}></UserIconWrapper>
@@ -59,7 +63,7 @@ export default async function Home() {
           
           {/* TO BE DELETED : I use this whiteboard wrapper button to test the whiteboard */}
           <WhiteboardButtonWrapper>
-            <button>Go to Whiteboard</button>
+            <button>Go to Code Editor</button>
           </WhiteboardButtonWrapper>
 
 

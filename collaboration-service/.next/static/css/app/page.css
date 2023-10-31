@@ -112,13 +112,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background : '#B9E8DF';
 }
 
 .CollaborativeEditor_editorContainer__WOR3i {
   position: relative;
   flex-grow: 1;
   overflow: auto;
-  background : '#B9E8DF';
 }
 

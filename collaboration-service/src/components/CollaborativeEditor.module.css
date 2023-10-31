@@ -15,12 +15,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background : '#B9E8DF';
 }
 
 .editorContainer {
   position: relative;
   flex-grow: 1;
   overflow: auto;
-  background : '#B9E8DF';
 }

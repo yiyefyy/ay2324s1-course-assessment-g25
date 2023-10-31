@@ -5,6 +5,7 @@ import { yCollab } from "y-codemirror.next";
 import { EditorView, basicSetup } from "codemirror";
 import { EditorState } from "@codemirror/state";
 import { javascript } from "@codemirror/lang-javascript";
+import { java } from "@codemirror/lang-java";
 import { useCallback, useEffect, useState } from "react";
 import LiveblocksProvider from "@liveblocks/yjs";
 import { TypedLiveblocksProvider, useRoom, useSelf } from "@/liveblocks.config";
@@ -56,6 +57,7 @@ export function CollaborativeEditor() {
       extensions: [
         basicSetup,
         javascript(),
+        // java(),
         yCollab(ytext, provider.awareness, { undoManager }),
       ],
     });

@@ -9,7 +9,7 @@ const liveblocks = new Liveblocks({
   secret: API_KEY!,
 });
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   // Get the current user's unique id from your database
 
   // TO BE CHANGED
@@ -21,6 +21,8 @@ export async function POST(request: NextRequest) {
       picture: "https://liveblocks.io/avatars/avatar-1.png",
     },
   };
+
+  // const user = __getUserFromDB__(request);
 
   // Create a session for the current user
   const session = liveblocks.prepareSession(user.id, {
@@ -34,7 +36,17 @@ export async function POST(request: NextRequest) {
   // Authorize the user and return the result
   const { body, status } = await session.authorize();
   return new Response(body, { status });
+
+  // // Identify the user and return the result
+  // const { status, body } = await liveblocks.identifyUser({
+  //   userId: user.id,
+  //   groupIds, // Optional
+  // });
+
+  // return new Response(body, { status });
 }
+
+
 
 // const USER_INFO = [
 //   {
