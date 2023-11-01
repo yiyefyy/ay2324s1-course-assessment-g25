@@ -1,80 +1,13 @@
-//const { findMatch, cancelMatch } = require('./service/matchingService');
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const http = require('http');
-const { Server } = require('socket.io');
+import io from 'socket.io-client';
+const socket = io('http://localhost:8081');
 const { v4: uuidv4 } = require("uuid");
-
-app.use(express.json());
-app.use(cors());
-
-const db = require("./models");
-
-const matchRouter = require("./routes/matchRouter");
-app.use("/match", matchRouter);
-const {errorHandler} = require("./middleware/errorHandler");
-app.use(errorHandler);
-
-const PORT = process.env.PORT || 8081;
-
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-  }
-});
-//for collab-service
-/* io.on('connection', (socket) => {
-  console.log('Client connected to the livestock service');
-
-  // Handle real-time communication
-  socket.on('livestockUpdate', (data) => {
-    // Broadcast updates to all clients
-    io.emit('livestockUpdated', data);
-  });
-});
-
-app.get('/livestock', (req, res) => {
-  res.json(livestockData);
-}); */
-
-/* const socketIoClient = require('socket.io-client');
-
-// Connect to the shared Socket.IO server in the Livestock Microservice
-const livestockSocket = socketIoClient('http://localhost:3001');
-
-livestockSocket.on('livestockUpdated', (data) => {
-  console.log('Livestock data updated:', data);
-});
- */
-
-io.on('connection', (socket) => {
-  console.log('User is connected');
-
-  socket.on('find-match', ({ username, complexity }) => {
-    findMatch(username, complexity); 
-  });
-  socket.on('cancel-match', (username) => {
-    cancelMatch(username);
-  });
-});
-
-
-db.sequelize.sync().then(() => {
-  server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-});
-
-//const socket = io('http://localhost:8081');
 const BASE_URL = 'http://localhost:8081/match'
 
-/* interface UserEntry {
+interface UserEntry {
   username: string;
   complexity: string
-} */
-const queue = [];
+}
+const queue: UserEntry[] = [];
 const intervalMap = new Map();
 
 function roomId() {
@@ -126,7 +59,7 @@ const cancelMatch = (username) => {
     socket.disconnect()
   }
 }
-async function fetchData(api, requestOptions = {}) {
+async function fetchData(api: string, requestOptions = {}): Promise<any> {
   const response = await fetch(api, requestOptions)
   const results = await response.json()
   if (!response.ok) {
@@ -135,10 +68,21 @@ async function fetchData(api, requestOptions = {}) {
   return results.res
 }
 
-async function addPair(username1, username2, complexity, roomId) {
+async function addPair(username1: string, username2: string, complexity: string, roomId: string): Promise<void> {
   const requestOptions = {
     method: "POST",
   };
   const api = `${BASE_URL}`
   return fetchData(api, requestOptions)
 }
+
+module.exports = {
+  cancelMatch,
+  findMatch
+}
+
+
+
+
+
+

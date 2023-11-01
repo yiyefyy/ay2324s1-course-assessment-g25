@@ -27,6 +27,8 @@
     "react-dom": "latest",
     "react-hook-form": "latest",
     "react-icons": "latest",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
     "tailwindcss": "latest"
   },
   "devDependencies": {

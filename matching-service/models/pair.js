@@ -1,5 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
     const Pair = sequelize.define('Pair', {
+        roomId: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         username1: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -16,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
         complexity: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        isDone: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            default: false
         }/* ,
         question: {
             type: DataTypes.STRING,
