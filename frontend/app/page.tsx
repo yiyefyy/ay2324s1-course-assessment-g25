@@ -67,6 +67,9 @@ export default async function Home() {
           </WhiteboardButtonWrapper>
 
 
+          <QuestionsTableWrapper/>
+
+
 
         </main>
       </div>
