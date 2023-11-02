@@ -5,6 +5,7 @@ const cors = require("cors");
 const http = require('http');
 const { Server } = require('socket.io');
 const { v4: uuidv4 } = require("uuid");
+const { Pair } = require('./models');
 
 app.use(express.json());
 app.use(cors());
@@ -49,7 +50,7 @@ livestockSocket.on('livestockUpdated', (data) => {
 });
  */
 
-io.on('connection', (socket) => {
+const socket = io.on('connection', (socket) => {
   console.log('User is connected');
 
   socket.on('find-match', ({ username, complexity }) => {
@@ -57,6 +58,14 @@ io.on('connection', (socket) => {
   });
   socket.on('cancel-match', (username) => {
     cancelMatch(username);
+  });
+  socket.on('match-timeout', ({ username, complexity }) => {
+    console.log(`${username} has timed out from matching for ${complexity} question.`);
+    socket.disconnect();
+  });
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
   });
 });
 
@@ -82,18 +91,20 @@ function roomId() {
 }
 
 const findMatch = async (username, complexity) => {
+  console.log(queue);
   const interval = setInterval(async () => {
     try {
-      const otherUser = queue.find((userEntry) => userEntry.complexity === complexity && userEntry.username !== username);
-      if (otherUser) {
+      const otherUser = queue.find((userEntry) => userEntry.complexity === complexity  && userEntry.username !== username );
+      if (otherUser != null) {
         const room = roomId();
-        await addPair(username, otherUser.username, complexity, room);
-        const username2 = otherUser.username;
-        socket.emit('create-session', { username, username2, complexity, room })
         socket.emit('match-found', { username1: username, username2: otherUser.username, complexity, room });
+        console.log('you have been matched with ${otherUser.username}');
+        await addPair(username, otherUser.username, complexity, room);
+        clearInterval(interval);
       } else {
         queue.push({ username, complexity })
         console.log("waiting for a match")
+        //console.log(queue)
       }
     } catch (err) {
       console.log(err)
@@ -108,6 +119,7 @@ const findMatch = async (username, complexity) => {
     if (id != -1) {
       return queue.splice(id, 1);
     }
+    console.log("timeout!")
     socket.emit('match-timeout', { username, complexity });
     intervalMap.delete(username);
     socket.disconnect()
@@ -126,19 +138,19 @@ const cancelMatch = (username) => {
     socket.disconnect()
   }
 }
-async function fetchData(api, requestOptions = {}) {
-  const response = await fetch(api, requestOptions)
-  const results = await response.json()
-  if (!response.ok) {
-    throw new Error(results.error)
-  }
-  return results.res
-}
 
 async function addPair(username1, username2, complexity, roomId) {
-  const requestOptions = {
-    method: "POST",
-  };
-  const api = `${BASE_URL}`
-  return fetchData(api, requestOptions)
+  try {
+      const pair = await Pair.create({
+          username1: username1,
+          username2: username2,
+          complexity: complexity,
+          isDone: false,
+          roomId: roomId
+          //question: qn_id,
+      });
+      return pair;
+  } catch (err) {
+      console.log(err)
+  }
 }

@@ -48,20 +48,14 @@ export default function MatchButtonWrapper({
   const [otherMatch, setOtherMatch] = useState('');
   const [isPairCreated, setIsPairCreated] = useState(false);
 
-  const socket: Socket = io('http://localhost:8081'/* , {
-    path: '/api/matching-service/socket.io',
-  } */);
+  const socket: Socket = io('http://localhost:8081');
 
   const connect = () => {
     console.log("socket connected");
-    socket.on('match-timeout', () => {
-      console.log(`${session?.user?.name} has timed out from matching`);
-      socket.disconnect();
-    });
-
     socket.on('match-found', (msg) => {
       const match = msg.username2;
       setIsPairCreated(true);
+      setOtherMatch(match);
       console.log(`Match found with: ${match}`);
     });
 
@@ -80,10 +74,10 @@ export default function MatchButtonWrapper({
 
       const username = session?.user?.name ?? localStorage.getItem("name") ?? 'null';
       if (username == null) {
-        return
+        return;
       } else {
         connect();
-        findMatch(username, localStorage.getItem('selectedDifficulty') ?? 'easy')
+        findMatch(username, localStorage.getItem('selectedDifficulty') ?? 'easy');
       }
     } catch (error) {
       //handle error
