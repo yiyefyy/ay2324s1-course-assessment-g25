@@ -49,16 +49,18 @@ export default function MatchButtonWrapper({
   const [questions, setQuestions] = useState<Question[]>([]);
   const [otherMatch, setOtherMatch] = useState('');
   const [isPairCreated, setIsPairCreated] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   const socket: Socket = io('http://localhost:8081');
 
   const connect = () => {
     console.log("socket connected");
     socket.on('match-found', (msg) => {
-      const match = msg.username2;
+      const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
+      socket.disconnect();
     });
 
     return socket;
@@ -77,8 +79,9 @@ export default function MatchButtonWrapper({
       const username = session?.user?.name ?? localStorage.getItem("name") ?? 'null';
       if (username == null) {
         return;
-      } else {
+      } else if (!isConnected) {
         connect();
+        setIsConnected(true);
         findMatch(username, localStorage.getItem('selectedDifficulty') ?? 'easy');
       }
     } catch (error) {
@@ -90,6 +93,8 @@ export default function MatchButtonWrapper({
     try {
       cancelMatch(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
       await deletePair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+      setIsPairCreated(false);
+      setIsConnected(false);
       socket.disconnect();
     } catch (error) {
 
@@ -134,6 +139,7 @@ export default function MatchButtonWrapper({
   const handleCloseClick = () => {
     handleCancelMatch()
     setOtherMatch('')
+    socket.disconnect()
     closeModal()
     setSeconds(30)
   }

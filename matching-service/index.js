@@ -63,13 +63,12 @@ const socket = io.on('connection', (socket) => {
     console.log(`${username} has timed out from matching for ${complexity} question.`);
     socket.disconnect();
   });
-
   socket.on('disconnect', () => {
     console.log('A user disconnected');
   });
 });
 
-
+const localIPAddress = '0.0.0.0'
 db.sequelize.sync().then(() => {
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
@@ -77,7 +76,6 @@ db.sequelize.sync().then(() => {
 });
 
 //const socket = io('http://localhost:8081');
-const BASE_URL = 'http://localhost:8081/match'
 
 /* interface UserEntry {
   username: string;
@@ -90,9 +88,12 @@ function roomId() {
   return "room" + uuidv4();
 }
 
+var connected = false;
+
 const findMatch = async (username, complexity) => {
   console.log(queue);
-  const interval = setInterval(async () => {
+  let interval;
+  interval = setInterval(async () => {
     try {
       const otherUser = queue.find((userEntry) => userEntry.complexity === complexity  && userEntry.username !== username );
       if (otherUser != null) {
@@ -101,6 +102,7 @@ const findMatch = async (username, complexity) => {
         console.log('you have been matched with ${otherUser.username}');
         await addPair(username, otherUser.username, complexity, room);
         clearInterval(interval);
+        connected = true;
       } else {
         queue.push({ username, complexity })
         console.log("waiting for a match")
@@ -122,7 +124,7 @@ const findMatch = async (username, complexity) => {
     console.log("timeout!")
     socket.emit('match-timeout', { username, complexity });
     intervalMap.delete(username);
-    socket.disconnect()
+    //socket.disconnect()
   }, 30000);
 }
 
@@ -135,7 +137,7 @@ const cancelMatch = (username) => {
       queue.splice(index, 1);
       console.log(`${username} canceled the match`);
     }
-    socket.disconnect()
+    //socket.disconnect()
   }
 }
 
