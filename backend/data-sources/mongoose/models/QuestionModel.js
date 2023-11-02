@@ -12,6 +12,11 @@ import mongoose from 'mongoose';
 
 // Create a schema for a question
 const questionSchema = new mongoose.Schema({
+  // The owner of the question
+  owner: {
+    type: String,
+    required: true
+  },
   // The title of the question
   title: {
     type: String,

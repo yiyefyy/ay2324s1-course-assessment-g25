@@ -10,6 +10,8 @@ import { NextRequest } from 'next/server';
 import { user } from '@nextui-org/react';
 import io, { Socket } from 'socket.io-client'
 
+
+
 interface Question {
   title: string;
   complexity: string;
@@ -194,6 +196,15 @@ export default function MatchButtonWrapper({
                     >
                       You have been matched with {otherMatch}
                     </Dialog.Title>
+
+                    
+                    // <RoomProvider id="my-room" initialPresence={{}}>
+                    //   <ClientSideSuspense fallback="Loading…">
+                    //     {() => <Editor />}
+                    //   </ClientSideSuspense>
+                    // </RoomProvider>
+                    
+
                   ) : <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"

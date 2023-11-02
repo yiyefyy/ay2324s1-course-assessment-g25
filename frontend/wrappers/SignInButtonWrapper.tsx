@@ -11,7 +11,7 @@ export default function SignInButtonWrapper({
   return (
     <button 
     onClick={() => signIn()}
-    className="flex items-center bg-white text-gray-800 border rounded p-2 shadow-md cursor-pointer font-dmserif transition-all duration-300 hover:shadow-lg active:scale-95">
+    className="flex items-center justify-between rounded-md bg-black bg-opacity-20 w-20 px-1 py-2 mr-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
       <SignInIcon className='mr-1'/>
       {children}
     </button>

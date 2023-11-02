@@ -35,7 +35,7 @@ export default function Profile() {
             setStoredEmail(userEmail)
             setStoredId(id)
         }
-    })
+    }, [])
 
     const router = useRouter();
 
