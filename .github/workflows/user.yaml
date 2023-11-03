@@ -1,5 +1,5 @@
 # The name key defines the name of the workflow.
-name: Backend CI and Tests
+name: User CI and Tests
 
 # The on key defines the events that triggers the workflow.
 on:
@@ -32,7 +32,7 @@ jobs:
 
     # The env key sets environment variables for jobs and steps.
     env:
-      working-directory: ./backend
+      working-directory: ./user-service
     
     # The steps key defines a sequence of tasks that will be executed by the job.
     steps:

@@ -1,4 +1,4 @@
-// File: /Users/wangxinyi/Desktop/3219 Assignment/collaboration-service/src/app/api/liveblocks-auth/route.ts
+// File: /Users/yiye/Desktop/uni/Y3S1/CS3219/yiyefyy/ay2324s1-course-assessment-g25/collaboration-service/src/app/api/liveblocks-auth/route.ts
 import * as entry from '../../../../../src/app/api/liveblocks-auth/route.js'
 import type { NextRequest } from 'next/server.js'
 

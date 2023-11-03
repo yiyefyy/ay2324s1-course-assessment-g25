@@ -1,7 +1,7 @@
 {
-  "name": "backend",
+  "name": "question-service",
   "version": "1.0.0",
-  "description": "this project contains the backend code",
+  "description": "this project contains the question-service code",
   "main": "index.js",
   "scripts": {
     "test": "jest",

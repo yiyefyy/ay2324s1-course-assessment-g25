@@ -1,15 +1,15 @@
+import io from 'socket.io-client';
+const socket = io('http://localhost:8081');
+
 const BASE_URL = 'http://localhost:8081/match'
 
 export interface PAIR {
+  roomId: string,
   username1: string,
   username2: string,
   complexity: string,
-/*   question: string */
-}
-
-export interface MATCH {
-  username: string,
-  complexity: string
+  isDone: boolean
+  /*   question: string */
 }
 
 async function fetchData(api: string, requestOptions = {}): Promise<any> {
@@ -21,37 +21,14 @@ async function fetchData(api: string, requestOptions = {}): Promise<any> {
   return results.res
 }
 
-export async function startMatch(match: MATCH): Promise<PAIR> {
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(match)
-  };
-  const api = `${BASE_URL}`
-  return fetchData(api, requestOptions)
-}
-
-export async function deleteMatch(username: string): Promise<void> {
-  const requestOptions = {
-    method: "DELETE",
-  };
-  const api = `${BASE_URL}/deleteMatch/${username}`
-  return fetchData(api, requestOptions)
+export async function fetchPairByRoom(roomId: string): Promise<PAIR> {
+  const fetchPairApi = `${BASE_URL}/getPair/${roomId}`
+  return fetchData(fetchPairApi)
 }
 
 export async function deletePair(username: string): Promise<void> {
-  const requestOptions = {
-    method: "DELETE",
-  };
-  const api = `${BASE_URL}/deletePair/${username}`
-  return fetchData(api, requestOptions)
-}
-
-
-export async function fetchAllInMatching(): Promise<MATCH[]>  {
-  return fetchData(`${BASE_URL}/matching}`)
+  const fetchPairApi = `${BASE_URL}/getPair/${username}`
+  return fetchData(fetchPairApi)
 }
 
 export async function fetchPair(username: string): Promise<PAIR> {
@@ -59,8 +36,23 @@ export async function fetchPair(username: string): Promise<PAIR> {
   return fetchData(fetchPairApi)
 }
 
-  export async function fetchAllPairs(): Promise<MATCH[]>  {
-    return fetchData(`${BASE_URL}/pair}`)
-  }
+export async function fetchAllPairs(): Promise<PAIR[]> {
+  return fetchData(`${BASE_URL}/pair}`)
+}
 
-  
+export const findMatch = (username: string, complexity: string) => {
+  const data = {username, complexity};
+  socket.emit('find-match', data);
+};
+
+export const cancelMatch = (username:string) => {
+  socket.emit('cancel-match', {username});
+};
+
+export const joinRoom = (roomId: string) => {
+  socket.emit('join-room', { roomId });
+};
+
+export const fetchQuestion = (roomId: string, complexity: string) => {
+  socket.emit('fetch-question', { roomId, complexity });
+};

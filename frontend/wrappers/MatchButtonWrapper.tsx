@@ -4,9 +4,11 @@ import { Session } from 'next-auth';
 import { signIn } from "next-auth/react";
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState, useEffect } from 'react'
-import { startMatch, deleteMatch, MATCH, fetchPair, PAIR, deletePair } from '../app/api/match/routes'
+import { findMatch, cancelMatch, deletePair } from '../app/api/match/routes'
 import { GET } from '../app/api/v1/questions/route'
 import { NextRequest } from 'next/server';
+import { user } from '@nextui-org/react';
+import io, { Socket } from 'socket.io-client'
 
 
 
@@ -14,6 +16,11 @@ interface Question {
   title: string;
   complexity: string;
   category: string;
+}
+
+interface PAIR {
+  username: string,
+  complexity: string
 }
 
 export default function MatchButtonWrapper({
@@ -26,10 +33,10 @@ export default function MatchButtonWrapper({
 
   let [isOpen, setIsOpen] = useState(false)
   const [seconds, setSeconds] = useState(30);
-  const [pair, setPair] = useState<MATCH>({
+  /* const [pair, setPair] = useState<PAIR>({
     username: '',
     complexity: 'easy'
-  });
+  }); */
 
   function closeModal() {
     setIsOpen(false)
@@ -42,6 +49,22 @@ export default function MatchButtonWrapper({
   const [questions, setQuestions] = useState<Question[]>([]);
   const [otherMatch, setOtherMatch] = useState('');
   const [isPairCreated, setIsPairCreated] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+
+  const socket: Socket = io('http://localhost:8081');
+
+  const connect = () => {
+    console.log("socket connected");
+    socket.on('match-found', (msg) => {
+      const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
+      setIsPairCreated(true);
+      setOtherMatch(match);
+      console.log(`Match found with: ${match}`);
+      socket.disconnect();
+    });
+
+    return socket;
+  };
 
 
   async function handleMatch() {
@@ -55,29 +78,30 @@ export default function MatchButtonWrapper({
 
       const username = session?.user?.name ?? localStorage.getItem("name") ?? 'null';
       if (username == null) {
-        return
-      } else {
-        setPair({
-          username: username,
-          complexity: localStorage.getItem('selectedDifficulty') ?? 'easy',
-        });
-        await startMatch(pair)
+        return;
+      } else if (!isConnected) {
+        connect();
+        setIsConnected(true);
+        findMatch(username, localStorage.getItem('selectedDifficulty') ?? 'easy');
       }
     } catch (error) {
       //handle error
     }
   }
 
-  async function cancelMatch() {
+  async function handleCancelMatch() {
     try {
-      await deleteMatch(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+      cancelMatch(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
       await deletePair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+      setIsPairCreated(false);
+      setIsConnected(false);
+      socket.disconnect();
     } catch (error) {
 
     }
   }
 /*   useEffect(() => { */
-    async function getPair() {
+   /*  async function getPair() {
       try {
         const pair = await fetchPair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
         console.log(pair)
@@ -94,7 +118,7 @@ export default function MatchButtonWrapper({
       } catch {
 
       }
-    }
+    } */
  /*    getPair()
     const intervalId = setInterval(getPair, 30000);
     return () => clearInterval(intervalId);
@@ -113,15 +137,16 @@ export default function MatchButtonWrapper({
   }
 
   const handleCloseClick = () => {
-    cancelMatch()
+    handleCancelMatch()
     setOtherMatch('')
+    socket.disconnect()
     closeModal()
     setSeconds(30)
   }
 
   useEffect(() => {
     let interval: number;
-    getPair();
+    /* getPair(); */
 
     if (isOpen) {
       interval = window.setInterval(() => {
