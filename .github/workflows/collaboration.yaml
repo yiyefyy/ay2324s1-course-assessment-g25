@@ -32,7 +32,7 @@ jobs:
 
     # The env key sets environment variables for jobs and steps.
     env:
-      working-directory: ./backend
+      working-directory: ./collaboration-service
     
     # The steps key defines a sequence of tasks that will be executed by the job.
     steps:
