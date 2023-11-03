@@ -12,6 +12,7 @@ import { TypedLiveblocksProvider, useRoom, useSelf } from "@/liveblocks.config";
 import styles from "./CollaborativeEditor.module.css";
 import { Avatars } from "@/components/Avatars";
 import { Toolbar } from "@/components/Toolbar";
+import LanguageSelectionWrapper from '@/wrappers/LanguageSelectionWrapper'
 
 // Collaborative code editor with undo/redo, live cursors, and live avatars
 export function CollaborativeEditor() {
@@ -78,10 +79,14 @@ export function CollaborativeEditor() {
   return (
     <div className={styles.container}>
       <div className={styles.editorHeader}>
-        <div>
-          {yUndoManager ? <Toolbar yUndoManager={yUndoManager} /> : null}
-        </div>
-        <Avatars />
+        <LanguageSelectionWrapper></LanguageSelectionWrapper>
+        <>
+          <div>
+            {yUndoManager ? <Toolbar yUndoManager={yUndoManager} /> : null}
+          </div>
+          <Avatars />
+        </>
+  
       </div>
       <div className={styles.editorContainer} ref={ref}></div>
     </div>
