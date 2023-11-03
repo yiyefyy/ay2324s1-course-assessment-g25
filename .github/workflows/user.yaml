@@ -1,5 +1,5 @@
 # The name key defines the name of the workflow.
-name: Backend CI and Tests
+name: User CI and Tests
 
 # The on key defines the events that triggers the workflow.
 on:
