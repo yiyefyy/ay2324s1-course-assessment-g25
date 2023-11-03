@@ -79,13 +79,16 @@ export function CollaborativeEditor() {
   return (
     <div className={styles.container}>
       <div className={styles.editorHeader}>
-        <LanguageSelectionWrapper></LanguageSelectionWrapper>
-        <>
+        
+        <div className="flex items-center">
           <div>
             {yUndoManager ? <Toolbar yUndoManager={yUndoManager} /> : null}
           </div>
+          <LanguageSelectionWrapper></LanguageSelectionWrapper>
+
+        </div>
+
           <Avatars />
-        </>
   
       </div>
       <div className={styles.editorContainer} ref={ref}></div>
