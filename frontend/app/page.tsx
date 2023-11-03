@@ -44,17 +44,21 @@ export default async function Home() {
           {session
             ?
             // show question interface if logged in
-            <div id='matchRequestBox' className='flex items-center justify-between bg-white shadow-md py-4 px-8 rounded-md my-10'>
-              <div className='flex items-center'>
-                <h1 className='font-dmserif font-semibold text-xl'>prepare for a </h1>
-                <DifficultySelectionWrapper />
-                <h1 className='font-dmserif font-semibold text-xl'>question today</h1>
+            <div>
+              <div id='matchRequestBox' className='flex items-center justify-between bg-white shadow-md py-4 px-8 rounded-md my-10'>
+                <div className='flex items-center'>
+                  <h1 className='font-dmserif font-semibold text-xl'>prepare for a </h1>
+                  <DifficultySelectionWrapper />
+                  <h1 className='font-dmserif font-semibold text-xl'>question today</h1>
+                </div>
+                <MatchButtonWrapper session={session}>MATCH</MatchButtonWrapper>
               </div>
-              <MatchButtonWrapper session={session}>MATCH</MatchButtonWrapper>
-              <WhiteboardButtonWrapper>
-                <button>Go to Code Editor</button>
-              </WhiteboardButtonWrapper>
-              <QuestionsTableWrapper />
+              <div>
+                <WhiteboardButtonWrapper>
+                  <button>Go to Code Editor</button>
+                </WhiteboardButtonWrapper>
+                <QuestionsTableWrapper />
+              </div>
             </div>
             :
             // else show empty div
