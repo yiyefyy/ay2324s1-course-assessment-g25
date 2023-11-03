@@ -30,8 +30,6 @@ export default function FirstPost() {
         title="Embedded Page"
       ></iframe> */}
 
-
-
     </div>
   );
   
