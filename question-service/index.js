@@ -1,26 +1,15 @@
 /**
- * This is the entry point of the backend.
- * It will start the server, set up the routes, and connect to the database.
+ * This is the entry point for the question service.
+ * It uses the express package to create API endpoints.
+ * It also handles the database connection to mongodb on Atlas.
  * 
- * @author Fang Yiye
- * @author Lin Leyi
- * @author Tan Yong Feng Deon
- * 
- * @version 1.0.0
- * @date 2023-09-07
- * 
- * @requires dotenv
- * @requires express
- * 
- * To start the server, run `npm start` in the backend folder.
- * 
- * Note: This file assumes that the database is already set up and running.
- * Make sure to check the environment variables in `.env` and configure the 
- * database connection accordingly before starting the server.
+ * Before starting this service, setup the environment variables in `.env`
+ * To start the service, run `npn run dev`
  */
 
 import 'dotenv/config';
 import './data-sources/mongoose/connection.js';
+
 import cors from 'cors';
 import express from 'express';
 import questionRouter from './api/v1/questionRouter.js';
@@ -28,35 +17,30 @@ import questionRouter from './api/v1/questionRouter.js';
 // Create an express app
 const app = express();
 
+// Configure the app to use EJS as the templating engine
+app.set("view engine", "ejs");
+
+// Configure the app to use CORS
 app.use(cors());
 
 // Configure the app to parse requests with JSON payloads
 app.use(express.json());
 
-// Prepare a port for the server to listen on
-const PORT = process.env.PORT || 3000;
-
-//set engine to view 
-app.set("view engine", "ejs");
-
-//send details to backend
+// Configure the app to parse requests with URL encoded payloads
 app.use(express.urlencoded({extended: false}));
 
-// Configure the app to listen on the port
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
-
-// Configure the app to respond to the status endpoint with a JSON object
-app.get('/api/v1/status', (req, res) => {
-  // Create a JSON object to send as a response
-  const status = {
-    "Status": "Running"
-  };
-
-  // Send the JSON object as a response
-  res.json(status);
-});
-
-// Configure the app to use the question router
+// Configure the app to use the question router for all requests to /api/v1/questions
 app.use('/api/v1/questions', questionRouter); 
+
+// Configure the app to use the defined port or 8084
+const PORT = process.env.PORT || 8084;
+
+// Start the app listening on the defined port
+app.listen(PORT, () => {
+  console.log(`Question-Service listening on port ${PORT}`);
+});
+
+// Configure the service to respond to service status requests
+app.get('/api/v1/status', (req, res) => {
+  res.json({ "Status": "Running" });
+});

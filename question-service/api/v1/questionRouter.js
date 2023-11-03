@@ -1,14 +1,3 @@
-/**
- * Question Router
- * 
- * This file contains the routes for the Question API endpoints.
- * 
- * @module backend/api/v1/questionRouter
- * 
- * @requires express
- * @requires backend/controllers/QuestionController
- */
-
 import express from 'express';
 import QuestionController from '../../controllers/QuestionController.js';
 
