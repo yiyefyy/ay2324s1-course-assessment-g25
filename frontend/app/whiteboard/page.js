@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
+import { Room } from "./Room";
+import { CollaborativeEditor } from "@/components/CollaborativeEditor";
 
 export default function FirstPost() {
   const externalPageUrl = 'http://localhost:3001'; // Change the port as needed
@@ -16,14 +18,17 @@ export default function FirstPost() {
         </div>
       </div>
   
+      <Room>
+        <CollaborativeEditor />
+      </Room>
 
-
+{/* 
       <iframe
         src={externalPageUrl}
         width="100%"
         style={{ flex: 1 }} // Use flex: 1 to fill remaining vertical space
         title="Embedded Page"
-      ></iframe>
+      ></iframe> */}
 
 
 
