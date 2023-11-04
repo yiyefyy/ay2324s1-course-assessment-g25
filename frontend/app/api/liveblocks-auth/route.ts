@@ -4,10 +4,14 @@ import { NextRequest } from "next/server";
 // Authenticating your Liveblocks application
 // https://liveblocks.io/docs/rooms/authentication/access-token-permissions/nextjs
 
+<<<<<<< HEAD:frontend/app/api/liveblocks-auth/route.ts
 const API_KEY = "sk_dev_UL-Q6euShRYS0pkEILb7TYvHBVaMPcXq_IIn_DrbYWdxgMZ-wXeplo8KQY96Z6lJ";
+=======
+const LIVEBLOCKS_SECRET_KEY = process.env.LIVEBLOCKS_SECRET_KEY;
+>>>>>>> master:collaboration-service/src/app/api/liveblocks-auth/route.ts
 
 const liveblocks = new Liveblocks({
-  secret: API_KEY!,
+  secret: LIVEBLOCKS_SECRET_KEY!,
 });
 
 export async function POST(request: NextRequest) {

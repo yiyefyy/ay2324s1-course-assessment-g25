@@ -1,13 +1,3 @@
-/**
- * Question Model
- * 
- * This file contains the model for the Question API endpoints.
- * 
- * @module backend/data-sources/mongoose/models/QuestionModel
- * 
- * @requires mongoose
- */
-
 import mongoose from 'mongoose';
 
 // Create a schema for a question
