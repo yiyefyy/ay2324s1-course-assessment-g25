@@ -1,7 +1,6 @@
 # PeerPrep - Technical Interview Preparation and Peer Matching Platform
 
 <p align="center">
-
 <img src="frontend/public/logo.svg" align="center" height=auto width="300">
 </p>
 
