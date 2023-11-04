@@ -1,10 +1,5 @@
 # PeerPrep - Technical Interview Preparation and Peer Matching Platform
 
-<p align="center">
-
-<img src="frontend/public/logo.svg" align="center" height=auto width="300">
-</p>
-
 PeerPrep is a technical interview preparation platform and peer matching system designed to help students practice whiteboard-style interview questions with their peers. With PeerPrep, you can easily find a study partner who shares your passion for technical interview success. This README provides an overview of the platform and its features, as well as essential information for developers and users.
 
 ## Table of Contents
@@ -112,11 +107,23 @@ Using PeerPrep is straightforward:
 
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
 
-[![Deploy Next.js site to Pages](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/nextjs.yml/badge.svg)](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/nextjs.yml)
+
 
 [![Frontend CI and Tests](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/frontend.yaml/badge.svg)](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/frontend.yaml)
 
-[![Backend CI and Tests](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/backend.yaml/badge.svg)](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/backend.yaml)
+[![Collaboration CI and Tests](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/collaboration.yaml/badge.svg)](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/collaboration.yaml)
+
+[![Matching CI and Tests](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/matching.yaml/badge.svg)](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/matching.yaml)
+
+[![Question CI and Tests](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/question.yaml/badge.svg)](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/question.yaml)
+
+[![User CI and Tests](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/user.yaml/badge.svg)](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/user.yaml)
+
+[![Deploy Next.js site to Pages](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/nextjs.yml/badge.svg)](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/nextjs.yml)
+
+[![pages-build-deployment](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25/actions/workflows/pages/pages-build-deployment)
+
+
 
 
 
