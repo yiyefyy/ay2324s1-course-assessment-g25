@@ -1,7 +1,7 @@
 # PeerPrep - Technical Interview Preparation and Peer Matching Platform
 
 <p align="center">
-<img src="frontend/public/logo.svg" align="center" height=auto width="300">
+<img src="frontend/public/logo.svg" align="center" height=auto width="200">
 </p>
 
 PeerPrep is a technical interview preparation platform and peer matching system designed to help students practice whiteboard-style interview questions with their peers. With PeerPrep, you can easily find a study partner who shares your passion for technical interview success. This README provides an overview of the platform and its features, as well as essential information for developers and users.
