@@ -18,7 +18,7 @@ export default async function manageQuestions() {
                 <div className="bg-theme flex justify-between items-center h-20 px-5">
                     <div className='flex items-center'>
                         <SideBarWrapper />
-                        FANCY P
+                        <img src="/logo.svg" alt="Logo" width="100" height="100" />
                     </div>
                     {session
                         ? <UserIconWrapper session={session}></UserIconWrapper>

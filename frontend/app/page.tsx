@@ -23,7 +23,8 @@ export default async function Home() {
               <FaIcons.FaBars />
             </Link> */}
             <SideBarWrapper />
-            <img src="/logo.svg" alt="Logo" width="128" height="128" />
+            
+            <img src="/logo.svg" alt="Logo" width="100" height="100" />
 
           </div>
           {session

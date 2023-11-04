@@ -5,7 +5,7 @@ import { CollaborativeEditor } from "@/components/CollaborativeEditor";
 
 export default function Whiteboard() {
 
-  // dummy question. input api here or wtv to call for correct question 
+  // dummy question. input api here or wtv to call for correct question
   const question = {
     "_id": "654289d66292a524af80e0ab",
     "owner": "Deon",
@@ -21,7 +21,11 @@ export default function Whiteboard() {
 
       <div className="bg-theme flex justify-between items-center h-16">
         <div className='flex items-center'>
+
           <img src="/logo.svg" alt="Logo" width="96" height="96" />
+
+          <h2 className='font-dmserif italic text-xl'>  prep with peers for technical assessments</h2>
+
         </div>
       </div>
 
@@ -68,5 +72,3 @@ export default function Whiteboard() {
   );
 
 }
-
-
