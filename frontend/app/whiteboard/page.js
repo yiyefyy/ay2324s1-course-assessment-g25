@@ -13,6 +13,8 @@ export default function FirstPost() {
 
           <img src="/logo.svg" alt="Logo" width="128" height="128" />
 
+          <h2 className='font-dmserif italic text-xl'>  prep with peers for technical assessments</h2>
+
         </div>
       </div>
   
