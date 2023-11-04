@@ -1,20 +1,18 @@
 import { createClient } from "@liveblocks/client";
 import { createRoomContext } from "@liveblocks/react";
-<<<<<<< HEAD
 import LiveblocksProvider from "@liveblocks/yjs";
   
 // Xinyi's public API key
 // Create a client which will be responsible for communicating with the back end
 const client = createClient({
-  authEndpoint: "/api/liveblocks-auth",
-=======
+  authEndpoint: "/api/liveblocks-auth", 
+})
 
 // Xinyi's public API key
 // Create a client which will be responsible for communicating with the back end
-const client = createClient({
+/* const client = createClient({
   publicApiKey: process.env.LIVEBLOCKS_PUBLIC_KEY!,
->>>>>>> master
-});
+}); */
 
 // Presence represents the properties that exist on every user in the Room
 // and that will automatically be kept in sync. Accessible through the
