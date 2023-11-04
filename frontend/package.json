@@ -45,6 +45,7 @@
     "tailwindcss": "latest",
     "y-monaco": "^0.1.4",
     "y-protocols": "^1.0.6",
+    "y-codemirror.next": "^0.3.2",
     "yjs": "^13.6.8"
   },
   "devDependencies": {

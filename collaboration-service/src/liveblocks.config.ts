@@ -1,3 +1,5 @@
+// note from leyi: this file shldn't be needed anymore after refactoring but leaving it here just to be safe & for ref 
+
 import { createClient } from "@liveblocks/client";
 import { createRoomContext } from "@liveblocks/react";
 import LiveblocksProvider from "@liveblocks/yjs";

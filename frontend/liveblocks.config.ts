@@ -1,11 +1,18 @@
 import { createClient } from "@liveblocks/client";
 import { createRoomContext } from "@liveblocks/react";
-
+import LiveblocksProvider from "@liveblocks/yjs";
+  
 // Xinyi's public API key
 // Create a client which will be responsible for communicating with the back end
 const client = createClient({
+  authEndpoint: "/api/liveblocks-auth", 
+})
+
+// Xinyi's public API key
+// Create a client which will be responsible for communicating with the back end
+/* const client = createClient({
   publicApiKey: process.env.LIVEBLOCKS_PUBLIC_KEY!,
-});
+}); */
 
 // Presence represents the properties that exist on every user in the Room
 // and that will automatically be kept in sync. Accessible through the
@@ -28,8 +35,12 @@ type Storage = {
 // provided by your own custom auth back end (if used). Useful for data that
 // will not change during a session, like a user's name or avatar.
 type UserMeta = {
-  // id?: string,  // Accessible through `user.id`
-  // info?: Json,  // Accessible through `user.info`
+  id: string; // Accessible through `user.id`
+  info: {
+    name: string;
+    color: string;
+    picture: string;
+  }; // Accessible through `user.info`
 };
 
 // Optionally, the type of custom events broadcast and listened to in this
@@ -38,6 +49,13 @@ type RoomEvent = {
   // type: "NOTIFICATION",
   // ...
 };
+
+export type TypedLiveblocksProvider = LiveblocksProvider<
+  Presence,
+  Storage,
+  UserMeta,
+  RoomEvent
+>;
 
 export const {
   suspense: {
