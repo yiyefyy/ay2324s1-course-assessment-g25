@@ -5,6 +5,8 @@ WORKDIR /app
 # Copy package.json files into the container.
 COPY package*.json ./
 
+COPY .next /app/.next
+
 # Install dependencies.
 RUN npm install
 
