@@ -1,21 +1,27 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
+import { LanguageSupport } from '@codemirror/language';
+import { javascript } from "@codemirror/lang-javascript";
+import { java } from "@codemirror/lang-java";
+import { python } from "@codemirror/lang-python";
+import { cpp } from "@codemirror/lang-cpp";
 
 const languages = [
-  { id: 1, name: 'Java' },
-  { id: 2, name: 'JavaScript' },
-  { id: 3, name: 'Python' },
-  { id: 4, name: 'C++' },
+  { id: 1, name: java() },
+  { id: 2, name: javascript() },
+  { id: 3, name: python() },
+  { id: 4, name: cpp() },
 ];
 
-export default function LanguageSelectionWrapper() {
+const LanguageSelectionWrapper = (props:any) => {
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
 
   useEffect(() => {
     const name = selectedLanguage.name;
     console.log(name);
-    localStorage.setItem('selectedLanguage', name);
+    localStorage.setItem('selectedLanguage', name.language.name);
+    props.setLang(selectedLanguage.name);
   }, [selectedLanguage]);
 
   return (
@@ -24,7 +30,7 @@ export default function LanguageSelectionWrapper() {
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white border py-2 text-gray-500 text-xl focus:outline-none focus-visible:border-theme focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
             <span className="block truncate flex items-center justify-between px-2">
-              <span className="block truncate">{selectedLanguage.name}</span>
+              <span className="block truncate">{selectedLanguage.name.language.name}</span>
               <ChevronDownIcon className="h-5 w-5 ml-2" aria-hidden="true" />
             </span>
           </Listbox.Button>
@@ -52,7 +58,7 @@ export default function LanguageSelectionWrapper() {
                           selected ? 'font-medium' : 'font-normal'
                         }`}
                       >
-                        {item.name}
+                        {item.name.language.name}
                       </span>
                       {selected ? (
                         <CheckIcon className="h-5 w-5" aria-hidden="true" />
@@ -68,3 +74,5 @@ export default function LanguageSelectionWrapper() {
     </div>
   );
 }
+
+export default LanguageSelectionWrapper;
