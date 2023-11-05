@@ -3,9 +3,12 @@
 import * as Y from "yjs";
 import { yCollab } from "y-codemirror.next";
 import { EditorView, basicSetup } from "codemirror";
-import { EditorState } from "@codemirror/state";
+import { EditorState, Compartment } from "@codemirror/state";
 import { javascript } from "@codemirror/lang-javascript";
 import { java } from "@codemirror/lang-java";
+import { python } from "@codemirror/lang-python";
+import { cpp } from "@codemirror/lang-cpp";
+import { LanguageSupport } from '@codemirror/language';
 import { useCallback, useEffect, useState } from "react";
 import LiveblocksProvider from "@liveblocks/yjs";
 import { TypedLiveblocksProvider, useRoom, useSelf } from "@/liveblocks.config";
@@ -19,6 +22,7 @@ export function CollaborativeEditor() {
   const room = useRoom();
   const [element, setElement] = useState<HTMLElement>();
   const [yUndoManager, setYUndoManager] = useState<Y.UndoManager>();
+  const [lang, setLang] = useState<LanguageSupport>(java);
 
   // Get user info from Liveblocks authentication endpoint
   const userInfo = useSelf((me) => me.info);
@@ -52,13 +56,14 @@ export function CollaborativeEditor() {
       colorLight: userInfo.color + "80", // 6-digit hex code at 50% opacity
     });
 
+    let language = new Compartment();
+    
     // Set up CodeMirror and extensions
     const state = EditorState.create({
       doc: ytext.toString(),
       extensions: [
         basicSetup,
-        javascript(),
-        // java(),
+        language.of(java()),
         yCollab(ytext, provider.awareness, { undoManager }),
       ],
     });
@@ -69,12 +74,17 @@ export function CollaborativeEditor() {
       parent: element,
     });
 
+    console.log("language:"+lang.language.name)
+    view.dispatch({
+      effects: language.reconfigure(lang)
+    })
+
     return () => {
       ydoc?.destroy();
       provider?.destroy();
       view?.destroy();
     };
-  }, [element, room, userInfo]);
+  }, [element, room, userInfo, lang]);
 
   return (
     <div className={styles.container}>
@@ -84,7 +94,7 @@ export function CollaborativeEditor() {
           <div>
             {yUndoManager ? <Toolbar yUndoManager={yUndoManager} /> : null}
           </div>
-          <LanguageSelectionWrapper></LanguageSelectionWrapper>
+          <LanguageSelectionWrapper setLang = {setLang}></LanguageSelectionWrapper>
 
         </div>
 
