@@ -22,7 +22,7 @@ export default function Whiteboard() {
       <div className="bg-theme flex justify-between items-center h-16">
         <div className='flex items-center'>
 
-          <img src="/logo.svg" alt="Logo" width="96" height="96" />
+          <img src="/logo.svg" alt="Logo" width="80" height="80" />
 
           <h2 className='font-dmserif italic text-xl'>  prep with peers for technical assessments</h2>
 
