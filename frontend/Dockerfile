@@ -1,12 +1,9 @@
-FROM node:17-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
 # Copy package.json files into the container.
 COPY package*.json ./
-
-# Copy .next files into the container.
-COPY .next /app/.next
 
 # Install dependencies.
 RUN npm install
