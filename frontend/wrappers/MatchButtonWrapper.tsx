@@ -9,6 +9,7 @@ import { GET } from '../app/api/v1/questions/route'
 import { NextRequest } from 'next/server';
 import { user } from '@nextui-org/react';
 import io, { Socket } from 'socket.io-client'
+import { ROUTES_MANIFEST } from 'next/dist/shared/lib/constants';
 
 
 
@@ -55,16 +56,23 @@ export default function MatchButtonWrapper({
 
   const connect = () => {
     console.log("socket connected");
+    var roomId: any;
     socket.on('match-found', (msg) => {
       const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
+      roomId = msg.roomId;
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
+      socket.emit('join-room', "joined room: ${roomId}");
+      localStorage.setItem('roomId', roomId);
       socket.disconnect();
     });
-
+    socket.on('join-room', function(io){
+      io.join(roomId);
+    })
     return socket;
   };
+
 
 
   async function handleMatch() {

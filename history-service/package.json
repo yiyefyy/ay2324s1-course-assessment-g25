@@ -1,0 +1,23 @@
+{
+  "name": "history-service",
+  "version": "1.0.0",
+  "description": "this project contains the history-service code",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node index.js",
+    "dev": "nodemon -L index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "nodemon": "^3.0.1",
+    "pg": "^8.11.3",
+    "sequelize": "^6.34.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "jest": "^29.6.4"
+  }
+}

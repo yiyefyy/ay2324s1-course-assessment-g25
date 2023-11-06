@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 // Authenticating your Liveblocks application
 // https://liveblocks.io/docs/rooms/authentication/access-token-permissions/nextjs
 
-const API_KEY = "sk_dev_CxrBmRYqoOpD3xeml5E5TdmByRZdV_Ksalfaq5wEhzale2U0GJy1TYAvwdL6XJpj";
+const API_KEY = "sk_dev_UL-Q6euShRYS0pkEILb7TYvHBVaMPcXq_IIn_DrbYWdxgMZ-wXeplo8KQY96Z6lJ"!;
 
 const liveblocks = new Liveblocks({
   secret: API_KEY!,
