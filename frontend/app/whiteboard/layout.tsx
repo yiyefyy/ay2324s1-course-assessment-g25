@@ -1,7 +1,7 @@
 import "../globals.css";
 
 export const metadata = {
-  title: "Liveblocks",
+  title: "PeerPrep Live Coding",
 };
 
 export default function RootLayout({
