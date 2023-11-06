@@ -9,7 +9,6 @@ import { GET } from '../app/api/v1/questions/route'
 import { NextRequest } from 'next/server';
 import { user } from '@nextui-org/react';
 import io, { Socket } from 'socket.io-client'
-import { ROUTES_MANIFEST } from 'next/dist/shared/lib/constants';
 
 
 
@@ -63,13 +62,16 @@ export default function MatchButtonWrapper({
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
-      socket.emit('join-room', "joined room: ${roomId}");
-      localStorage.setItem('roomId', roomId);
+      /* socket.emit('join-room', "joined room: ${roomId}");
+      localStorage.setItem('roomId', roomId); */
       socket.disconnect();
     });
-    socket.on('join-room', function(io){
+    socket.on("disconnect", () => {
+      console.log(socket.connected); // false
+    });
+    /* socket.on('join-room', function(io){
       io.join(roomId);
-    })
+    }) */
     return socket;
   };
 
@@ -90,6 +92,7 @@ export default function MatchButtonWrapper({
       } else if (!isConnected) {
         connect();
         setIsConnected(true);
+
         findMatch(username, localStorage.getItem('selectedDifficulty') ?? 'easy');
       }
     } catch (error) {
