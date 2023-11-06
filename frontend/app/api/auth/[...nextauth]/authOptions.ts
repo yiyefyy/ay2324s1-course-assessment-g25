@@ -1,12 +1,8 @@
+import DiscordProvider from "next-auth/providers/discord";
 import GithubProvider from "next-auth/providers/github";
 import type { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-
-/* import { PrismaClient } from "@prisma/client"; */
-
-
-
-const{PrismaClient} = require("@prisma/client")
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
 
@@ -17,6 +13,10 @@ export const authOptions: NextAuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
+    }),
+    DiscordProvider({
+      clientId: process.env.DISCORD_ID as string,
+      clientSecret: process.env.DISCORD_SECRET as string,
     }),
     // CredentialsProvider({
     //   name: "Credentials",
