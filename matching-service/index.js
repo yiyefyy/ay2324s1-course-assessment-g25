@@ -17,7 +17,7 @@ app.use("/match", matchRouter);
 const {errorHandler} = require("./middleware/errorHandler");
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 8088;
+const PORT = process.env.PORT || 8081;
 
 const server = http.createServer(app);
 const io = new Server(server, {

@@ -51,7 +51,7 @@ export default function MatchButtonWrapper({
   const [isConnected, setIsConnected] = useState(false);
   const [isTimerFinished, setIsTimerFinished] = useState(false);
 
-  const socket: Socket = io('http://localhost:8088');
+  const socket: Socket = io('http://localhost:8081');
 
   const connect = () => {
     console.log("socket connected");
