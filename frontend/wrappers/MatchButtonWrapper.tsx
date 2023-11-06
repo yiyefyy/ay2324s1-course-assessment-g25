@@ -32,7 +32,7 @@ export default function MatchButtonWrapper({
 }) {
 
   let [isOpen, setIsOpen] = useState(false)
-  const [seconds, setSeconds] = useState(30);
+  const [seconds, setSeconds] = useState(3);
   /* const [pair, setPair] = useState<PAIR>({
     username: '',
     complexity: 'easy'
@@ -51,6 +51,7 @@ export default function MatchButtonWrapper({
   const [isPairCreated, setIsPairCreated] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [name, setName] = useState(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+  const [isTimerFinished, setIsTimerFinished] = useState(false);
 
   const socket: Socket = io('http://localhost:8081');
 
@@ -81,7 +82,6 @@ export default function MatchButtonWrapper({
 
   async function handleMatch() {
     try {
-
       const response = await GET(new NextRequest('http://localhost:8080' + '/api/v1/questions?page=1&limit=10', { method: 'GET' }));
       const data = await response.json();
       const filteredQuestions = data.filter((qn: Question) => qn.complexity === localStorage.getItem('selectedDifficulty'));
@@ -158,6 +158,33 @@ export default function MatchButtonWrapper({
     setSeconds(30)
   }
 
+  const handleClickOutside = () => {
+    handleCancelMatch()
+    setOtherMatch('')
+    socket.disconnect()
+    closeModal()
+    setSeconds(30)
+    setIsTimerFinished(false);
+  }
+
+  /* const handleRetry = () => {
+    handleMatch()
+    setSeconds(30);
+    setIsTimerFinished(false);
+  }; */
+
+  const handleTryLater = () => {
+    setSeconds(30)
+    setIsOpen(false);
+    setIsTimerFinished(false);
+  };
+
+  const handleTimeRunOut = () => {
+    setIsTimerFinished(true);
+    handleCloseClick();
+
+  }
+
   useEffect(() => {
     let interval: number;
     /* getPair(); */
@@ -168,12 +195,15 @@ export default function MatchButtonWrapper({
           setSeconds((prevSeconds) => prevSeconds - 1);
         } else {
           window.clearInterval(interval);
+          handleTimeRunOut();
+          openModal();
         }
       }, 1000);
     }
 
     return () => window.clearInterval(interval);
   }, [isOpen, seconds]);
+
 
 
   return (
@@ -184,7 +214,7 @@ export default function MatchButtonWrapper({
         {children}
       </button>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10" onClose={() => handleClickOutside()}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -196,63 +226,108 @@ export default function MatchButtonWrapper({
           >
             <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
+          {isTimerFinished ? (
 
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  {isPairCreated ? (
+            <div className="fixed inset-0 overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-4 text-center">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 scale-95"
+                  enterTo="opacity-100 scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
+                >
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                     <Dialog.Title
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-                      You have been matched with {otherMatch}
+                      Match failed. Would you like to: 
                     </Dialog.Title>
 
-                    
-                    // <RoomProvider id="my-room" initialPresence={{}}>
-                    //   <ClientSideSuspense fallback="Loading…">
-                    //     {() => <Editor />}
-                    //   </ClientSideSuspense>
-                    // </RoomProvider>
-                    
-
-                  ) : <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    Matching you with a peer...
-                  </Dialog.Title>}
-
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      {seconds} seconds left
-                    </p>
-
-                  </div>
-
-                  <div className="mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={handleCloseClick}
-                    >
-                      I'm impatient
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
+                    <div className="mt-4">
+                      {/* <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        onClick={handleRetry}
+                      >
+                        Retry
+                      </button> */}
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 ml-4 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        onClick={handleTryLater}
+                      >
+                        Try Later
+                      </button>
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
             </div>
-          </div>
+
+
+          ) : (
+            <div className="fixed inset-0 overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-4 text-center">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 scale-95"
+                  enterTo="opacity-100 scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
+                >
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                    {isPairCreated ? (
+                      <Dialog.Title
+                        as="h3"
+                        className="text-lg font-medium leading-6 text-gray-900"
+                      >
+                        You have been matched with {otherMatch}
+                      </Dialog.Title>
+
+
+                      // <RoomProvider id="my-room" initialPresence={{}}>
+                      //   <ClientSideSuspense fallback="Loading…">
+                      //     {() => <Editor />}
+                      //   </ClientSideSuspense>
+                      // </RoomProvider>
+
+
+                    ) : <Dialog.Title
+                      as="h3"
+                      className="text-lg font-medium leading-6 text-gray-900"
+                    >
+                      Matching you with a peer...
+                    </Dialog.Title>}
+
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-500">
+                        {seconds} seconds left
+                      </p>
+
+                    </div>
+
+                    <div className="mt-4">
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        onClick={handleCloseClick}
+                      >
+                        I'm impatient
+                      </button>
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          )}
         </Dialog>
+        
       </Transition>
     </>
 
