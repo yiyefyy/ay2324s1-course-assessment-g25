@@ -95,6 +95,7 @@ const findMatch = async (username, complexity) => {
         }
         connected = true;
       } else if (!pushed) {
+        pushed = true;
         queue.push({ username, complexity })
         console.log(queue)
         console.log("waiting for a match")
@@ -105,8 +106,8 @@ const findMatch = async (username, complexity) => {
     }
   }, 1500);
   intervalMap.set(username, interval);
-  setTimeout(() => {
-    //pushed = false;
+  setTimeout(async () => {
+    pushed = false;
     clearInterval(interval);
     const id = queue.findIndex(
       (entry) => entry.username === username
@@ -121,16 +122,19 @@ const findMatch = async (username, complexity) => {
   }, 30000);
 }
 
-const cancelMatch = (username) => {
-  console.log(`${username} canceled the match`);
-  //pushed = false;
-  clearInterval(intervalMap.get(username));
-  intervalMap.delete(username);
-  const index = queue.findIndex((userEntry) => userEntry.username === username);
+const cancelMatch = async (username) => {
+  const nameValue = JSON.stringify(username)
+  const parsedData = JSON.parse(nameValue);
+  const name = parsedData.username;
+  console.log("cancel " + name);
+  pushed = false;
+  clearInterval(intervalMap.get(name));
+  intervalMap.delete(name);
+  const index = queue.findIndex((userEntry) => userEntry.username === name);
   if (index != -1) {
     queue.splice(index, 1);
   }
-
+  console.log(queue)
 }
 
 async function addPair(username1, username2, complexity, roomId) {

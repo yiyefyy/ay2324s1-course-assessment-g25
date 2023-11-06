@@ -50,6 +50,7 @@ export default function MatchButtonWrapper({
   const [otherMatch, setOtherMatch] = useState('');
   const [isPairCreated, setIsPairCreated] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [name, setName] = useState(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
 
   const socket: Socket = io('http://localhost:8081');
 
@@ -57,6 +58,7 @@ export default function MatchButtonWrapper({
     console.log("socket connected");
     var roomId: any;
     socket.on('match-found', (msg) => {
+      setName((msg.username2 === session?.user?.name) ? msg.username2: msg.username1)
       const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
       roomId = msg.roomId;
       setIsPairCreated(true);
@@ -102,7 +104,8 @@ export default function MatchButtonWrapper({
 
   async function handleCancelMatch() {
     try {
-      cancelMatch(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+      cancelMatch(name);
+      console.log("heyy " + name)
       await deletePair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
       setIsPairCreated(false);
       setIsConnected(false);
