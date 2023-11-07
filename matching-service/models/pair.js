@@ -21,18 +21,13 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        isDone: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            default: false
-        }/* ,
-        question: {
+        questionId: {
             type: DataTypes.STRING,
             allowNull: true
-        } */
+        }
     }, {
         tableName: 'pairs',
         timestamps: false, // If you don't want Sequelize to manage createdAt and updatedAt columns
     })
-    return Pair
+    return Pair;
 }
