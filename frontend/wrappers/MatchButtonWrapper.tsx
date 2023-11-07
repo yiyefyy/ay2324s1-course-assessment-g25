@@ -32,7 +32,7 @@ export default function MatchButtonWrapper({
 }) {
 
   let [isOpen, setIsOpen] = useState(false)
-  const [seconds, setSeconds] = useState(3);
+  const [seconds, setSeconds] = useState(30);
   /* const [pair, setPair] = useState<PAIR>({
     username: '',
     complexity: 'easy'
