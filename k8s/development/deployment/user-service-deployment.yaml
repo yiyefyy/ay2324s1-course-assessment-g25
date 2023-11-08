@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-deployment-dev
+  namespace: development
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: user-service
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 1
+    template:
+      metadata:
+        labels:
+          app: user-service
+      spec:
+        containers:
+        - image: 3219assignment-user-service
+          name: user_service_container
+          ports:
+          - containerPort: 8080
+          resources:
+            requests:
+              memory: "150Mi" # Request 256MB of memory
+              cpu: "100m" # Request 0.1 CPU
+            limits:
+              memory: "200Mi" # Limit memory to 512MB
+              cpu: "200m" # Limit CPU to 0.2 CPU
+            env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config-dev
+                  key: PORT
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config-dev
+                  key: DATABASE_URL
+
+restartPolicy: Always # Always restart the container on failure
+
+status: {} # Empty status section

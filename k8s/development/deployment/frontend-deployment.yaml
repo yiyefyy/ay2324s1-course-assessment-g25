@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment-dev
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - image: 3219assignment-frontend
+        name: frontend_container
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "150Mi" # Request 256MB of memory
+            cpu: "100m" # Request 0.1 CPU
+          limits:
+            memory: "200Mi" # Limit memory to 512MB
+            cpu: "200m" # Limit CPU to 0.2 CPU
+          env:
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: PORT
+          - name: NODE_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: NODE_ENV
+          - name: BASE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: BASE_URL
+          - name: DATABASE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: DATABASE_URL
+          - name: NEXTAUTH_URL
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: NEXTAUTH_URL
+          - name: NEXTAUTH_SECRET
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: NEXTAUTH_SECRET
+          - name: GITHUB_ID
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: GITHUB_ID
+          - name: GITHUB_SECRET
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: GITHUB_SECRET
+          - name: LIVEBLOCKS_PUBLIC_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: LIVEBLOCKS_PUBLIC_KEY
+          - name: LIVEBLOCKS_SECRET_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: LIVEBLOCKS_SECRET_KEY
+          - name: NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY
+ 
+restartPolicy: Always # Always restart the container on failure
+
+status: {} # Empty status section

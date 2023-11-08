@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-service-deployment-dev
+  namespace: development
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: matching-service
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 1
+    template:
+      metadata:
+        labels:
+          app: matching-service
+      spec:
+        containers:
+        - image: 3219assignment-matching-service
+          name: matching_service_container
+          ports:
+          - containerPort: 8081
+          resources:
+            requests:
+              memory: "150Mi" # Request 256MB of memory
+              cpu: "100m" # Request 0.1 CPU
+            limits:
+              memory: "200Mi" # Limit memory to 512MB
+              cpu: "200m" # Limit CPU to 0.2 CPU
+            env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config-dev
+                  key: PORT
+
+restartPolicy: Always # Always restart the container on failure
+
+status: {} # Empty status section
