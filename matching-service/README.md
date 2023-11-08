@@ -2,9 +2,15 @@
 
 ## Setup
 
+### Work Directory
+
+Run `cd matching-service` to the matching-service directory.
+
 ### Install dependencies
 
-Run `npm ci` to install all dependencies specified in `package.json`.
+Run `npm install` to install all dependencies specified in `package.json`.
+
+Run `npm ci` to make sure Continuous Integration.
 
 ### Start the server
 
