@@ -1,14 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
-    const Pair = sequelize.define('Pair', {
+    const AttemptedQuestions = sequelize.define('Pair', {
         roomId: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        username1: {
+        username: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        username2: {
+        questionId: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -17,17 +17,13 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
-        complexity: {
-            type: DataTypes.STRING,
+        attemptedDate: {
+            type: DataTypes.DATE,
             allowNull: false,
-        },
-        questionId: {
-            type: DataTypes.STRING,
-            allowNull: true
         }
     }, {
-        tableName: 'pairs',
+        tableName: 'attemptedQns',
         timestamps: false, // If you don't want Sequelize to manage createdAt and updatedAt columns
     })
-    return Pair;
+    return AttemptedQuestions;
 }
