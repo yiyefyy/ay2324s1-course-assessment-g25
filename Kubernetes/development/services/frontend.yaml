@@ -7,9 +7,10 @@ spec:
     selector:
         app: frontend
     ports:
-        - name: "frontend-port"
+        - protocol: TCP
+          name: "frontend-port"
           port: 3000
           targetPort: 3000
-    type: NodePort
+    type: LoadBalancer
 status:
     loadBalancer: {}

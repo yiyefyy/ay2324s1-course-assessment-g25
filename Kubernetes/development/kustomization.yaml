@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+
+  # configMap
+  - /configMap/collaboration-serivce-config.yaml
+  - /configMap/frontend-config.yaml
+  - /configMap/matching-service-config.yaml
+  - /configMap/question-service-config.yaml
+  - /configMap/user-service-config.yaml
+
+  # deployment
+  - /deployment/collaboration-serivce-deployment.yaml
+  - /deployment/frontend-deployment.yaml
+  - /deployment/matching-service-deployment.yaml
+  - /deployment/question-service-deployment.yaml
+  - /deployment/user-service-deployment.yaml
+
+  # horizntal pod autoscaler
+  - /HPA/collaboration-service-hpa.yaml
+  - /HPA/frontend-hpa.yaml
+  - /HPA/matching-service-hpa.yaml
+  - /HPA/question-service-hpa.yaml
+  - /HPA/user-service-hpa.yaml
+
+  # services
+  - /services/frontend.yaml
+  - /services/collaboration-service.yaml
+  - /services/matching-service.yaml
+  - /services/question-service.yaml
+  - /services/user-service.yaml
+
