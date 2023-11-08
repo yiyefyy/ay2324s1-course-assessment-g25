@@ -51,26 +51,38 @@ export default function MatchButtonWrapper({
   const [otherMatch, setOtherMatch] = useState('');
   const [isPairCreated, setIsPairCreated] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [name, setName] = useState(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
   const [isTimerFinished, setIsTimerFinished] = useState(false);
 
   const socket: Socket = io('http://localhost:8081');
 
   const connect = () => {
     console.log("socket connected");
+    var roomId: any;
     socket.on('match-found', (msg) => {
-      const match = (msg.username2 === session?.user?.name) ? msg.username1 : msg.username2;
+      setName((msg.username2 === session?.user?.name) ? msg.username2: msg.username1)
+      const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
+      roomId = msg.roomId;
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
+      /* socket.emit('join-room', "joined room: ${roomId}");
+      localStorage.setItem('roomId', roomId); */
       socket.disconnect();
     });
+    socket.on("disconnect", () => {
+      console.log(socket.connected); // false
+    });
+    /* socket.on('join-room', function(io){
+      io.join(roomId);
+    }) */
     return socket;
   };
 
 
+
   async function handleMatch() {
     try {
-
       const response = await GET(new NextRequest('http://localhost:8080' + '/api/v1/questions?page=1&limit=10', { method: 'GET' }));
       const data = await response.json();
       const filteredQuestions = data.filter((qn: Question) => qn.complexity === localStorage.getItem('selectedDifficulty'));
@@ -92,7 +104,8 @@ export default function MatchButtonWrapper({
 
   async function handleCancelMatch() {
     try {
-      cancelMatch(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+      cancelMatch(name);
+      console.log("heyy " + name)
       await deletePair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
       setIsPairCreated(false);
       setIsConnected(false);
@@ -191,6 +204,7 @@ export default function MatchButtonWrapper({
   }, [isOpen, seconds]);
 
 
+
   return (
     <>
       <button
@@ -229,17 +243,17 @@ export default function MatchButtonWrapper({
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-                      Match failed. Would you like to: 
+                      Match failed. Would you like to:
                     </Dialog.Title>
 
                     <div className="mt-4">
-                      <button
+                      {/* <button
                         type="button"
                         className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                         onClick={handleRetry}
                       >
                         Retry
-                      </button>
+                      </button> */}
                       <button
                         type="button"
                         className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 ml-4 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
@@ -312,7 +326,7 @@ export default function MatchButtonWrapper({
             </div>
           )}
         </Dialog>
-        
+
       </Transition>
     </>
 

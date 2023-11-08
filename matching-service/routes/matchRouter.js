@@ -7,6 +7,6 @@ matchRouter.get("/getPair/:username", matchController.getPairByUsername)
 matchRouter.get("/getPair/:roomId", matchController.getPairByRoomId)
 matchRouter.delete("/deletePair/:username", matchController.deletePair)
 matchRouter.get("/pair", matchController.getAllPairs)
-matchRouter.get("/matching", matchController.getAllMatch)
+matchRouter.get("/getRoomId/:username", matchController.getRoomId)
 
 module.exports = matchRouter
