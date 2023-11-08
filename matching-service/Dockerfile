@@ -17,7 +17,7 @@ RUN npm install
 RUN npm ci
 
 # Expose matching service to port 8088.
-EXPOSE 8088
+EXPOSE 8081
 
 # Matching service use npm start to start the service
 CMD ["npm", "start"]
