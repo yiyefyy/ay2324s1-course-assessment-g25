@@ -52,6 +52,7 @@ services:
     build: ./matching-service
     container_name: matching_service_container
     ports:
-      - "8088:8088"
+      - "8081:8081"
     volumes:
       - ./matching-service:/app
+      
