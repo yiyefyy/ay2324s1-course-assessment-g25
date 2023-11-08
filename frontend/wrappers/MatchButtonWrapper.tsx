@@ -9,6 +9,8 @@ import { Session } from 'next-auth'
 import { signIn } from "next-auth/react"
 import { NextRequest } from 'next/server'
 import { GET } from '../app/api/v1/questions/route'
+import { PrismaClientValidationError } from '@prisma/client/runtime/library'
+import { useSetDifficulty } from './DifficultySelectionContext'
 
 interface Question {
   title: string;
@@ -31,6 +33,7 @@ export default function MatchButtonWrapper({
 
   let [isOpen, setIsOpen] = useState(false)
   const [seconds, setSeconds] = useState(30);
+  const { difficultySelected } = useSetDifficulty();
   /* const [pair, setPair] = useState<PAIR>({
     username: '',
     complexity: 'easy'
@@ -51,7 +54,7 @@ export default function MatchButtonWrapper({
   const [name, setName] = useState(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
   const [isTimerFinished, setIsTimerFinished] = useState(false);
 
-  const socket: Socket = io('http://localhost:8088');
+  const socket: Socket = io('http://localhost:8081');
 
   const connect = () => {
     console.log("socket connected");
@@ -92,8 +95,7 @@ export default function MatchButtonWrapper({
       } else if (!isConnected) {
         connect();
         setIsConnected(true);
-
-        findMatch(username, localStorage.getItem('selectedDifficulty') ?? 'easy');
+        findMatch(username, difficultySelected);
       }
     } catch (error) {
       //handle error
@@ -112,29 +114,29 @@ export default function MatchButtonWrapper({
 
     }
   }
-/*   useEffect(() => { */
-   /*  async function getPair() {
-      try {
-        const pair = await fetchPair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
-        console.log(pair)
-        if (pair) {
-          if (pair.username1 === session?.user?.name) {
-            setOtherMatch(pair.username2)
-          } else {
-            setOtherMatch(pair.username1)
-          }
-          setIsPairCreated(true);
-        } else {
-          setIsPairCreated(false);
-        }
-      } catch {
+  /*   useEffect(() => { */
+  /*  async function getPair() {
+     try {
+       const pair = await fetchPair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+       console.log(pair)
+       if (pair) {
+         if (pair.username1 === session?.user?.name) {
+           setOtherMatch(pair.username2)
+         } else {
+           setOtherMatch(pair.username1)
+         }
+         setIsPairCreated(true);
+       } else {
+         setIsPairCreated(false);
+       }
+     } catch {
 
-      }
-    } */
- /*    getPair()
-    const intervalId = setInterval(getPair, 30000);
-    return () => clearInterval(intervalId);
-  }, [seconds]); */
+     }
+   } */
+  /*    getPair()
+     const intervalId = setInterval(getPair, 30000);
+     return () => clearInterval(intervalId);
+   }, [seconds]); */
 
   const handleButtonClick = () => {
     console.log("button pressed")
@@ -165,11 +167,10 @@ export default function MatchButtonWrapper({
     setIsTimerFinished(false);
   }
 
-  /* const handleRetry = () => {
-    handleMatch()
+  const handleRetry = () => {
     setSeconds(30);
     setIsTimerFinished(false);
-  }; */
+  };
 
   const handleTryLater = () => {
     setSeconds(30)
@@ -242,7 +243,7 @@ export default function MatchButtonWrapper({
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-                      Match failed. Would you like to: 
+                      Match failed. Would you like to:
                     </Dialog.Title>
 
                     <div className="mt-4">
@@ -325,7 +326,7 @@ export default function MatchButtonWrapper({
             </div>
           )}
         </Dialog>
-        
+
       </Transition>
     </>
 
