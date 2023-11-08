@@ -1,8 +1,8 @@
-import DiscordProvider from "next-auth/providers/discord";
-import GithubProvider from "next-auth/providers/github";
-import type { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
+import type { NextAuthOptions } from "next-auth";
+import DiscordProvider from "next-auth/providers/discord";
+import GithubProvider from "next-auth/providers/github";
 
 const prisma = new PrismaClient()
 
@@ -11,6 +11,9 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GithubProvider({
+      profile(profile) {
+        return { role: profile.role ?? "user" }
+      },
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
     }),
@@ -58,5 +61,12 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
-  }
+  },
+  callbacks: {
+    async session({session, user}) {
+      // Add role to session.
+      session.user?.role = user.role;
+      return session;
+    }
+  },
 }
