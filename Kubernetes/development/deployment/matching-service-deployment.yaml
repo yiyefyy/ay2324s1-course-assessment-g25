@@ -20,7 +20,7 @@ spec:
       spec:
         containers:
         - image: 3219assignment-matching-service
-          name: matching_service_container
+          name: matching-service-container
           ports:
           - containerPort: 8081
           resources:
@@ -30,13 +30,11 @@ spec:
             limits:
               memory: "200Mi" # Limit memory to 512MB
               cpu: "200m" # Limit CPU to 0.2 CPU
-            env:
+          env:
             - name: PORT
               valueFrom:
                 configMapKeyRef:
                   name: user-service-config-dev
                   key: PORT
-
-restartPolicy: Always # Always restart the container on failure
 
 status: {} # Empty status section

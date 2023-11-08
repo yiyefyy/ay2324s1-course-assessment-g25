@@ -20,7 +20,7 @@ spec:
       spec:
         containers:
         - image: 3219assignment-collaboration-service-service
-          name: collaboration_service_container
+          name: collaboration-service-container
           ports:
           - containerPort: 3001
           resources:
@@ -30,7 +30,7 @@ spec:
             limits:
               memory: "200Mi" # Limit memory to 512MB
               cpu: "200m" # Limit CPU to 0.2 CPU
-            env:
+          env:
             - name: BASE_URL
               valueFrom:
                 configMapKeyRef:
@@ -51,7 +51,5 @@ spec:
                 configMapKeyRef:
                   name: collaboration-service-config-dev
                   key: NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY
-
-restartPolicy: Always # Always restart the container on failure
 
 status: {} # Empty status section

@@ -4,30 +4,29 @@ kind: Kustomization
 resources:
 
   # configMap
-  - /configMap/collaboration-serivce-config.yaml
-  - /configMap/frontend-config.yaml
-  - /configMap/matching-service-config.yaml
-  - /configMap/question-service-config.yaml
-  - /configMap/user-service-config.yaml
+  - ../development/configMap/collaboration-service-config.yaml
+  - ../development/configMap/frontend-config.yaml
+  - ../development/configMap/matching-service-config.yaml
+  - ../development/configMap/question-service-config.yaml
+  - ../development/configMap/user-service-config.yaml
 
   # deployment
-  - /deployment/collaboration-serivce-deployment.yaml
-  - /deployment/frontend-deployment.yaml
-  - /deployment/matching-service-deployment.yaml
-  - /deployment/question-service-deployment.yaml
-  - /deployment/user-service-deployment.yaml
+  - ../development/deployment/collaboration-service-deployment.yaml
+  - ../development/deployment/frontend-deployment.yaml
+  - ../development/deployment/matching-service-deployment.yaml
+  - ../development/deployment/question-service-deployment.yaml
+  - ../development/deployment/user-service-deployment.yaml
 
   # horizntal pod autoscaler
-  - /HPA/collaboration-service-hpa.yaml
-  - /HPA/frontend-hpa.yaml
-  - /HPA/matching-service-hpa.yaml
-  - /HPA/question-service-hpa.yaml
-  - /HPA/user-service-hpa.yaml
+  - ../development/HPA/collaboration-service-hpa.yaml
+  - ../development/HPA/frontend-hpa.yaml
+  - ../development/HPA/matching-service-hpa.yaml
+  - ../development/HPA/question-service-hpa.yaml
+  - ../development/HPA/user-service-hpa.yaml
 
   # services
-  - /services/frontend.yaml
-  - /services/collaboration-service.yaml
-  - /services/matching-service.yaml
-  - /services/question-service.yaml
-  - /services/user-service.yaml
-
+  - ../development/services/frontend.yaml
+  - ../development/services/collaboration-service.yaml
+  - ../development/services/matching-service.yaml
+  - ../development/services/question-service.yaml
+  - ../development/services/user-service.yaml

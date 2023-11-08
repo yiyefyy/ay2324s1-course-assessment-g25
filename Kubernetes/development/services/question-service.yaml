@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: question-service-dev
+    name: question-service
     namespace: development
 spec:
     selector:
@@ -10,6 +10,6 @@ spec:
         - name: "question-serivce-port"
           port: 8084
           targetPort: 8084
-    type: LoadBalancer
+    type: NodePort
 status:
     loadBalancer: {}

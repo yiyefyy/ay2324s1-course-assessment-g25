@@ -20,7 +20,7 @@ spec:
       spec:
         containers:
         - image: 3219assignment-question-service
-          name: question_service_container
+          name: question-service-container
           ports:
           - containerPort: 8084
           resources:
@@ -30,7 +30,7 @@ spec:
             limits:
               memory: "200Mi" # Limit memory to 512MB
               cpu: "200m" # Limit CPU to 0.2 CPU
-            env:
+          env:
             - name: PORT
               valueFrom:
                 configMapKeyRef:
@@ -41,7 +41,5 @@ spec:
                 configMapKeyRef:
                   name: question-service-config-dev
                   key: MONGODB_URI
-
-restartPolicy: Always # Always restart the container on failure
 
 status: {} # Empty status section
