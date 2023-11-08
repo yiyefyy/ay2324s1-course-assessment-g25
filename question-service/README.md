@@ -1,4 +1,4 @@
-# The Backend
+# Question Service
 
 ## Setup
 
@@ -8,11 +8,11 @@ Run `npm install` to install all dependencies specified in `package.json`.
 
 ### Start the server
 
-Run `npm start` to start the server. The server will be running on port 3000.
+Run `npm start` to start the server. The server will be running on port 8004.
 
 ### Start the server in development mode
 
-Run `npm run dev` to start the server in development mode using `nodemon`. The server will be running on port 3000.
+Run `npm run dev` to start the server in development mode using `nodemon`. The server will be running on port 8004.
 
 ### Run tests
 

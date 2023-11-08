@@ -1,13 +1,3 @@
-/**
- * Question Controller
- * 
- * This file contains the controller for the Question API endpoints.
- * 
- * @module backend/controllers/QuestionController
- * 
- * @requires backend/data-sources/mongoose/models/QuestionModel
- */
-
 import QuestionModel from '../data-sources/mongoose/models/QuestionModel.js';
 
 class QuestionController {
