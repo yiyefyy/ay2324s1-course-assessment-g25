@@ -14,7 +14,7 @@ const db = require("./models");
 
 const matchRouter = require("./routes/matchRouter");
 app.use("/match", matchRouter);
-const {errorHandler} = require("./middleware/errorHandler");
+const { errorHandler } = require("./middleware/errorHandler");
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 8088;
@@ -25,46 +25,23 @@ const io = new Server(server, {
     origin: "*",
   }
 });
-//for collab-service
-/* io.on('connection', (socket) => {
-  console.log('Client connected to the livestock service');
-
-  // Handle real-time communication
-  socket.on('livestockUpdate', (data) => {
-    // Broadcast updates to all clients
-    io.emit('livestockUpdated', data);
-  });
-});
-
-app.get('/livestock', (req, res) => {
-  res.json(livestockData);
-}); */
-
-/* const socketIoClient = require('socket.io-client');
-
-// Connect to the shared Socket.IO server in the Livestock Microservice
-const livestockSocket = socketIoClient('http://localhost:3001');
-
-livestockSocket.on('livestockUpdated', (data) => {
-  console.log('Livestock data updated:', data);
-});
- */
 
 const socket = io.on('connection', (socket) => {
-  console.log('User is connected');
+  //console.log('User is connected');
 
   socket.on('find-match', ({ username, complexity }) => {
-    findMatch(username, complexity); 
+    findMatch(username, complexity);
   });
   socket.on('cancel-match', (username) => {
     cancelMatch(username);
+    socket.disconnect();
   });
   socket.on('match-timeout', ({ username, complexity }) => {
     console.log(`${username} has timed out from matching for ${complexity} question.`);
     socket.disconnect();
   });
   socket.on('disconnect', () => {
-    console.log('A user disconnected');
+    //console.log('A user disconnected');
   });
 });
 
@@ -89,31 +66,48 @@ function roomId() {
 }
 
 var connected = false;
+var pushed = false;
 
 const findMatch = async (username, complexity) => {
   console.log(queue);
   let interval;
   interval = setInterval(async () => {
     try {
-      const otherUser = queue.find((userEntry) => userEntry.complexity === complexity  && userEntry.username !== username );
+      const otherUser = queue.find((userEntry) => userEntry.complexity === complexity && userEntry.username !== username);
       if (otherUser != null) {
+        console.log(queue);
         const room = roomId();
         socket.emit('match-found', { username1: username, username2: otherUser.username, complexity, room });
-        console.log('you have been matched with ${otherUser.username}');
+        console.log(`you have been matched with ${otherUser.username}`);
         await addPair(username, otherUser.username, complexity, room);
         clearInterval(interval);
+        const otherId = queue.findIndex(
+          (entry) => entry.username === otherUser.username
+        );
+        if (otherId != -1) {
+          return queue.splice(otherId, 1);
+        }
+        const myId = queue.findIndex(
+          (entry) => entry.username === username
+        );
+        if (myId != -1) {
+          return queue.splice(myId, 1);
+        }
         connected = true;
-      } else {
+      } else if (!pushed) {
+        pushed = true;
         queue.push({ username, complexity })
+        console.log(queue)
         console.log("waiting for a match")
         //console.log(queue)
       }
     } catch (err) {
       console.log(err)
     }
-  }, 500);
+  }, 1500);
   intervalMap.set(username, interval);
-  setTimeout(() => {
+  setTimeout(async () => {
+    pushed = false;
     clearInterval(interval);
     const id = queue.findIndex(
       (entry) => entry.username === username
@@ -123,36 +117,38 @@ const findMatch = async (username, complexity) => {
     }
     console.log("timeout!")
     socket.emit('match-timeout', { username, complexity });
+    console.log(queue)
     intervalMap.delete(username);
-    //socket.disconnect()
   }, 30000);
 }
 
-const cancelMatch = (username) => {
-  if (intervalMap.has(username)) {
-    clearInterval(intervalMap.get(username));
-    intervalMap.delete(username);
-    const index = queue.findIndex((userEntry) => userEntry.username === username);
-    if (index !== -1) {
-      queue.splice(index, 1);
-      console.log(`${username} canceled the match`);
-    }
-    //socket.disconnect()
+const cancelMatch = async (username) => {
+  const nameValue = JSON.stringify(username)
+  const parsedData = JSON.parse(nameValue);
+  const name = parsedData.username;
+  console.log("cancel " + name);
+  pushed = false;
+  clearInterval(intervalMap.get(name));
+  intervalMap.delete(name);
+  const index = queue.findIndex((userEntry) => userEntry.username === name);
+  if (index != -1) {
+    queue.splice(index, 1);
   }
+  console.log(queue)
 }
 
 async function addPair(username1, username2, complexity, roomId) {
   try {
-      const pair = await Pair.create({
-          username1: username1,
-          username2: username2,
-          complexity: complexity,
-          isDone: false,
-          roomId: roomId
-          //question: qn_id,
-      });
-      return pair;
+    const pair = await Pair.create({
+      username1: username1,
+      username2: username2,
+      complexity: complexity,
+      isDone: false,
+      roomId: roomId
+      //question: qn_id,
+    });
+    return pair;
   } catch (err) {
-      console.log(err)
+    console.log(err)
   }
 }
