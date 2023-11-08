@@ -4,12 +4,7 @@ import { Room } from "./Room";
 import { CollaborativeEditor } from "@/components/CollaborativeEditor";
 
 import io from 'socket.io-client';
-const socket = io('http://localhost:8081');
 
-const handleEndSession = () => {
-  io.to(localStorage.getItem('roomId')).emit("session ended by partner")
-  socket.disconnect();
-}
 
 export default function Whiteboard() {
 
@@ -22,6 +17,12 @@ export default function Whiteboard() {
     "category": "String Manipulation",
     "complexity": "Easy",
     "__v": 0
+  }
+  const socket = io('http://localhost:8081');
+
+  const handleEndSession = () => {
+    io.to(localStorage.getItem('roomId')).emit("session ended by partner")
+    socket.disconnect();
   }
 
   return (
@@ -73,8 +74,9 @@ export default function Whiteboard() {
             <CollaborativeEditor />
           </Room>
 
-      </div>
+        </div>
 
+      </div>
     </div>
   );
 
