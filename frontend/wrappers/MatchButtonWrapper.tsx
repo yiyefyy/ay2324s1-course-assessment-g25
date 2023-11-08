@@ -10,6 +10,7 @@ import { signIn } from "next-auth/react"
 import { NextRequest } from 'next/server'
 import { GET } from '../app/api/v1/questions/route'
 import { PrismaClientValidationError } from '@prisma/client/runtime/library'
+import { useSetDifficulty } from './DifficultySelectionContext'
 
 interface Question {
   title: string;
@@ -32,6 +33,7 @@ export default function MatchButtonWrapper({
 
   let [isOpen, setIsOpen] = useState(false)
   const [seconds, setSeconds] = useState(30);
+  const { difficultySelected } = useSetDifficulty();
   /* const [pair, setPair] = useState<PAIR>({
     username: '',
     complexity: 'easy'
@@ -62,7 +64,6 @@ export default function MatchButtonWrapper({
       console.log(`Match found with: ${match}`);
       socket.disconnect();
     });
-
     return socket;
   };
 
@@ -82,7 +83,7 @@ export default function MatchButtonWrapper({
       } else if (!isConnected) {
         connect();
         setIsConnected(true);
-        findMatch(username, localStorage.getItem('selectedDifficulty') ?? 'easy');
+        findMatch(username, difficultySelected);
       }
     } catch (error) {
       //handle error
