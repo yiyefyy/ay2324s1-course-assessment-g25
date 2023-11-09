@@ -1,10 +1,8 @@
-import Link from 'next/link';
-import React from 'react';
-import { Room } from "./Room";
 import { CollaborativeEditor } from "@/components/CollaborativeEditor";
-
+import Image from 'next/image';
+import React from 'react';
 import io from 'socket.io-client';
-
+import { Room } from "./Room";
 
 export default function Whiteboard() {
 
@@ -31,7 +29,7 @@ export default function Whiteboard() {
       <div className="bg-theme flex justify-between items-center h-16">
         <div className='flex items-center'>
 
-          <img src="/logo.svg" alt="Logo" width="80" height="80" />
+          <Image src="/logo.svg" alt="Logo" width="80" height="80" />
 
           <h2 className='font-dmserif italic text-xl'>  prep with peers for technical assessments</h2>
 

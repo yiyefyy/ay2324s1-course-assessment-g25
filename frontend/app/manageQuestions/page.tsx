@@ -1,12 +1,13 @@
-import { getServerSession } from 'next-auth';
-import EditableQuestionsTableWrapper from '../../wrappers/EditableQuestionsTableWrapper';
-import UserIconWrapper from '../../wrappers/UserIconWrapper';
-import SideBarWrapper from '../../wrappers/SideBarWrapper';
-import AddQuestionForm from '../../wrappers/AddQuestionFormWrapper';
-import { PlusIcon, EditIcon } from '../../icons';
-import { ManageQuestionsProvider } from './ManageQuestionsContext'
+import { EditIcon, PlusIcon } from '../../icons';
 
+import { getServerSession } from 'next-auth';
+import Image from 'next/image';
+import AddQuestionForm from '../../wrappers/AddQuestionFormWrapper';
+import EditableQuestionsTableWrapper from '../../wrappers/EditableQuestionsTableWrapper';
+import SideBarWrapper from '../../wrappers/SideBarWrapper';
+import UserIconWrapper from '../../wrappers/UserIconWrapper';
 import { authOptions } from '../api/auth/[...nextauth]/authOptions';
+import { ManageQuestionsProvider } from './ManageQuestionsContext';
 
 export default async function manageQuestions() {
 
@@ -18,7 +19,7 @@ export default async function manageQuestions() {
                 <div className="bg-theme flex justify-between items-center h-20 px-5">
                     <div className='flex items-center'>
                         <SideBarWrapper />
-                        <img src="/logo.svg" alt="Logo" width="100" height="100" />
+                        <Image src="/logo.svg" alt="Logo" width="100" height="100" />
                     </div>
                     {session
                         ? <UserIconWrapper session={session}></UserIconWrapper>
