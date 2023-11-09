@@ -19,17 +19,17 @@ spec:
           app: matching-service
       spec:
         containers:
-        - image: 3219assignment-matching-service
+        - image: wxy1203/3219assignment-matching-service:v2
           name: matching-service-container
           ports:
           - containerPort: 8081
           resources:
             requests:
-              memory: "150Mi" # Request 256MB of memory
-              cpu: "100m" # Request 0.1 CPU
+              memory: "3Gi" # Request 3GB of memory
+              cpu: "700m" # Request 0.7 CPU
             limits:
-              memory: "200Mi" # Limit memory to 512MB
-              cpu: "200m" # Limit CPU to 0.2 CPU
+              memory: "4Gi" # Limit memory to 4GB
+              cpu: "1000m" # Limit CPU to 1 CPU
           env:
             - name: PORT
               valueFrom:

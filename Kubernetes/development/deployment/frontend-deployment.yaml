@@ -16,17 +16,17 @@ spec:
         app: frontend
     spec:
       containers:
-      - image: 3219assignment-frontend
+      - image: wxy1203/3219assignment-frontend:v2
         name: frontend-container
         ports:
         - containerPort: 3000
         resources:
           requests:
-            memory: "150Mi" # Request 256MB of memory
-            cpu: "100m" # Request 0.1 CPU
+            memory: "3Gi" # Request 3GB of memory
+            cpu: "700m" # Request 0.7 CPU
           limits:
-            memory: "200Mi" # Limit memory to 512MB
-            cpu: "200m" # Limit CPU to 0.2 CPU
+            memory: "4Gi" # Limit memory to 4GB
+            cpu: "1000m" # Limit CPU to 1 CPU
         # env:
         #   - name: PORT
         #     valueFrom:
