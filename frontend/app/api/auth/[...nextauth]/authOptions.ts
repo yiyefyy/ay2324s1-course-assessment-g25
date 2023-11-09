@@ -64,11 +64,11 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    jwt({ token, user }) {
+    jwt({ token, user }: { token: any, user: any }) {
       if (user) token.role = user.role
       return token
     },
-    session({ session, token }) {
+    session({ session, token }: { session: any, token: any }) {
       session.user.role = token.role
       return session
     }
