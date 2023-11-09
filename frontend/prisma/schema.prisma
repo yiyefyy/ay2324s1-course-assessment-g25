@@ -54,3 +54,18 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model matches {
+  username   String @id
+  createdAt  DateTime @default(now())
+  complexity String
+}
+
+model pairs {
+  roomId     String @id
+  username1  String
+  username2  String
+  createdAt  DateTime @default(now())
+  complexity String
+  questionId String?
+}
