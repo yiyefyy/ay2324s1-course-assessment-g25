@@ -56,13 +56,15 @@ model VerificationToken {
 }
 
 model matches {
-  username   String @id
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
   createdAt  DateTime @default(now())
   complexity String
 }
 
 model pairs {
-  roomId     String @id
+  id         Int      @id @default(autoincrement())
+  roomId     String   @unique
   username1  String
   username2  String
   createdAt  DateTime @default(now())
