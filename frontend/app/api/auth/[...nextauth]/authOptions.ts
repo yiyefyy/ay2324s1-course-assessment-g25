@@ -12,8 +12,8 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GithubProvider({
-      profile(profile) {
-        return { role: profile.role ?? "user", ...profile }
+      profile(user) {
+        return { role: user.role ?? "user", ...user }
       },
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
@@ -60,11 +60,17 @@ export const authOptions: NextAuthOptions = {
       }
     })
   ],
-  callbacks: {
-    async session({ session, user }: { session: any, user: any }) {
-      // Add role to session.
-      session.user.role = user.role;
-      return session;
-    }
+  session: {
+    strategy: "jwt",
   },
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) token.role = user.role
+      return token
+    },
+    session({ session, token }) {
+      session.user.role = token.role
+      return session
+    }
+  }
 }
