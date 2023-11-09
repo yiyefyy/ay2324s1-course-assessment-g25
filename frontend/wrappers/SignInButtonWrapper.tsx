@@ -1,7 +1,6 @@
 'use client'
 
-import { SignInIcon } from '@/icons';
-import { Button } from '@/primitives/Button';
+import { SignInIcon } from '../icons';
 import { signIn } from "next-auth/react";
 
 export default function SignInButtonWrapper({
@@ -10,8 +9,11 @@ export default function SignInButtonWrapper({
   children: React.ReactNode
 }) {
   return (
-    <Button icon={<SignInIcon />} onClick={() => signIn()}>
+    <button 
+    onClick={() => signIn()}
+    className="flex items-center justify-between rounded-md bg-black bg-opacity-20 w-20 px-1 py-2 mr-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+      <SignInIcon className='mr-1'/>
       {children}
-    </Button>
+    </button>
   )
 }
