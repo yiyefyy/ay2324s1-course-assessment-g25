@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BASE_URL = 'https://api.liveblocks.io/v2'
 
+// Get all rooms
 export async function GET(request: NextRequest) {
   const response = await fetch(BASE_URL + `/rooms`, {
     method: 'GET',
@@ -14,6 +15,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(data)
 }
 
+// Create a room
 export async function POST(request: NextRequest) {
   const body = await request.json()
   /**

@@ -1,10 +1,9 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-/* import { PrismaClient } from "@prisma/client"; */
+import { PrismaClient } from "@prisma/client";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import DiscordProvider from "next-auth/providers/discord";
 import GithubProvider from "next-auth/providers/github";
-
-const{PrismaClient} = require("@prisma/client")
 
 const prisma = new PrismaClient()
 
@@ -13,8 +12,15 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GithubProvider({
+      profile(user) {
+        return { role: user.role ?? "user", ...user }
+      },
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
+    }),
+    DiscordProvider({
+      clientId: process.env.DISCORD_ID as string,
+      clientSecret: process.env.DISCORD_SECRET as string,
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -56,5 +62,15 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
+  },
+  callbacks: {
+    jwt({ token, user }: { token: any, user: any }) {
+      if (user) token.role = user.role
+      return token
+    },
+    session({ session, token }: { session: any, token: any }) {
+      session.user.role = token.role
+      return session
+    }
   }
 }

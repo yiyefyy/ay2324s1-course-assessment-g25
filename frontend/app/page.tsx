@@ -1,4 +1,6 @@
+import { DifficultySelectionProvider } from '@/wrappers/DifficultySelectionContext';
 import { getServerSession } from 'next-auth';
+import Image from 'next/image';
 import DifficultySelectionWrapper from '../wrappers/DifficultySelectionWrapper';
 import MatchButtonWrapper from '../wrappers/MatchButtonWrapper';
 import QuestionsTableWrapper from '../wrappers/QuestionsTableWrapper';
@@ -8,13 +10,12 @@ import SignUpButtonWrapper from '../wrappers/SignUpWrapper';
 import UserIconWrapper from '../wrappers/UserIconWrapper';
 import WhiteboardButtonWrapper from '../wrappers/WhiteboardButtonWrapper';
 import { authOptions } from './api/auth/[...nextauth]/authOptions';
-import { DifficultySelectionProvider } from '@/wrappers/DifficultySelectionContext';
 
 //import LOGO from '../public/logo.jpg';
 
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
+  const session: any = await getServerSession(authOptions);
   return (
     <>
       <div className="bg-white min-h-screen">
@@ -25,13 +26,24 @@ export default async function Home() {
             </Link> */}
             <SideBarWrapper />
             
-            <img src="/logo.svg" alt="Logo" width="100" height="100" />
+            <Image src="/logo.svg" alt="Logo" width="100" height="100" />
 
           </div>
           {session
             ?
             // show user icon if logged in
+            <div>
             <UserIconWrapper session={session}></UserIconWrapper>
+            <p>My role is: {session.user?.role}</p>
+            {session.user?.role === 'admin' 
+            ?
+            <div>
+              <p>Secret Admin Sentence</p>
+            </div>
+            :
+            <div />
+            }
+            </div>
             :
             // else show sign in and sign up buttons
             <div className='flex flex-row '>

@@ -42,6 +42,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  role          String?   @default("user")
   accounts      Account[]
   sessions      Session[]
 }
@@ -52,4 +53,21 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model matches {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  createdAt  DateTime @default(now())
+  complexity String
+}
+
+model pairs {
+  id         Int      @id @default(autoincrement())
+  roomId     String   @unique
+  username1  String
+  username2  String
+  createdAt  DateTime @default(now())
+  complexity String
+  questionId String?
 }
