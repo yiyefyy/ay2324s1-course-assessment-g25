@@ -40,6 +40,10 @@ export async function fetchAllPairs(): Promise<PAIR[]> {
   return fetchData(`${BASE_URL}/pair}`)
 }
 
+export async function fetchRoomId(username: string): Promise<String> {
+  return fetchData(`${BASE_URL}/${username}`)
+}
+
 export const findMatch = (username: string, complexity: string) => {
   const data = {username, complexity};
   socket.emit('find-match', data);
@@ -53,6 +57,3 @@ export const joinRoom = (roomId: string) => {
   socket.emit('join-room', { roomId });
 };
 
-export const fetchQuestion = (roomId: string, complexity: string) => {
-  socket.emit('fetch-question', { roomId, complexity });
-};

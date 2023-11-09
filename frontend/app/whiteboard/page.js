@@ -3,6 +3,9 @@ import React from 'react';
 import { Room } from "./Room";
 import { CollaborativeEditor } from "@/components/CollaborativeEditor";
 
+import io from 'socket.io-client';
+
+
 export default function Whiteboard() {
 
   // dummy question. input api here or wtv to call for correct question
@@ -14,6 +17,12 @@ export default function Whiteboard() {
     "category": "String Manipulation",
     "complexity": "Easy",
     "__v": 0
+  }
+  const socket = io('http://localhost:8081');
+
+  const handleEndSession = () => {
+    io.to(localStorage.getItem('roomId')).emit("session ended by partner")
+    socket.disconnect();
   }
 
   return (
@@ -64,10 +73,10 @@ export default function Whiteboard() {
           <Room>
             <CollaborativeEditor />
           </Room>
+
         </div>
 
       </div>
-
     </div>
   );
 

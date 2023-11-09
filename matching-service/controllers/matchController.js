@@ -48,10 +48,18 @@ const getAllPairs = async (req, res, next) => {
     }
 }
 
-const getAllMatch = async (req, res, next) => {
+
+
+const getRoomId = async (req, res, next) => {
     try {
-        const matchList = await Match.findAll();
-        res.status(200).json({ res: matchList })
+        const username = req.params.username
+        const pair = await Pair.findOne({where: {
+            [Op.or]: [
+                { username1: username },
+                { username2: username }
+            ]
+        }})
+        res.status(200).json({ res: pair.roomId })
     } catch (err) {
         next(err)
     }
@@ -73,7 +81,7 @@ const addPair = async (req, res, next) => {
     }
 }
 
-const endSession = async (req, res, next) => {
+/* const endSession = async (req, res, next) => {
     try {
         const id = req.params.roomId;
         const pair = await Pair.findOne({
@@ -89,7 +97,7 @@ const endSession = async (req, res, next) => {
     } catch (err) {
         next(err)
     }
-}
+} */
 
 const deletePair = async (req, res, next) => {
     try {
@@ -122,10 +130,9 @@ module.exports = {
     getPairByUsername,
     deletePair,
     getAllPairs,
-    getAllMatch,
     addPair,
     getPairByRoomId,
-    endSession
+    getRoomId
 }
 
 

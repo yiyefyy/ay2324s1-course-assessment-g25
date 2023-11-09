@@ -3,6 +3,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import { useSetDifficulty } from './DifficultySelectionContext'
 
 const difficulty = [
   { id: 1, name: 'easy' },
@@ -13,11 +14,13 @@ const difficulty = [
 
 export default function DifficultySelectionWrapper() {
   const [selectedDifficulty, setSelectedDifficulty] = useState(difficulty[0])
+  const { setDifficultySelected } = useSetDifficulty()
 
   useEffect(() => {
     const name = selectedDifficulty.name;
     console.log(name)
-    localStorage.setItem('selectedDifficulty', name);
+    // localStorage.setItem('selectedDifficulty', name);
+    setDifficultySelected(selectedDifficulty.name);
   }, [selectedDifficulty]);
 
   return (
