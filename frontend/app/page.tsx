@@ -1,3 +1,4 @@
+import { DifficultySelectionProvider } from '@/wrappers/DifficultySelectionContext';
 import { getServerSession } from 'next-auth';
 import DifficultySelectionWrapper from '../wrappers/DifficultySelectionWrapper';
 import MatchButtonWrapper from '../wrappers/MatchButtonWrapper';
@@ -8,7 +9,6 @@ import SignUpButtonWrapper from '../wrappers/SignUpWrapper';
 import UserIconWrapper from '../wrappers/UserIconWrapper';
 import WhiteboardButtonWrapper from '../wrappers/WhiteboardButtonWrapper';
 import { authOptions } from './api/auth/[...nextauth]/authOptions';
-import { DifficultySelectionProvider } from '@/wrappers/DifficultySelectionContext';
 
 //import LOGO from '../public/logo.jpg';
 
@@ -31,7 +31,18 @@ export default async function Home() {
           {session
             ?
             // show user icon if logged in
+            <div>
             <UserIconWrapper session={session}></UserIconWrapper>
+            <p>My role is: {session.user?.role}</p>
+            {session.user?.role === 'admin' 
+            ?
+            <div>
+              <p>Secret Admin Sentence</p>
+            </div>
+            :
+            <div />
+            }
+            </div>
             :
             // else show sign in and sign up buttons
             <div className='flex flex-row '>
