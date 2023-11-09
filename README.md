@@ -67,32 +67,27 @@ To run PeerPrep locally for development purposes, follow these steps:
     git clone https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25.git
     cd ay2324s1-course-assessment-g25
 ```
+2. In order to set up the Docker image and container, first need to install Docker Desktop on your local computer.
 
-2. Install the required dependencies for both the frontend and backend.
+Check out [Docker Desktop Installation](https://www.docker.com/products/docker-desktop/), and [Docker Docs](https://docs.docker.com/desktop/) for more information.
+
+3. With Docker Desktop and Our Assignment folder, enter:
+
 ```bash
-    # Install frontend dependencies
-    cd frontend
-    npm install
+    git clone https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25.git
+    cd ay2324s1-course-assessment-g25
+    docker-compose up
+```
+Your PeerPrep images and containers are set up!
 
-    # Install backend dependencies
-    cd ../backend
-    npm install
+4. Once the containers are up and running, you can access your PeerPrep environment by opening a web browser and navigating to [local host](http://localhost:3000/). 
+
+5. If you want to shut down the container and delete them, enter:
+
+```bash
+    docker-compose down --rmi all -v
 ```
 
-3. Set up your local environment variables as needed, including database configuration, authentication secrets, and other required parameters.
-
-4. Start the development servers for the frontend and backend.
-```bash
-    # Start the frontend server
-    cd ../frontend
-    npm run dev
-
-    # Start the backend server
-    cd ../backend
-    npm run start
-```
-
-5. Your PeerPrep application should now be accessible at `http://localhost:3000`.
 
 ## Usage <a name="usage"></a>
 Using PeerPrep is straightforward:

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-service-deployment-dev
+  namespace: development
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: matching-service
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 1
+    template:
+      metadata:
+        labels:
+          app: matching-service
+      spec:
+        containers:
+        - image: wxy1203/3219assignment-matching-service:v2
+          name: matching-service-container
+          ports:
+          - containerPort: 8081
+          resources:
+            requests:
+              memory: "3Gi" # Request 3GB of memory
+              cpu: "700m" # Request 0.7 CPU
+            limits:
+              memory: "4Gi" # Limit memory to 4GB
+              cpu: "1000m" # Limit CPU to 1 CPU
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config-dev
+                  key: PORT
+
+status: {} # Empty status section
