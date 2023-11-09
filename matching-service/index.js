@@ -77,6 +77,21 @@ const findMatch = async (username, complexity) => {
       if (otherUser != null) {
         console.log(queue);
         const room = roomId();
+        
+        // make a POST request to create a new room using the room id
+        const response = await fetch(`http://localhost:3001/api/v1/rooms`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            "id": room,
+            "defaultAccesses": [ "room:write" ],
+            "metadata": { "color": "blue" }
+          }),
+        })
+        console.log(await response.json())
+
         socket.emit('match-found', { username1: username, username2: otherUser.username, complexity, room });
         console.log(`you have been matched with ${otherUser.username}`);
         await addPair(username, otherUser.username, complexity, room);
