@@ -60,9 +60,6 @@ export const authOptions: NextAuthOptions = {
       }
     })
   ],
-  session: {
-    strategy: "jwt",
-  },
   callbacks: {
     async session({ session, user }: { session: any, user: any }) {
       // Add role to session.
