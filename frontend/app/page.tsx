@@ -1,5 +1,6 @@
 import { DifficultySelectionProvider } from '@/wrappers/DifficultySelectionContext';
 import { getServerSession } from 'next-auth';
+import Image from 'next/image';
 import DifficultySelectionWrapper from '../wrappers/DifficultySelectionWrapper';
 import MatchButtonWrapper from '../wrappers/MatchButtonWrapper';
 import QuestionsTableWrapper from '../wrappers/QuestionsTableWrapper';
@@ -14,7 +15,7 @@ import { authOptions } from './api/auth/[...nextauth]/authOptions';
 
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
+  const session: any = await getServerSession(authOptions);
   return (
     <>
       <div className="bg-white min-h-screen">
@@ -25,7 +26,7 @@ export default async function Home() {
             </Link> */}
             <SideBarWrapper />
             
-            <img src="/logo.svg" alt="Logo" width="100" height="100" />
+            <Image src="/logo.svg" alt="Logo" width="100" height="100" />
 
           </div>
           {session
