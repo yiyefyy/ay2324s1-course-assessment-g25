@@ -28,6 +28,7 @@
     "axios": "latest",
     "clsx": "latest",
     "codemirror": "^6.0.1",
+    "encoding": "^0.1.13",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "framer-motion": "^10.16.4",
