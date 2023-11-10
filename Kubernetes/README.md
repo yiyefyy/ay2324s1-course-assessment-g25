@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Docker installed. You can download Docker [here](https://www.docker.com/products/docker-desktop).
+- Docker Desktopinstalled. You can download Docker [here](https://www.docker.com/products/docker-desktop).
 - Kubernetes installed. If you're running on a local machine, you can use Minikube. Download it [here](https://minikube.sigs.k8s.io/docs/start/).
 - Lens GUI for managing Kubernetes. Download it [here](https://k8slens.dev/desktop.html#:~:text=Kubernetes%20operations,on%20open%20source%20and%20free.).
 
@@ -16,7 +16,7 @@ In our main project directory, build all the images.
 docker compose build
 ```
 
-Remember to enable Kubernetes in Docker Desktop Setting.
+IMPORTANT: remember to enable Kubernetes in Docker Desktop Setting!
 
 ### Setting Up Kubernetes
 
@@ -31,15 +31,16 @@ minikube start --driver=docker
 3. Go to foler name `kubernetes`.
 
 ```bash
-cd kubernetes.
+cd kubernetes
 ```
+
 4. Deploy to kubernetes!
 
 ```bash
  kubectl apply -k .
 ```
 
-5. MUST DO: config port forwarding for all services!
+5. MUST DO: config Port Forwarding for all services!
 
 6. You can now access PeerPrep [here](http://localhost:3000/).
 
