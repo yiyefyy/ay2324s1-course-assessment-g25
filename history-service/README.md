@@ -16,7 +16,7 @@ Run `npm ci` to make sure Continuous Integration.
 
 Run `npm run start` to start the server in development mode using `nodemon`. 
 
-The server will be running on port 8080.
+The server will be running on port 8000.
 
 ### Run tests
 

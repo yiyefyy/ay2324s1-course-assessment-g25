@@ -16,8 +16,8 @@ RUN npm install
 # CI mode
 RUN npm ci
 
-# Expose history service to port 8080.
-EXPOSE 8080
+# Expose history service to port 8000.
+EXPOSE 8000
 
 # Run the history service.
 CMD ["npm", "run", "start"]
