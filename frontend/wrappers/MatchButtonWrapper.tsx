@@ -79,9 +79,8 @@ export default function MatchButtonWrapper({
     return socket;
   };
 
-
-
   async function handleMatch() {
+    console.log("handle match called", isConnected)
     try {
       const response = await GET(new NextRequest('http://localhost:8080' + '/api/v1/questions?page=1&limit=10', { method: 'GET' }));
       const data = await response.json();
@@ -93,6 +92,7 @@ export default function MatchButtonWrapper({
       if (username == null) {
         return;
       } else if (!isConnected) {
+        console.log("in bracket")
         connect();
         setIsConnected(true);
         findMatch(username, difficultySelected);
@@ -106,7 +106,7 @@ export default function MatchButtonWrapper({
     try {
       cancelMatch(name);
       console.log("heyy " + name)
-      await deletePair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
+      // await deletePair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
       setIsPairCreated(false);
       setIsConnected(false);
       socket.disconnect();
@@ -114,29 +114,6 @@ export default function MatchButtonWrapper({
 
     }
   }
-  /*   useEffect(() => { */
-  /*  async function getPair() {
-     try {
-       const pair = await fetchPair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
-       console.log(pair)
-       if (pair) {
-         if (pair.username1 === session?.user?.name) {
-           setOtherMatch(pair.username2)
-         } else {
-           setOtherMatch(pair.username1)
-         }
-         setIsPairCreated(true);
-       } else {
-         setIsPairCreated(false);
-       }
-     } catch {
-
-     }
-   } */
-  /*    getPair()
-     const intervalId = setInterval(getPair, 30000);
-     return () => clearInterval(intervalId);
-   }, [seconds]); */
 
   const handleButtonClick = () => {
     console.log("button pressed")
@@ -153,7 +130,7 @@ export default function MatchButtonWrapper({
   const handleCloseClick = () => {
     handleCancelMatch()
     setOtherMatch('')
-    socket.disconnect()
+    // socket.disconnect()
     closeModal()
     setSeconds(30)
   }
@@ -181,7 +158,6 @@ export default function MatchButtonWrapper({
   const handleTimeRunOut = () => {
     setIsTimerFinished(true);
     handleCloseClick();
-
   }
 
   useEffect(() => {
@@ -202,8 +178,6 @@ export default function MatchButtonWrapper({
 
     return () => window.clearInterval(interval);
   }, [isOpen, seconds]);
-
-
 
   return (
     <>

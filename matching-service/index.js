@@ -69,7 +69,7 @@ var connected = false;
 var pushed = false;
 
 const findMatch = async (username, complexity) => {
-  console.log(queue);
+  console.log("find match called" + queue);
   let interval;
   interval = setInterval(async () => {
     try {
@@ -79,7 +79,7 @@ const findMatch = async (username, complexity) => {
         const room = roomId();
         
         // make a POST request to create a new room using the room id
-        const response = await fetch(`http://localhost:3001/api/v1/rooms`, {
+        /* const response = await fetch(`http://localhost:3001/api/v1/rooms`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const findMatch = async (username, complexity) => {
             "metadata": { "color": "blue" }
           }),
         })
-        console.log(await response.json())
+        console.log(await response.json()) */
 
         socket.emit('match-found', { username1: username, username2: otherUser.username, complexity, room });
         console.log(`you have been matched with ${otherUser.username}`);

@@ -35,6 +35,9 @@ export function Avatar({ picture, name }: { picture: string; name: string }) {
         alt={name}
         className={styles.avatar_picture}
         data-tooltip={name}
+        width="100" 
+        height="100"
+
       />
     </div>
   );
