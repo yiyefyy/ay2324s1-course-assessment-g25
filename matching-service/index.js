@@ -86,7 +86,7 @@ const findMatch = async (username, complexity) => {
         const room = roomId();
 
         // make a POST request to create a new room using the room id
-        const response = await fetch(`http://localhost:3001/api/v1/rooms`, {
+        /* const response = await fetch(`http://localhost:3001/api/v1/rooms`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ const findMatch = async (username, complexity) => {
             "defaultAccesses": ["room:write"],
             "metadata": { "color": "blue" }
           }),
-        })
+        }) */
         console.log(await response.json())
 
         socket.emit('match-found', { username1: username, username2: otherUser.username, complexity, room });

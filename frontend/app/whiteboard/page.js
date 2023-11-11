@@ -21,7 +21,7 @@ export default function Whiteboard() {
   const socket = io('http://localhost:8081');
 
   const handleEndSession = () => {
-    socket.emit("partner wishes to end session, do you wish to proceed?")
+    socket.emit('message', "partner wishes to end session, do you wish to proceed?")
     socket.disconnect();
   }
 
