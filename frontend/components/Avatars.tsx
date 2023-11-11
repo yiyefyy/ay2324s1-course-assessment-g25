@@ -11,7 +11,7 @@ export function Avatars() {
     <div className={styles.avatars}>
       {users.map(({ connectionId, info }) => {
         return (
-          <Avatar key={connectionId} picture={info.picture} name={info.name} />
+          <Avatar key={connectionId} picture={info.picture} name={info.name} width={64} height={64} />
         );
       })}
 
