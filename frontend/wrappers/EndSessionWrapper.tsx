@@ -3,14 +3,8 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import io, { Socket } from 'socket.io-client'
-import { cancelMatch, deletePair, findMatch } from '../app/api/match/routes'
-
 import { Session } from 'next-auth'
 import { signIn } from "next-auth/react"
-import { NextRequest } from 'next/server'
-import { GET } from '../app/api/v1/questions/route'
-import { PrismaClientValidationError } from '@prisma/client/runtime/library'
-import { useSetDifficulty } from './DifficultySelectionContext'
 
 export default function EndSessionWrapper({
   children,
