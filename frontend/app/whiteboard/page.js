@@ -4,11 +4,12 @@ import { CollaborativeEditor } from "@/components/CollaborativeEditor";
 import { Fragment, useEffect, useState } from 'react'
 import Image from 'next/image';
 import React from 'react';
-import io from 'socket.io-client';
+import io from 'socket.io-client'
 import { Room } from "./Room";
 import { Modal, Button } from "react-bootstrap";
+import { joinRoom } from '../api/match/routes'
 
-export default async function Whiteboard() {
+export default function Whiteboard() {
 
   // dummy question. input api here or wtv to call for correct question
   const question = {
@@ -25,43 +26,42 @@ export default async function Whiteboard() {
   let [isOpen, setIsOpen] = useState(false)
   let [end, setEnd] = useState(false)
   const [messages, setMessages] = useState([]);
-  let room;
+  const [room, setRoom] = useState(""); 
 
   
   const handleEndSession = () => {
-    room = "room306ea1f3-0913-47a5-aba4-ec9980e23387"
     console.log(room)
     setEnd(true)
-    socket.emit('message', {room, message: "partner wishes to end session, do you wish to proceed?"})
+    connect()
+    socket.emit('message', {room: room, message: "partner wishes to end session, do you wish to proceed?"})
   }
 
 
   useEffect(() => {
-    socket.on('receive-end-session', ({ message }) => {
-      // Display the end session message
-      setMessages((prevMessages) => [...prevMessages, message]);
+    setRoom('room306ea1f3-0913-47a5-aba4-ec9980e23387')
+    socket.emit('join-room', {room: room})
+  });
+
+  const connect = () => {
+    console.log("connect message")
+    socket.on('end-session',  ({message}) => {
+      console.log("end session received")
+      setMessages(message);
       setIsOpen(true)
     });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, [end]);
+    return socket
+  }
 
   const handleCloseClick = () => {
     socket.disconnect()
     closeModal()
   }
 
-  const handleClickOutside = () => {
-    socket.disconnect()
-    closeModal()
-  }
   const handleConfirmEndSession = () => {
     console.log("User confirmed end session");
 
   // Send a confirmation message to the backend
-    socket.emit('confirmEndSession', { room, username });l
+    socket.emit('confirmEndSession', { room });
     handleCloseClick();
   };
 

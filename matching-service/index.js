@@ -43,17 +43,16 @@ const socket = io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     //console.log('A user disconnected');
   });
-  socket.on('join-room', room => {
+  socket.on('join-room', ({room}) => {
     socket.join(room)
+    console.log("joined room: " + room)
   })
-  socket.on('message', ({ room, message }) => {
-    console.log("send message")
-    socket.to(room).emit('receive-end-session', {message})
+  socket.on('message', ({room, message}) => {
+    endSession(room, message)
   })
 
 });
 
-const localIPAddress = '0.0.0.0'
 db.sequelize.sync().then(() => {
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
@@ -75,6 +74,11 @@ function roomId() {
 
 var connected = false;
 var pushed = false;
+
+const endSession = async (room, message) => {
+  console.log("send message " + room)
+  socket.to(room).emit('end-session', {message})
+}
 
 const findMatch = async (username, complexity) => {
   console.log(queue);

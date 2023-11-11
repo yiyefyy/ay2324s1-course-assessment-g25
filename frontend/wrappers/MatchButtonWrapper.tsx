@@ -4,7 +4,6 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import io, { Socket } from 'socket.io-client'
 import { cancelMatch, deletePair, findMatch } from '../app/api/match/routes'
-
 import { Session } from 'next-auth'
 import { signIn } from "next-auth/react"
 import { NextRequest } from 'next/server'
@@ -62,7 +61,7 @@ export default function MatchButtonWrapper({
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
-      socket.emit('join-room', {room: msg.room});
+      //socket.emit('join-room', {room: msg.room});
     });
     socket.on("disconnect", () => {
       console.log(socket.connected); // false
@@ -76,11 +75,11 @@ export default function MatchButtonWrapper({
     try {
       const response = await GET(new NextRequest('http://localhost:8080' + '/api/v1/questions?page=1&limit=10', { method: 'GET' }));
       const data = await response.json();
-      const filteredQuestions = data.filter((qn: Question) => qn.complexity === localStorage.getItem('selectedDifficulty'));
+      const filteredQuestions = data.filter((qn: Question) => qn.complexity === difficultySelected);
 
       setQuestions(filteredQuestions);
 
-      const username = session?.user?.name ?? localStorage.getItem("name") ?? 'null';
+      const username = session?.user?.name ?? 'null';
       if (username == null) {
         return;
       } else if (!isConnected) {
