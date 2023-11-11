@@ -45,9 +45,10 @@ const socket = io.on('connection', (socket) => {
   });
   socket.on('join-room', room => {
     socket.join(room)
-    socket.on('message', ({ message }) => {
-      socket.to(room).emit(message)
-    })
+  })
+  socket.on('message', ({ room, message }) => {
+    console.log("send message")
+    socket.to(room).emit('receive-end-session', {message})
   })
 
 });
@@ -97,7 +98,7 @@ const findMatch = async (username, complexity) => {
             "metadata": { "color": "blue" }
           }),
         }) */
-        console.log(await response.json())
+        //console.log(await response.json())
 
         socket.emit('match-found', { username1: username, username2: otherUser.username, complexity, room });
         console.log(`you have been matched with ${otherUser.username}`);

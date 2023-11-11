@@ -38,6 +38,7 @@
     "nodemon": "latest",
     "postcss": "latest",
     "react": "latest",
+    "react-bootstrap": "^2.9.1",
     "react-dom": "latest",
     "react-hook-form": "latest",
     "react-icons": "latest",

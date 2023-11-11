@@ -41,7 +41,7 @@ export async function fetchAllPairs(): Promise<PAIR[]> {
 }
 
 export async function fetchRoomId(username: string): Promise<String> {
-  return fetchData(`${BASE_URL}/${username}`)
+  return fetchData(`${BASE_URL}/getRoomId/${username}`)
 }
 
 export const findMatch = (username: string, complexity: string) => {

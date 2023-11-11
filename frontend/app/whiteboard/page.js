@@ -1,12 +1,14 @@
 'use client'
+
 import { CollaborativeEditor } from "@/components/CollaborativeEditor";
-import { useState } from "react";
+import { Fragment, useEffect, useState } from 'react'
 import Image from 'next/image';
 import React from 'react';
 import io from 'socket.io-client';
 import { Room } from "./Room";
+import { Modal, Button } from "react-bootstrap";
 
-export default function Whiteboard() {
+export default async function Whiteboard() {
 
   // dummy question. input api here or wtv to call for correct question
   const question = {
@@ -18,12 +20,50 @@ export default function Whiteboard() {
     "complexity": "Easy",
     "__v": 0
   }
-  const socket = io('http://localhost:8081');
 
+  const socket = io('http://localhost:8081');
+  let [isOpen, setIsOpen] = useState(false)
+  let [end, setEnd] = useState(false)
+  const [messages, setMessages] = useState([]);
+  let room;
+
+  
   const handleEndSession = () => {
-    socket.emit('message', "partner wishes to end session, do you wish to proceed?")
-    socket.disconnect();
+    room = "room306ea1f3-0913-47a5-aba4-ec9980e23387"
+    console.log(room)
+    setEnd(true)
+    socket.emit('message', {room, message: "partner wishes to end session, do you wish to proceed?"})
   }
+
+
+  useEffect(() => {
+    socket.on('receive-end-session', ({ message }) => {
+      // Display the end session message
+      setMessages((prevMessages) => [...prevMessages, message]);
+      setIsOpen(true)
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [end]);
+
+  const handleCloseClick = () => {
+    socket.disconnect()
+    closeModal()
+  }
+
+  const handleClickOutside = () => {
+    socket.disconnect()
+    closeModal()
+  }
+  const handleConfirmEndSession = () => {
+    console.log("User confirmed end session");
+
+  // Send a confirmation message to the backend
+    socket.emit('confirmEndSession', { room, username });l
+    handleCloseClick();
+  };
 
   return (
     <div className='flex flex-col bg-theme bg-opacity-10 min-h-screen'>
@@ -83,6 +123,20 @@ export default function Whiteboard() {
             </button>
           </div>
         </div>
+        <Modal show={isOpen} onHide={handleCloseClick}>
+        <Modal.Header closeButton>
+          <Modal.Title>End Session Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{messages}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseClick}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleConfirmEndSession}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       </div>
     </div>
