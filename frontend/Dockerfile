@@ -19,6 +19,9 @@ COPY . .
 # Generate Prisma client code
 RUN npx prisma generate
 
+# kill all processes running on port 3000 since frontend need to use prot 3000.
+RUN npx kill-port 3000
+
 # Expose front end port 3000.
 EXPOSE 3000
 

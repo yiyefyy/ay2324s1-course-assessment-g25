@@ -6,17 +6,21 @@ As users edit the code, changes will be automatically persisted and synced—all
 
 ## Setup
 
+### Work Directory
+
+Run `cd collaboration-service` to the collaboration-service directory.
+
 ### Install dependencies
 
 Run `npm install` to install all dependencies specified in `package.json`.
 
-### Start the server
-
-Run `npm start` to start the server. The server will be running on port 3001.
+Run `npm ci` to make sure Continuous Integration.
 
 ### Start the server in development mode
 
-Run `npm run dev` to start the server in development mode using `nodemon`. The server will be running on port 3001.
+Run `npm run dev` to start the server in development mode using `nodemon`. 
+
+The server will be running on port 3001.
 
 ### Run tests
 

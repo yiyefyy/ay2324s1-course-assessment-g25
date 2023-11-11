@@ -4,21 +4,26 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Setup
 
+### Work Directory
+
+Run `cd frontend` to the frontend directory.
+
 ### Install dependencies
 
 Run `npm install` to install all dependencies specified in `package.json`.
 
-### Start the server
-
-Run `npm start` to start the server. The server will be running on port 3000.
+Run `npm ci` to make sure Continuous Integration.
 
 ### Start the server in development mode
 
-Run `npm run dev` to start the server in development mode using `nodemon`. The server will be running on port 3000.
+Run `npm run dev` to start the server in development mode using `nodemon`. 
+
+The server will be running on port 3000.
 
 ### Run tests
 
 Run `npm test` to run all tests.
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

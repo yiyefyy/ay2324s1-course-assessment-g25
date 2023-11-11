@@ -2,17 +2,21 @@
 
 ## Setup
 
+### Work Directory
+
+Run `cd question-service` to the question-service directory.
+
 ### Install dependencies
 
 Run `npm install` to install all dependencies specified in `package.json`.
 
-### Start the server
-
-Run `npm start` to start the server. The server will be running on port 8004.
+Run `npm ci` to make sure Continuous Integration.
 
 ### Start the server in development mode
 
-Run `npm run dev` to start the server in development mode using `nodemon`. The server will be running on port 8004.
+Run `npm run dev` to start the server in development mode using `nodemon`. 
+
+The server will be running on port 8084.
 
 ### Run tests
 
