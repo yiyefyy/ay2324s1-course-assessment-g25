@@ -1,25 +1,29 @@
 "use client";
 
+import { useParams, useSearchParams } from "next/navigation";
+
 import { ClientSideSuspense } from "@liveblocks/react";
 import { Loading } from "@/components/Loading";
 import { RoomProvider } from "@/liveblocks.config";
 import { useMemo } from "react";
-import { useSearchParams } from "next/navigation";
 
-export function Room(params: { roomid: string; }) {
-  const id = params.roomid;
-  console.log(id);
-  const roomId = useOverrideRoomId(id);
+export function Room(
+  { children }: { children: React.ReactNode }
+) {
+  const params = useParams();
+  const roomid: any = params.roomid;
+  console.log(roomid);
+  // const roomId = useOverrideRoomId(roomid); // useless function - Deon
 
   return (
     <RoomProvider
-      id={roomId}
+      id={roomid}
       initialPresence={{
         cursor: null,
       }}
     >
       <ClientSideSuspense fallback={<Loading />}>
-        {() => ""}
+        {() => children}
       </ClientSideSuspense>
     </RoomProvider>
   );

@@ -1,11 +1,11 @@
+import AIChatButton from "@/components/AIChatButton";
 import { CollaborativeEditor } from "@/components/CollaborativeEditor";
 import Image from 'next/image';
+import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
 import { Room } from "./Room";
 import io from 'socket.io-client';
 
-export default function Whiteboard(
-  { params }
-  ) {
+export default function Whiteboard() {
 
   // dummy question. input api here or wtv to call for correct question
   const question = {
@@ -40,12 +40,7 @@ export default function Whiteboard(
       <div className='flex flex-row h-full mx-2 mt-2 '>
         <div className='w-5/12 '>
           <div className='bg-white rounded-lg overflow-auto mr-2 py-4 px-5 h-[calc(100vh-20rem)]'>
-            <h2 className="text-2xl font-semibold">{question.title}</h2>
-            <p className="text-gray-500 mt-2">
-              Category: {question.category} | Complexity: {question.complexity}
-            </p>
-            <hr className="my-4" />
-            <p className="text-gray-700">{question.description}</p>
+            <QuestionSelectionWrapper complexity={"Easy"}/>
           </div>
 
           <div className='bg-gray-500 rounded-lg overflow-auto mr-2 py-4 px-5 h-56 mt-4'>
@@ -55,12 +50,13 @@ export default function Whiteboard(
                 Welcome! How can I assist you today?
               </p>
               <div className="flex justify-center gap-4">
-                <button className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none">
+                {/* <button className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none">
                   Generate Prompt
                 </button>
                 <button className="bg-green-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-600 focus:outline-none">
                   Get Hint
-                </button>
+                </button> */}
+                <AIChatButton />
               </div>
             </div>
           </div>
@@ -69,7 +65,7 @@ export default function Whiteboard(
         </div>
 
         <div className='w-7/12 bg-white rounded-lg overflow-auto h-[calc(100vh-5rem)]'>
-          <Room roomid={params.roomid}>
+          <Room>
             <CollaborativeEditor />
           </Room>
 
