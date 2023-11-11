@@ -17,4 +17,15 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'liveblocks.io',
+      },
+    ],
+  },
+}
+
+// module.exports = nextConfig
