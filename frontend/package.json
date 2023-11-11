@@ -32,6 +32,7 @@
     "eslint": "latest",
     "eslint-config-next": "latest",
     "framer-motion": "^10.16.4",
+    "lucide-react": "^0.292.0",
     "next": "^13.5.6",
     "next-auth": "^4.24.3",
     "next-google-fonts": "^2.2.0",
