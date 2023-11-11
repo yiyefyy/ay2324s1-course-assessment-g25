@@ -96,30 +96,8 @@ export default function EndSessionWrapper({
                         as="h3"
                         className="text-lg font-medium leading-6 text-gray-900"
                       >
-                        You have been matched with {otherMatch}
+                        You have been matched with 
                       </Dialog.Title>
-
-
-                      // <RoomProvider id="my-room" initialPresence={{}}>
-                      //   <ClientSideSuspense fallback="Loading…">
-                      //     {() => <Editor />}
-                      //   </ClientSideSuspense>
-                      // </RoomProvider>
-
-
-                    ) : <Dialog.Title
-                      as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900"
-                    >
-                      Matching you with a peer...
-                    </Dialog.Title>}
-
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        {seconds} seconds left
-                      </p>
-
-                    </div>
 
                     <div className="mt-4">
                       <button
@@ -127,7 +105,7 @@ export default function EndSessionWrapper({
                         className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                         onClick={handleCloseClick}
                       >
-                        I'm impatient
+                        End now
                       </button>
                     </div>
                   </Dialog.Panel>
