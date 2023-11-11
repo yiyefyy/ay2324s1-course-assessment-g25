@@ -53,13 +53,17 @@ export default function MatchButtonWrapper({
   const [isConnected, setIsConnected] = useState(false);
   const [name, setName] = useState(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
   const [isTimerFinished, setIsTimerFinished] = useState(false);
-
-  const socket: Socket = io('http://localhost:8081');
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   const connect = () => {
-    console.log("socket connected");
+    const newSocket = io('http://localhost:8081');
+    newSocket.on('connect', () => {
+      // The socket has successfully connected to the server.
+      console.log("socket connected");
+      setSocket(newSocket);
+    });
     var roomId: any;
-    socket.on('match-found', (msg) => {
+    newSocket.on('match-found', (msg) => {
       setName((msg.username2 === session?.user?.name) ? msg.username2: msg.username1)
       const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
       roomId = msg.roomId;
@@ -68,15 +72,16 @@ export default function MatchButtonWrapper({
       console.log(`Match found with: ${match}`);
       /* socket.emit('join-room', "joined room: ${roomId}");
       localStorage.setItem('roomId', roomId); */
-      socket.disconnect();
+      newSocket.disconnect();
     });
-    socket.on("disconnect", () => {
-      console.log(socket.connected); // false
+    newSocket.on("disconnect", () => {
+      console.log(newSocket.connected); // false
     });
     /* socket.on('join-room', function(io){
       io.join(roomId);
     }) */
-    return socket;
+    
+    return newSocket;
   };
 
   async function handleMatch() {
@@ -109,7 +114,9 @@ export default function MatchButtonWrapper({
       // await deletePair(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
       setIsPairCreated(false);
       setIsConnected(false);
-      socket.disconnect();
+      if (socket != null) {
+        socket.disconnect();
+      }
     } catch (error) {
 
     }
@@ -130,7 +137,9 @@ export default function MatchButtonWrapper({
   const handleCloseClick = () => {
     handleCancelMatch()
     setOtherMatch('')
-    // socket.disconnect()
+    if (socket != null) {
+      socket.disconnect();
+    }    
     closeModal()
     setSeconds(30)
   }
@@ -138,7 +147,7 @@ export default function MatchButtonWrapper({
   const handleClickOutside = () => {
     handleCancelMatch()
     setOtherMatch('')
-    socket.disconnect()
+    // socket.disconnect()
     closeModal()
     setSeconds(30)
     setIsTimerFinished(false);
@@ -147,6 +156,7 @@ export default function MatchButtonWrapper({
   const handleRetry = () => {
     setSeconds(30);
     setIsTimerFinished(false);
+    handleMatch();
   };
 
   const handleTryLater = () => {
@@ -221,13 +231,13 @@ export default function MatchButtonWrapper({
                     </Dialog.Title>
 
                     <div className="mt-4">
-                      {/* <button
+                      <button
                         type="button"
                         className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                         onClick={handleRetry}
                       >
                         Retry
-                      </button> */}
+                      </button>
                       <button
                         type="button"
                         className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 ml-4 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
