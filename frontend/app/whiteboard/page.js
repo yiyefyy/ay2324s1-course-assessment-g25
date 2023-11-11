@@ -38,7 +38,7 @@ export default function Whiteboard() {
 
 
   useEffect(() => {
-    setRoom('room306ea1f3-0913-47a5-aba4-ec9980e23387')
+    setRoom("room306ea1f3-0913-47a5-aba4-ec9980e23387")
     socket.emit('join-room', {room: room})
   });
 

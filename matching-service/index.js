@@ -28,7 +28,6 @@ const io = new Server(server, {
 
 const socket = io.on('connection', (socket) => {
   //console.log('User is connected');
-
   socket.on('find-match', ({ username, complexity }) => {
     findMatch(username, complexity);
   });
@@ -43,14 +42,14 @@ const socket = io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     //console.log('A user disconnected');
   });
-  socket.on('join-room', ({room}) => {
+  socket.on('join-room', ({ room }) => {
     socket.join(room)
     console.log("joined room: " + room)
   })
-  socket.on('message', ({room, message}) => {
-    endSession(room, message)
+  socket.on('message', ({ room, message }) => {
+    console.log("send message " + room)
+    socket.to(room).emit('end-session', { message })
   })
-
 });
 
 db.sequelize.sync().then(() => {
@@ -77,7 +76,7 @@ var pushed = false;
 
 const endSession = async (room, message) => {
   console.log("send message " + room)
-  socket.to(room).emit('end-session', {message})
+  socket.to(room).emit('end-session', { message })
 }
 
 const findMatch = async (username, complexity) => {
