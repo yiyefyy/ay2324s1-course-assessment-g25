@@ -27,21 +27,23 @@ const io = new Server(server, {
 });
 
 const socket = io.on('connection', (socket) => {
-  //console.log('User is connected');
+
+  console.log('User is connected');
 
   socket.on('find-match', ({ username, complexity }) => {
+    console.log("socket find-match received")
     findMatch(username, complexity);
   });
   socket.on('cancel-match', (username) => {
     cancelMatch(username);
-    socket.disconnect();
+    //socket.disconnect();
   });
   socket.on('match-timeout', ({ username, complexity }) => {
     console.log(`${username} has timed out from matching for ${complexity} question.`);
-    socket.disconnect();
+    //socket.disconnect();
   });
   socket.on('disconnect', () => {
-    //console.log('A user disconnected');
+    console.log('A user disconnected');
   });
 });
 
@@ -69,7 +71,7 @@ var connected = false;
 var pushed = false;
 
 const findMatch = async (username, complexity) => {
-  console.log(queue);
+  console.log("find match called" + queue);
   let interval;
   interval = setInterval(async () => {
     try {
@@ -79,7 +81,7 @@ const findMatch = async (username, complexity) => {
         const room = roomId();
         
         // make a POST request to create a new room using the room id
-        const response = await fetch(`http://localhost:3001/api/v1/rooms`, {
+        /* const response = await fetch(`http://localhost:3001/api/v1/rooms`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +92,7 @@ const findMatch = async (username, complexity) => {
             "metadata": { "color": "blue" }
           }),
         })
-        console.log(await response.json())
+        console.log(await response.json()) */
 
         socket.emit('match-found', { username1: username, username2: otherUser.username, complexity, room });
         console.log(`you have been matched with ${otherUser.username}`);
