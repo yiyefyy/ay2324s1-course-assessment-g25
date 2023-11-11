@@ -36,7 +36,7 @@ type AvatarProps = {
   height?: number;
 }
 
-export function Avatar({ picture, name, width, height}: AvatarProps) {
+export function Avatar({ picture, name, width=64, height=64}: AvatarProps) {
   return (
     <div className={styles.avatar} data-tooltip={name}>
       <Image

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 import io from 'socket.io-client';
 import { Room } from "./Room";
+import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
 
 export default function Whiteboard() {
 
@@ -39,12 +40,7 @@ export default function Whiteboard() {
       <div className='flex flex-row h-full mx-2 mt-2 '>
         <div className='w-5/12 '>
           <div className='bg-white rounded-lg overflow-auto mr-2 py-4 px-5 h-[calc(100vh-20rem)]'>
-            <h2 className="text-2xl font-semibold">{question.title}</h2>
-            <p className="text-gray-500 mt-2">
-              Category: {question.category} | Complexity: {question.complexity}
-            </p>
-            <hr className="my-4" />
-            <p className="text-gray-700">{question.description}</p>
+            <QuestionSelectionWrapper complexity={"Easy"}/>
           </div>
 
           <div className='bg-gray-500 rounded-lg overflow-auto mr-2 py-4 px-5 h-56 mt-4'>

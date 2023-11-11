@@ -13,6 +13,9 @@ export default function UserIconWrapper({
   }: {
     session: Session
   }) {
+
+  useEffect(() => console.log(session.user ? session.user : ""))
+
   return (
     <div className="relative w-52">
       <Menu as="div" className="relative inline-block text-left">
