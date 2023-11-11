@@ -20,6 +20,8 @@ export function Avatars() {
           <Avatar
             picture={currentUser.info.picture}
             name={currentUser.info.name}
+            width={64}
+            height={64}
           />
         </div>
       )}
@@ -27,7 +29,14 @@ export function Avatars() {
   );
 }
 
-export function Avatar({ picture, name }: { picture: string; name: string }) {
+type AvatarProps = {
+  picture: string;
+  name: string;
+  width?: number;
+  height?: number;
+}
+
+export function Avatar({ picture, name, width=64, height=64}: AvatarProps) {
   return (
     <div className={styles.avatar} data-tooltip={name}>
       <Image
@@ -35,9 +44,8 @@ export function Avatar({ picture, name }: { picture: string; name: string }) {
         alt={name}
         className={styles.avatar_picture}
         data-tooltip={name}
-        width="100" 
-        height="100"
-
+        width={width}
+        height={height}
       />
     </div>
   );
