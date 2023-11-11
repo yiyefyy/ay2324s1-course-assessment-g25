@@ -34,10 +34,7 @@ export default function MatchButtonWrapper({
   let [isOpen, setIsOpen] = useState(false)
   const [seconds, setSeconds] = useState(30);
   const { difficultySelected } = useSetDifficulty();
-  /* const [pair, setPair] = useState<PAIR>({
-    username: '',
-    complexity: 'easy'
-  }); */
+
 
   function closeModal() {
     setIsOpen(false)
@@ -58,24 +55,18 @@ export default function MatchButtonWrapper({
 
   const connect = () => {
     console.log("socket connected");
-    var roomId: any;
     socket.on('match-found', (msg) => {
       setName((msg.username2 === session?.user?.name) ? msg.username2: msg.username1)
       const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
-      roomId = msg.roomId;
+      //setRoomId(msg.room)
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
-      /* socket.emit('join-room', "joined room: ${roomId}");
-      localStorage.setItem('roomId', roomId); */
-      socket.disconnect();
+      socket.emit('join-room', {room: msg.room});
     });
     socket.on("disconnect", () => {
       console.log(socket.connected); // false
     });
-    /* socket.on('join-room', function(io){
-      io.join(roomId);
-    }) */
     return socket;
   };
 

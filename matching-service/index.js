@@ -43,6 +43,13 @@ const socket = io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     //console.log('A user disconnected');
   });
+  socket.on('join-room', room => {
+    socket.join(room)
+    socket.on('message', ({ message }) => {
+      socket.to(room).emit(message)
+    })
+  })
+
 });
 
 const localIPAddress = '0.0.0.0'
@@ -77,7 +84,7 @@ const findMatch = async (username, complexity) => {
       if (otherUser != null) {
         console.log(queue);
         const room = roomId();
-        
+
         // make a POST request to create a new room using the room id
         const response = await fetch(`http://localhost:3001/api/v1/rooms`, {
           method: 'POST',
@@ -86,7 +93,7 @@ const findMatch = async (username, complexity) => {
           },
           body: JSON.stringify({
             "id": room,
-            "defaultAccesses": [ "room:write" ],
+            "defaultAccesses": ["room:write"],
             "metadata": { "color": "blue" }
           }),
         })

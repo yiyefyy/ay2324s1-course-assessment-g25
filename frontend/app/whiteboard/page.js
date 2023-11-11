@@ -1,4 +1,6 @@
+'use client'
 import { CollaborativeEditor } from "@/components/CollaborativeEditor";
+import { useState } from "react";
 import Image from 'next/image';
 import React from 'react';
 import io from 'socket.io-client';
@@ -19,7 +21,7 @@ export default function Whiteboard() {
   const socket = io('http://localhost:8081');
 
   const handleEndSession = () => {
-    io.to(localStorage.getItem('roomId')).emit("session ended by partner")
+    socket.emit("partner wishes to end session, do you wish to proceed?")
     socket.disconnect();
   }
 
@@ -71,7 +73,15 @@ export default function Whiteboard() {
           <Room>
             <CollaborativeEditor />
           </Room>
-
+          <div className="self-end py-2 px-5">
+            <button
+            onClick={handleEndSession}
+              type="button"
+              className="inline-flex rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            >
+              endSession
+            </button>
+          </div>
         </div>
 
       </div>
