@@ -27,20 +27,22 @@ const io = new Server(server, {
 });
 
 const socket = io.on('connection', (socket) => {
-  //console.log('User is connected');
+
+  console.log('User is connected');
   socket.on('find-match', ({ username, complexity }) => {
+    console.log("socket find-match received")
     findMatch(username, complexity);
   });
   socket.on('cancel-match', (username) => {
     cancelMatch(username);
-    socket.disconnect();
+    //socket.disconnect();
   });
   socket.on('match-timeout', ({ username, complexity }) => {
     console.log(`${username} has timed out from matching for ${complexity} question.`);
-    socket.disconnect();
+    //socket.disconnect();
   });
   socket.on('disconnect', () => {
-    //console.log('A user disconnected');
+    console.log('A user disconnected');
   });
   socket.on('join-room', ({ room }) => {
     socket.join(room)
@@ -80,7 +82,7 @@ const endSession = async (room, message) => {
 }
 
 const findMatch = async (username, complexity) => {
-  console.log(queue);
+  console.log("find match called" + queue);
   let interval;
   interval = setInterval(async () => {
     try {
