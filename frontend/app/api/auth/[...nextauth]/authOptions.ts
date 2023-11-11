@@ -19,6 +19,9 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_SECRET as string,
     }),
     DiscordProvider({
+      profile(user) {
+        return { role: user.role ?? "user", ...user }
+      },
       clientId: process.env.DISCORD_ID as string,
       clientSecret: process.env.DISCORD_SECRET as string,
     }),
