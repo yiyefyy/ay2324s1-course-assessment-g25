@@ -76,8 +76,7 @@ export default function MatchButtonWrapper({
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
-      /* socket.emit('join-room', "joined room: ${roomId}");
-      localStorage.setItem('roomId', roomId); */
+      newSocket.emit('join-room', { room: roomId }) // new
       newSocket.disconnect();
     });
     newSocket.on("disconnect", () => {

@@ -4,14 +4,18 @@ import { CollaborativeEditor } from "@/components/CollaborativeEditor";
 import { Fragment, useEffect, useState } from 'react'
 import Image from 'next/image';
 import React from 'react';
-import io from 'socket.io-client'
+import io, { Socket } from 'socket.io-client'
 import { Room } from "./Room";
 import { Modal, Button } from "react-bootstrap";
+import { useParams, useSearchParams } from "next/navigation";
 // import { joinRoom } from '../api/match/routes'
 import AIChatButton from "@/components/AIChatButton"
 import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
 
-export default function Whiteboard() {
+export default function Whiteboard(
+  { children }: { children: React.ReactNode }
+) {
+  const params = useParams();
 
   // dummy question. input api here or wtv to call for correct question
   const question = {
@@ -24,29 +28,30 @@ export default function Whiteboard() {
     "__v": 0
   }
 
-  const socket = io('http://localhost:8081');
   let [isOpen, setIsOpen] = useState(false)
   let [end, setEnd] = useState(false)
   const [messages, setMessages] = useState([]);
-  const [room, setRoom] = useState("");
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [room, setRoom] = useState(params.roomid)
 
 
   const handleEndSession = () => {
     console.log(room)
     setEnd(true)
     connect()
-    socket.emit('message', { room: room, message: "partner wishes to end session, do you wish to proceed?" })
+    socket?.emit('message', { room: room, message: "partner wishes to end session, do you wish to proceed?" })
   }
 
-
   useEffect(() => {
-    setRoom("room306ea1f3-0913-47a5-aba4-ec9980e23387")
-    socket.emit('join-room', { room: room })
-  });
+    /* setRoom("room306ea1f3-0913-47a5-aba4-ec9980e23387")
+    socket.emit('join-room', { room: room }) */
+    const socket = io('http://localhost:8081');
+    setSocket(socket)
+  }, []);
 
   const connect = () => {
     console.log("connect message")
-    socket.on('end-session', ({ message }) => {
+    socket?.on('end-session', ({ message }) => {
       console.log("end session received")
       setMessages(message);
       setIsOpen(true)
@@ -54,8 +59,12 @@ export default function Whiteboard() {
     return socket
   }
 
+  function closeModal() {
+    setIsOpen(false)
+  }
+
   const handleCloseClick = () => {
-    socket.disconnect()
+    // socket.disconnect()
     closeModal()
   }
 
@@ -63,7 +72,7 @@ export default function Whiteboard() {
     console.log("User confirmed end session");
 
     // Send a confirmation message to the backend
-    socket.emit('confirmEndSession', { room });
+    socket?.emit('confirmEndSession', { room });
     handleCloseClick();
   };
 
@@ -108,7 +117,7 @@ export default function Whiteboard() {
         </div>
 
         <div className="w-7/12 bg-white rounded-lg overflow-auto h-[calc(100vh-5rem)] relative">
-          <Room className="h-full">
+          <Room>
             <CollaborativeEditor />
           </Room>
 
