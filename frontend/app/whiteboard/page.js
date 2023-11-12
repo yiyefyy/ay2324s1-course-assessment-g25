@@ -29,25 +29,25 @@ export default function Whiteboard() {
   let [isOpen, setIsOpen] = useState(false)
   let [end, setEnd] = useState(false)
   const [messages, setMessages] = useState([]);
-  const [room, setRoom] = useState(""); 
+  const [room, setRoom] = useState("");
 
-  
+
   const handleEndSession = () => {
     console.log(room)
     setEnd(true)
     connect()
-    socket.emit('message', {room: room, message: "partner wishes to end session, do you wish to proceed?"})
+    socket.emit('message', { room: room, message: "partner wishes to end session, do you wish to proceed?" })
   }
 
 
   useEffect(() => {
     setRoom("room306ea1f3-0913-47a5-aba4-ec9980e23387")
-    socket.emit('join-room', {room: room})
+    socket.emit('join-room', { room: room })
   });
 
   const connect = () => {
     console.log("connect message")
-    socket.on('end-session',  ({message}) => {
+    socket.on('end-session', ({ message }) => {
       console.log("end session received")
       setMessages(message);
       setIsOpen(true)
@@ -63,7 +63,7 @@ export default function Whiteboard() {
   const handleConfirmEndSession = () => {
     console.log("User confirmed end session");
 
-  // Send a confirmation message to the backend
+    // Send a confirmation message to the backend
     socket.emit('confirmEndSession', { room });
     handleCloseClick();
   };
@@ -84,7 +84,7 @@ export default function Whiteboard() {
       <div className='flex flex-row h-full mx-2 mt-2 '>
         <div className='w-5/12 '>
           <div className='bg-white rounded-lg overflow-auto mr-2 py-4 px-5 h-[calc(100vh-20rem)]'>
-            <QuestionSelectionWrapper complexity={"Easy"}/>
+            <QuestionSelectionWrapper complexity={"Easy"} />
           </div>
 
           <div className='bg-gray-500 rounded-lg overflow-auto mr-2 py-4 px-5 h-56 mt-4'>
@@ -108,34 +108,36 @@ export default function Whiteboard() {
 
         </div>
 
-        <div className='w-7/12 bg-white rounded-lg overflow-auto h-[calc(100vh-5rem)]'>
-          <Room>
+        <div className="w-7/12 bg-white rounded-lg overflow-auto h-[calc(100vh-5rem)] relative">
+          <Room className="h-full">
             <CollaborativeEditor />
           </Room>
-          <div className="self-end py-2 px-5">
+
+          <div className="absolute bottom-3 right-3">
             <button
-            onClick={handleEndSession}
+              onClick={handleEndSession}
               type="button"
-              className="inline-flex rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-12"
             >
               endSession
             </button>
           </div>
         </div>
+
         <Modal show={isOpen} onHide={handleCloseClick}>
-        <Modal.Header closeButton>
-          <Modal.Title>End Session Confirmation</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{messages}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseClick}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleConfirmEndSession}>
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
+          <Modal.Header closeButton>
+            <Modal.Title>End Session Confirmation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{messages}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseClick}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleConfirmEndSession}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
       </div>
     </div>

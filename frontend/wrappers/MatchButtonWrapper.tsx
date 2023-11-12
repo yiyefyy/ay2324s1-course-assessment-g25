@@ -11,6 +11,7 @@ import { NextRequest } from 'next/server'
 import { GET } from '../app/api/v1/questions/route'
 import { PrismaClientValidationError } from '@prisma/client/runtime/library'
 import { useSetDifficulty } from './DifficultySelectionContext'
+import { useRouter } from 'next/navigation';
 
 interface Question {
   title: string;
@@ -34,10 +35,15 @@ export default function MatchButtonWrapper({
   let [isOpen, setIsOpen] = useState(false)
   const [seconds, setSeconds] = useState(30);
   const { difficultySelected } = useSetDifficulty();
-  /* const [pair, setPair] = useState<PAIR>({
-    username: '',
-    complexity: 'easy'
-  }); */
+
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [otherMatch, setOtherMatch] = useState('');
+  const [roomId, setRoomId] = useState('');
+  const [isPairCreated, setIsPairCreated] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const [name, setName] = useState(session?.user?.name ?? 'null')
+  const [isTimerFinished, setIsTimerFinished] = useState(false);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   function closeModal() {
     setIsOpen(false)
@@ -47,13 +53,12 @@ export default function MatchButtonWrapper({
     setIsOpen(true)
   }
 
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [otherMatch, setOtherMatch] = useState('');
-  const [isPairCreated, setIsPairCreated] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
-  const [name, setName] = useState(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
-  const [isTimerFinished, setIsTimerFinished] = useState(false);
-  const [socket, setSocket] = useState<Socket | null>(null);
+
+  const router = useRouter()
+  useEffect(() => {
+      router.push(`/whiteboard/${roomId}`);
+  }, [roomId]);
+
 
   const connect = () => {
     const newSocket = io('http://localhost:8081');
@@ -67,6 +72,7 @@ export default function MatchButtonWrapper({
       setName((msg.username2 === session?.user?.name) ? msg.username2: msg.username1)
       const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
       roomId = msg.roomId;
+      setRoomId(roomId)
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
