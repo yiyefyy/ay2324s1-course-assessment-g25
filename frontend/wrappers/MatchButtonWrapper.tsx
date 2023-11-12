@@ -56,7 +56,9 @@ export default function MatchButtonWrapper({
 
   const router = useRouter()
   useEffect(() => {
+    if (roomId) { // Check if roomId is valid
       router.push(`/whiteboard/${roomId}`);
+    }
   }, [roomId]);
 
 
