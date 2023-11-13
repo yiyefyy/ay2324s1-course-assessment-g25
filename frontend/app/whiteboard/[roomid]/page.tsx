@@ -15,9 +15,7 @@ import { useRouter } from 'next/navigation';
 import { deletePair } from "@/app/api/match/routes";
 import { Dialog, Transition } from '@headlessui/react'
 
-export default function Whiteboard(
-  { children }: { children: React.ReactNode }
-) {
+export default function Whiteboard() {
   const params = useParams();
 
   // dummy question. input api here or wtv to call for correct question
