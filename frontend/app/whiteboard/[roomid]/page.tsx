@@ -229,7 +229,7 @@ export default function Whiteboard() {
                       >
                         Partner wants to end session, would you like to
                       </Dialog.Title>
-                      <div>
+                      <div className="flex flex-row gap-2">
                         <button onClick={handleStayClick}
                           type="button"
                           className="rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-12"

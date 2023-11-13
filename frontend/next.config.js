@@ -25,6 +25,7 @@ module.exports = {
         hostname: 'liveblocks.io',
       },
     ],
+    domains: ['cdn.discordapp.com', 'liveblocks.io', 'avatars.githubusercontent.com'],
   },
 }
 

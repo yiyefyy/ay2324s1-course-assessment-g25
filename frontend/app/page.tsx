@@ -26,7 +26,6 @@ export default async function Home() {
               <FaIcons.FaBars />
             </Link> */}
             <SideBarWrapper role={session?.user?.role ?? "user"} />
-
             <Image src="/logo.svg" alt="Logo" width="100" height="100" />
 
           </div>
