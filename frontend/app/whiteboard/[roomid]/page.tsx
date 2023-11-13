@@ -32,7 +32,7 @@ export default function Whiteboard(
   let [end, setEnd] = useState(false)
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [room, setRoom] = useState(params.roomid)
+  const room = params.roomid
 
 
   const handleEndSession = () => {
@@ -50,6 +50,7 @@ export default function Whiteboard(
   }, []);
 
   const connect = () => {
+    console.log("Socket connected" + socket?.connected)
     console.log("connect message")
     socket?.on('end-session', ({ message }) => {
       console.log("end session received")

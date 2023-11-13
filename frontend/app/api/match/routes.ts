@@ -9,7 +9,7 @@ export interface PAIR {
   username2: string,
   complexity: string,
   isDone: boolean
-  /*   question: string */
+  // question: string 
 }
 
 async function fetchData(api: string, requestOptions = {}): Promise<any> {

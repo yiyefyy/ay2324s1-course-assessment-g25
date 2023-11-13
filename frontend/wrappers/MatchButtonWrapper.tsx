@@ -38,12 +38,13 @@ export default function MatchButtonWrapper({
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [otherMatch, setOtherMatch] = useState('');
-  const [roomId, setRoomId] = useState('');
+  const [roomId, setRoomId] = useState<string|null>(null);
   const [isPairCreated, setIsPairCreated] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [name, setName] = useState(session?.user?.name ?? 'null')
   const [isTimerFinished, setIsTimerFinished] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [hasRedirected, setHasRedirected] = useState(false);
 
   function closeModal() {
     setIsOpen(false)
@@ -55,6 +56,7 @@ export default function MatchButtonWrapper({
 
 
   const router = useRouter()
+  
   /* useEffect(() => {
     if (roomId) { // Check if roomId is valid
       router.push(`/whiteboard/${roomId}`);
@@ -63,6 +65,12 @@ export default function MatchButtonWrapper({
 
   
 
+  useEffect(() => {
+    if (roomId && !hasRedirected) {
+      router.push(`/whiteboard/${roomId}`);
+      setHasRedirected(true);
+    }
+  }, [roomId, hasRedirected]);
 
   const connect = () => {
     const newSocket = io('http://localhost:8081');
@@ -73,14 +81,23 @@ export default function MatchButtonWrapper({
     });
     var roomId: string;
     newSocket.on('match-found', (msg) => {
-      setName((msg.username2 === session?.user?.name) ? msg.username2 : msg.username1)
-      const match = (msg.username2 === session?.user?.name) ? msg.username1 : msg.username2;
+      setName((msg.username2 === session?.user?.name) ? msg.username2: msg.username1)
+      const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
       roomId = msg.room;
       setRoomId(roomId)
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
       console.log(roomId)
+      newSocket.emit('join-room', { room: roomId }) // new
+
+    console.log(hasRedirected, roomId)
+    if (!hasRedirected && roomId) {
+      console.log('in redirect')
+      router.push(`/whiteboard/${roomId}`);
+      setHasRedirected(true);
+    }
+
       newSocket.disconnect();
     });
     newSocket.on("disconnect", () => {
