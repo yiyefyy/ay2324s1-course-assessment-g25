@@ -2,6 +2,7 @@ import { EditIcon, PlusIcon } from '../../icons';
 
 import { getServerSession } from 'next-auth';
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
 import AddQuestionForm from '../../wrappers/AddQuestionFormWrapper';
 import EditableQuestionsTableWrapper from '../../wrappers/EditableQuestionsTableWrapper';
 import SideBarWrapper from '../../wrappers/SideBarWrapper';
@@ -10,15 +11,16 @@ import { authOptions } from '../api/auth/[...nextauth]/authOptions';
 import { ManageQuestionsProvider } from './ManageQuestionsContext';
 
 export default async function manageQuestions() {
-
-    const session = await getServerSession(authOptions);
-
+    const session: any = await getServerSession(authOptions);
+    if (session?.user?.role !== "admin") {
+        redirect("/unauthorized");
+    }
     return (
         <ManageQuestionsProvider>
             <div className="bg-white min-h-screen">
                 <div className="bg-theme flex justify-between items-center h-20 px-5">
                     <div className='flex items-center'>
-                        <SideBarWrapper />
+                        <SideBarWrapper role={session?.user?.role ?? "user"} />
                         <Image src="/logo.svg" alt="Logo" width="100" height="100" />
                     </div>
                     {session
@@ -33,7 +35,7 @@ export default async function manageQuestions() {
                     </div>
                     <h2 className='font-dmserif text-base text-gray-600'>Contribute a question to the crowd-sourced questions database!</h2>
                     <div id='matchRequestBox' className='flex flex-col items-left bg-gray-100 shadow-md py-4 rounded-md mt-5 mb-10'>
-                        <AddQuestionForm session={session}/>
+                        <AddQuestionForm session={session} />
                     </div>
                     <div className='flex flex-row items-center'>
                         <EditIcon className='mr-2'></EditIcon>
@@ -41,7 +43,7 @@ export default async function manageQuestions() {
                     </div>
 
                     <h2 className='font-dmserif text-base text-gray-600 pb-5'>Wish to change something? You may edit the questions created by you.</h2>
-                    <EditableQuestionsTableWrapper session={session}/>
+                    <EditableQuestionsTableWrapper session={session} />
                 </main>
             </div>
         </ManageQuestionsProvider>
