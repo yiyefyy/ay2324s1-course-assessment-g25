@@ -44,6 +44,18 @@ export async function fetchRoomId(username: string): Promise<String> {
   return fetchData(`${BASE_URL}/getRoomId/${username}`)
 }
 
+export async function putQuestionByRoomId(roomId: string | string[], questionId: string): Promise<PAIR> {
+  const putQuestionApi = `${BASE_URL}/editByRoom/${roomId}`;
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ roomId, questionId }),
+  };
+  return fetchData(putQuestionApi, requestOptions);
+}
+
 export const findMatch = (username: string, complexity: string) => {
   const data = {username, complexity};
   socket.emit('find-match', data);

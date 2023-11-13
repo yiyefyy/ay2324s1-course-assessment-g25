@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CrossIcon } from '../icons/Cross'
-import { fetchPairByRoom } from "@/app/api/match/routes"
+import { fetchPairByRoom, putQuestionByRoomId } from "@/app/api/match/routes"
 import io, { Socket } from 'socket.io-client';
 import { Loading } from '@/components/Loading';
 
@@ -100,6 +100,14 @@ export default function QuestionSelectionWrapper({
     const handleConfirm = (index: any) => {
         setChosen(true)
         socket?.emit('question-chosen', { room: roomId, message: chosenQuestion })
+        putQuestionByRoomId(roomId, chosenQuestion._id)
+        .then((updatedPair) => {
+          console.log("pair updated", updatedPair)
+        })
+        .catch((error) => {
+          console.log("error putting question", error)
+        });
+      
     };
 
     return (
