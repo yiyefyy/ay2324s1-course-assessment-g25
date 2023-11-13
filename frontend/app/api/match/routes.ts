@@ -7,9 +7,8 @@ export interface PAIR {
   roomId: string,
   username1: string,
   username2: string,
-  complexity: string,
-  isDone: boolean
-  // question: string 
+  complexity: string
+  questionId: string 
 }
 
 async function fetchData(api: string, requestOptions = {}): Promise<any> {

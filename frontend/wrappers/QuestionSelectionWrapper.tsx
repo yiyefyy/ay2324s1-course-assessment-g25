@@ -1,6 +1,7 @@
 'use client'
 
 import { GET } from '../app/api/v1/questions/route'
+import { GET_ID } from '../app/api/v1/questions/[id]/route'
 import { NextRequest } from "next/server";
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
@@ -63,7 +64,7 @@ export default function QuestionSelectionWrapper({
         setIsOpenNotif(false)
     }
 
-    const BASE_URL = process.env.BASE_URL || 'http://localhost:8080'
+    const BASE_URL = process.env.BASE_URL || 'http://localhost:8084'
 
     useEffect(() => {
         socket?.on('partner-chose-question', ({ message }) => {
@@ -76,13 +77,26 @@ export default function QuestionSelectionWrapper({
         fetchPairByRoom(roomId)
         .then(async (result) => {
             try {
-                const response = await GET(new NextRequest(BASE_URL + '/api/v1/questions?page=1&limit=20', { method: 'GET' }));
-                const data = await response.json();
-                const complex = result.complexity
-                const filteredData = data.filter((item: Question) => item.complexity.toLowerCase() === complex.toLowerCase() || '');
-                setComplexity(complex)
-                console.log("complexity in question selection wrapper:", complex, complexity, filteredData)
-                setQuestions(filteredData);
+       
+                if (result.questionId) {
+                    console.log("question id saved is", result.questionId)
+                    setChosen(true)
+                    const id = String(result.questionId)
+                    const params = { params: { id: id } };
+                    const qn = await GET_ID(new NextRequest(BASE_URL + `/api/v1/questions/${id}`, { method: 'GET' }), params);
+
+                    const qn_data = await qn.json()
+                    console.log("qn data is", qn_data)
+                    setChosenQuestion(qn_data)
+                } else {
+                    const response = await GET(new NextRequest(BASE_URL + '/api/v1/questions', { method: 'GET' }));
+                    const data = await response.json();           
+                    const complex = result.complexity
+                    const filteredData = data.filter((item: Question) => item.complexity.toLowerCase() === complex.toLowerCase() || '');
+                    setComplexity(complex)
+                    console.log("complexity in question selection wrapper:", complex, complexity, filteredData)
+                    setQuestions(filteredData);
+                }
                 setLoaded(true);
             } catch (error: any) {
                 console.error('Error fetching data:', error.message);
