@@ -11,7 +11,6 @@ const getPairByUsername = async (req, res, next) => {
                     { username1: username },
                     { username2: username }
                 ],
-                isDone: true
             }
         })
         if (pair instanceof Pair) {

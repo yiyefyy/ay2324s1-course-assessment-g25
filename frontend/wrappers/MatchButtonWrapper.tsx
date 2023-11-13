@@ -55,11 +55,13 @@ export default function MatchButtonWrapper({
 
 
   const router = useRouter()
-  useEffect(() => {
+  /* useEffect(() => {
     if (roomId) { // Check if roomId is valid
       router.push(`/whiteboard/${roomId}`);
     }
-  }, [roomId]);
+  }, [roomId]); */
+
+  
 
 
   const connect = () => {
@@ -69,16 +71,16 @@ export default function MatchButtonWrapper({
       console.log("socket connected");
       setSocket(newSocket);
     });
-    var roomId: any;
+    var roomId: string;
     newSocket.on('match-found', (msg) => {
-      setName((msg.username2 === session?.user?.name) ? msg.username2: msg.username1)
-      const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
-      roomId = msg.roomId;
+      setName((msg.username2 === session?.user?.name) ? msg.username2 : msg.username1)
+      const match = (msg.username2 === session?.user?.name) ? msg.username1 : msg.username2;
+      roomId = msg.room;
       setRoomId(roomId)
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
-      newSocket.emit('join-room', { room: roomId }) // new
+      console.log(roomId)
       newSocket.disconnect();
     });
     newSocket.on("disconnect", () => {
@@ -87,9 +89,15 @@ export default function MatchButtonWrapper({
     /* socket.on('join-room', function(io){
       io.join(roomId);
     }) */
-    
+
     return newSocket;
   };
+
+  const handleGoToWhiteboard = () => {
+    const newSocket = io('http://localhost:8081');
+    newSocket.emit('join-room', { room: roomId })
+    router.push(`/whiteboard/${roomId}`);
+  }
 
   async function handleMatch() {
     console.log("handle match called", isConnected)
@@ -113,6 +121,7 @@ export default function MatchButtonWrapper({
       //handle error
     }
   }
+  
 
   async function handleCancelMatch() {
     try {
@@ -146,7 +155,7 @@ export default function MatchButtonWrapper({
     setOtherMatch('')
     if (socket != null) {
       socket.disconnect();
-    }    
+    }
     closeModal()
     setSeconds(30)
   }
@@ -273,13 +282,23 @@ export default function MatchButtonWrapper({
                 >
                   <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                     {isPairCreated ? (
-                      <Dialog.Title
-                        as="h3"
-                        className="text-lg font-medium leading-6 text-gray-900"
-                      >
-                        You have been matched with {otherMatch}
-                      </Dialog.Title>
-
+                      <div>
+                        <Dialog.Title
+                          as="h3"
+                          className="text-lg font-medium leading-6 text-gray-900"
+                        >
+                          You have been matched with {otherMatch}
+                        </Dialog.Title>
+                        <div>
+                          <button
+                            type="button"
+                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 ml-4 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                            onClick={handleGoToWhiteboard}
+                          >
+                            go to whiteboard
+                          </button>
+                        </div>
+                      </div>
 
                       // <RoomProvider id="my-room" initialPresence={{}}>
                       //   <ClientSideSuspense fallback="Loading…">
@@ -288,29 +307,32 @@ export default function MatchButtonWrapper({
                       // </RoomProvider>
 
 
-                    ) : <Dialog.Title
-                      as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900"
-                    >
-                      Matching you with a peer...
-                    </Dialog.Title>}
+                    ) :
+                      <div>
+                        <Dialog.Title
+                          as="h3"
+                          className="text-lg font-medium leading-6 text-gray-900"
+                        >
+                          Matching you with a peer...
+                        </Dialog.Title>
 
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        {seconds} seconds left
-                      </p>
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-500">
+                            {seconds} seconds left
+                          </p>
 
-                    </div>
+                        </div>
 
-                    <div className="mt-4">
-                      <button
-                        type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                        onClick={handleCloseClick}
-                      >
-                        I'm impatient
-                      </button>
-                    </div>
+                        <div className="mt-4">
+                          <button
+                            type="button"
+                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                            onClick={handleCloseClick}
+                          >
+                            I'm impatient
+                          </button>
+                        </div>
+                      </div>}
                   </Dialog.Panel>
                 </Transition.Child>
               </div>

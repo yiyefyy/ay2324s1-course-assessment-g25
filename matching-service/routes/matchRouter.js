@@ -4,7 +4,7 @@ const matchRouter = express.Router();
 
 matchRouter.post("/", matchController.addPair)
 matchRouter.get("/getPair/:username", matchController.getPairByUsername)
-matchRouter.get("/getPair/:roomId", matchController.getPairByRoomId)
+matchRouter.get("/getByRoom/:roomId", matchController.getPairByRoomId)
 matchRouter.delete("/deletePair/:username", matchController.deletePair)
 matchRouter.get("/pair", matchController.getAllPairs)
 matchRouter.get("/getRoomId/:username", matchController.getRoomId)

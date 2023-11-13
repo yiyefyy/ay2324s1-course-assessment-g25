@@ -22,7 +22,7 @@ async function fetchData(api: string, requestOptions = {}): Promise<any> {
 }
 
 export async function fetchPairByRoom(roomId: string): Promise<PAIR> {
-  const fetchPairApi = `${BASE_URL}/getPair/${roomId}`
+  const fetchPairApi = `${BASE_URL}/getByRoom/${roomId}`
   return fetchData(fetchPairApi)
 }
 
