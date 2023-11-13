@@ -43,11 +43,28 @@ export default function Whiteboard(
   }
 
   useEffect(() => {
-    /* setRoom("room306ea1f3-0913-47a5-aba4-ec9980e23387")
-    socket.emit('join-room', { room: room }) */
     const socket = io('http://localhost:8081');
+    socket.emit('join-room', { room: room })
     setSocket(socket)
+
+    socket.on('end-session', ({ message }) => {
+      console.log("end session received");
+      setMessages(message);
+      setIsOpen(true);
+    })
   }, []);
+
+  /* useEffect(() => {
+    // Create a socket connection and set up the listener
+    if (socket?.connected) {
+      console.log("hiiii")
+      socket.on('end-session', ({ message }) => {
+        console.log("end session received");
+        setMessages(message);
+        setIsOpen(true);
+      })
+    }
+  }) */
 
   const connect = () => {
     console.log("Socket connected" + socket?.connected)
