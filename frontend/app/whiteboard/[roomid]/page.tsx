@@ -8,9 +8,11 @@ import io, { Socket } from 'socket.io-client'
 import { Room } from "./Room";
 import { Modal, Button } from "react-bootstrap";
 import { useParams, useSearchParams } from "next/navigation";
-// import { joinRoom } from '../api/match/routes'
 import AIChatButton from "@/components/AIChatButton"
 import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
+import { useRouter } from 'next/navigation';
+import { deletePair } from "@/app/api/match/routes";
+import { Dialog, Transition } from '@headlessui/react'
 
 export default function Whiteboard(
   { children }: { children: React.ReactNode }
@@ -29,74 +31,107 @@ export default function Whiteboard(
   }
 
   let [isOpen, setIsOpen] = useState(false)
+  let [isEnd, setIsEnd] = useState(false)
   let [end, setEnd] = useState(false)
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState<Socket | null>(null);
+  let [isStart, setIsStart] = useState(false)
+  let [isSender, setIsSender] = useState(false)
+  let [confirmed, setConfirmed] = useState(false)
+  let [stay, setStay] = useState(false)
   const room = params.roomid
 
+  const router = useRouter()
 
   const handleEndSession = () => {
+    //connect()
     console.log(room)
     setEnd(true)
-    connect()
+    setIsSender(true)
     socket?.emit('message', { room: room, message: "partner wishes to end session, do you wish to proceed?" })
+
+    //router.push(`/`)
+    //socket?.disconnect()
   }
 
   useEffect(() => {
-    const socket = io('http://localhost:8081');
-    socket.emit('join-room', { room: room })
-    setSocket(socket)
-
-    socket.on('end-session', ({ message }) => {
-      console.log("end session received");
-      setMessages(message);
-      setIsOpen(true);
-    })
-  }, []);
-
-  /* useEffect(() => {
-    // Create a socket connection and set up the listener
-    if (socket?.connected) {
-      console.log("hiiii")
-      socket.on('end-session', ({ message }) => {
-        console.log("end session received");
-        setMessages(message);
-        setIsOpen(true);
-      })
-    }
-  }) */
+    connect()
+    const handleBeforeUnload = () => {
+      socket?.emit('partner-disconnect', { room, message: "partner is disconnected" });
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isStart]);
 
   const connect = () => {
+    //socket.emit('join-room', { room: room })
     console.log("Socket connected" + socket?.connected)
     console.log("connect message")
     socket?.on('end-session', ({ message }) => {
       console.log("end session received")
       setMessages(message);
       setIsOpen(true)
+      setIsEnd(true)
     });
-    return socket 
+    socket?.on('confirmed', ({ message }) => {
+      setIsOpen(true)
+      setMessages(message)
+      setConfirmed(true)
+      router.push('/')
+    })
+    socket?.on('partner-stay', ({ message }) => {
+      setIsOpen(true)
+      setIsEnd(false)
+      setMessages(message)
+      setStay(true)
+      setIsSender(false)
+      //closeModal()
+    })
+    socket?.on('partner-left', ({ room, message }) => {
+      setMessages(message)
+      setIsOpen(true)
+    })
+    //handleEndSession();
+    return socket
   }
 
   function closeModal() {
     setIsOpen(false)
+    setIsEnd(false)
   }
 
-  const handleCloseClick = () => {
+  const handleStay = () => {
+    closeModal()
+    setStay(false)
+  }
+
+  const handleStayClick = () => {
     // socket.disconnect()
+    socket?.emit('stay-session', { room, message: "Partner wants to stay" })
     closeModal()
   }
 
   const handleConfirmEndSession = () => {
     console.log("User confirmed end session");
-
     // Send a confirmation message to the backend
-    socket?.emit('confirmEndSession', { room });
-    handleCloseClick();
+    socket?.emit('confirmEndSession', { room, message: "partner ended session" });
+    socket?.disconnect()
+    const roomId = room
+    deletePair(roomId)
+    router.push(`/`)
   };
+
+  const handleStart = () => {
+    const socket = io('http://localhost:8081');
+    setSocket(socket)
+    socket?.emit('join-room', { room: room })
+    setIsStart(true)
+  }
 
   return (
     <div className='flex flex-col bg-theme bg-opacity-10 min-h-screen'>
-
       <div className="bg-theme flex justify-between items-center h-16">
         <div className='flex items-center'>
 
@@ -106,7 +141,6 @@ export default function Whiteboard(
 
         </div>
       </div>
-
       <div className='flex flex-row h-full mx-2 mt-2 '>
         <div className='w-5/12 '>
           <div className='bg-white rounded-lg overflow-auto mr-2 py-4 px-5 h-[calc(100vh-20rem)]'>
@@ -134,39 +168,130 @@ export default function Whiteboard(
 
         </div>
 
-        <div className="w-7/12 bg-white rounded-lg overflow-auto h-[calc(100vh-5rem)] relative">
-          <Room>
-            <CollaborativeEditor />
-          </Room>
 
-          <div className="absolute bottom-3 right-3">
-            <button
-              onClick={handleEndSession}
-              type="button"
-              className="rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-12"
-            >
-              endSession
-            </button>
+        {!isStart ? (
+          <div className="w-7/12 bg-white rounded-lg overflow-auto h-[calc(100vh-5rem)] relative">
+            <div className="p-5 content-center bottom-3 right-3">
+              <button
+                onClick={handleStart}
+                type="button"
+                className="rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-12"
+              >
+                startSession
+              </button>
+            </div>
+          </div>) :
+          (<div className="w-7/12 bg-white rounded-lg overflow-auto h-[calc(100vh-5rem)] relative">
+            <Room>
+              <CollaborativeEditor />
+            </Room>
+            <div className="absolute bottom-3 right-3">
+              <button
+                onClick={handleEndSession}
+                type="button"
+                className="rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-12"
+              >
+                endSession
+              </button>
+            </div>
           </div>
-        </div>
-
-        <Modal show={isOpen} onHide={handleCloseClick}>
-          <Modal.Header closeButton>
-            <Modal.Title>End Session Confirmation</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{messages}</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseClick}>
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={handleConfirmEndSession}>
-              Confirm
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
+          )}
+        <Transition appear show={isOpen} as={Fragment}>
+          <Dialog as="div" className="relative z-10" onClose={() => { }}>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-black bg-opacity-25" />
+            </Transition.Child>
+            <div className="fixed inset-0 overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-4 text-center">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 scale-95"
+                  enterTo="opacity-100 scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
+                >
+                  <div>
+                  {isEnd ? (
+                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                      <Dialog.Title
+                        as="h3"
+                        className="text-lg font-medium leading-6 text-gray-900"
+                      >
+                        Partner wants to end session, would you like to
+                      </Dialog.Title>
+                      <div>
+                        <button onClick={handleStayClick}
+                          type="button"
+                          className="rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-12"
+                        >
+                          I want to Stay
+                        </button>
+                        <button
+                          onClick={handleConfirmEndSession}
+                          type="button"
+                          className="rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-12"
+                        >
+                          Confirm end
+                        </button>
+                      </div>
+                    </Dialog.Panel>) : (<div><Dialog.Panel></Dialog.Panel></div>)}
+                    {isSender ? (
+                      <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-lg font-medium leading-6 text-gray-900"
+                        >
+                          Waiting for your partners response
+                        </Dialog.Title>
+                        <div>
+                          {confirmed ? (
+                            <button
+                              onClick={handleConfirmEndSession}
+                              type="button"
+                              className="rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-12"
+                            >
+                              Confirm end
+                            </button>) : (<div></div>)}
+                        </div>
+                      </Dialog.Panel>
+                    ) : (<div><Dialog.Panel></Dialog.Panel></div>)}
+                    {stay ? (
+                      <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-lg font-medium leading-6 text-gray-900"
+                        >
+                          {messages}
+                        </Dialog.Title>
+                        <div>
+                          <button
+                            onClick={handleStay}
+                            type="button"
+                            className="rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-12"
+                          >
+                            ok
+                          </button>
+                        </div>
+                      </Dialog.Panel>
+                    ) : (<div><Dialog.Panel></Dialog.Panel></div>)}
+                  </div>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition>
       </div>
-    </div>
+    </div >
   );
 
 }

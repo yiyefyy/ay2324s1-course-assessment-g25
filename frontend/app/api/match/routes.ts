@@ -26,8 +26,8 @@ export async function fetchPairByRoom(roomId: string): Promise<PAIR> {
   return fetchData(fetchPairApi)
 }
 
-export async function deletePair(username: string): Promise<void> {
-  const fetchPairApi = `${BASE_URL}/getPair/${username}`
+export async function deletePair(roomId: string| string[]): Promise<void> {
+  const fetchPairApi = `${BASE_URL}/deletePair/${roomId}`
   return fetchData(fetchPairApi)
 }
 

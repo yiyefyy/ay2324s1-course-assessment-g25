@@ -50,7 +50,17 @@ const socket = io.on('connection', (socket) => {
   })
   socket.on('message', ({ room, message }) => {
     console.log("send message " + room)
-    socket.to(room).emit('end-session', { message })
+    socket.broadcast.to(room).emit('end-session', { message })
+  })
+  socket?.on('confirmEndSession', ({room, message}) => {
+    console.log("confirm end")
+    socket.broadcast.to(room).emit('confirmed', {message})
+  })
+  socket?.on('stay-session', ({room, message}) => {
+    socket.broadcast.to(room).emit('partner-stay', {message})
+  })
+  socket.on('partner-disconnect', ({room, message}) => {
+    socket.broadcast.to(room).emit('partner-left', {message})
   })
 });
 

@@ -28,14 +28,17 @@ export default function Whiteboard() {
   let [end, setEnd] = useState(false)
   const [messages, setMessages] = useState([]);
   const [room, setRoom] = useState("");
+  const [isSender, setIsSender] = useState(false)
+
   // const [socket, setSocket] = useState<Socket | null>(null);
   const socket = io('http://localhost:8081');
 
   const handleEndSession = () => {
     console.log(room)
     setEnd(true)
-    connect()
+    //const socket = connect()
     socket.emit('message', { room: room, message: "partner wishes to end session, do you wish to proceed?" })
+    setIsSender(true)
   }
 
 
@@ -45,16 +48,17 @@ export default function Whiteboard() {
     // setSocket(socket)
   }); 
 
-  const connect = () => {
+  /* const connect = () => {
     console.log("connect message")
     socket.on('end-session', ({ message }) => {
       console.log("end session received")
       setMessages(message);
       setIsOpen(true)
+      console.log(`${isSender}`)
     });
     return socket
   }
-
+ */
   const handleCloseClick = () => {
     // socket.disconnect()
     closeModal()
@@ -128,7 +132,10 @@ export default function Whiteboard() {
           <Modal.Header closeButton>
             <Modal.Title>End Session Confirmation</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{messages}</Modal.Body>
+          {isSender?(
+          <Modal.Body> End session? </Modal.Body>
+          ): (<Modal.Body > {messages} </Modal.Body>)
+          }
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseClick}>
               Cancel

@@ -52,12 +52,14 @@ const getAllPairs = async (req, res, next) => {
 const getRoomId = async (req, res, next) => {
     try {
         const username = req.params.username
-        const pair = await Pair.findOne({where: {
-            [Op.or]: [
-                { username1: username },
-                { username2: username }
-            ]
-        }})
+        const pair = await Pair.findOne({
+            where: {
+                [Op.or]: [
+                    { username1: username },
+                    { username2: username }
+                ]
+            }
+        })
         res.status(200).json({ res: pair.roomId })
     } catch (err) {
         next(err)
@@ -100,13 +102,10 @@ const addPair = async (req, res, next) => {
 
 const deletePair = async (req, res, next) => {
     try {
-        const username = req.params.username
+        const id = req.params.roomId
         const pair = await Pair.findOne({
             where: {
-                [Op.or]: [
-                    { username1: username },
-                    { username2: username }
-                ]
+                roomId: id
             }
         })
         if (!pair) {
@@ -114,12 +113,10 @@ const deletePair = async (req, res, next) => {
         }
         await Pair.destroy({
             where: {
-                [Op.or]: [
-                    { username1: username },
-                    { username2: username }
-                ]
+                roomId: id
             }
         })
+        res.status(200).json({res: "pair is deleted"})
     } catch (err) {
         next(err)
     }

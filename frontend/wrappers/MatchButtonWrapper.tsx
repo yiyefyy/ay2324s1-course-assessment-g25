@@ -89,10 +89,11 @@ export default function MatchButtonWrapper({
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
       console.log(roomId)
-      newSocket.emit('join-room', { room: roomId }) // new
+       // new
 
     console.log(hasRedirected, roomId)
     if (!hasRedirected && roomId) {
+      newSocket.emit('join-room', { room: roomId })
       console.log('in redirect')
       router.push(`/whiteboard/${roomId}`);
       setHasRedirected(true);
@@ -110,11 +111,11 @@ export default function MatchButtonWrapper({
     return newSocket;
   };
 
-  const handleGoToWhiteboard = () => {
+  /* const handleGoToWhiteboard = () => {
     const newSocket = io('http://localhost:8081');
-    newSocket.emit('join-room', { room: roomId })
+    //newSocket.emit('join-room', { room: roomId })
     router.push(`/whiteboard/${roomId}`);
-  }
+  } */
 
   async function handleMatch() {
     console.log("handle match called", isConnected)
@@ -306,24 +307,7 @@ export default function MatchButtonWrapper({
                         >
                           You have been matched with {otherMatch}
                         </Dialog.Title>
-                        <div>
-                          <button
-                            type="button"
-                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 ml-4 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                            onClick={handleGoToWhiteboard}
-                          >
-                            go to whiteboard
-                          </button>
                         </div>
-                      </div>
-
-                      // <RoomProvider id="my-room" initialPresence={{}}>
-                      //   <ClientSideSuspense fallback="Loading…">
-                      //     {() => <Editor />}
-                      //   </ClientSideSuspense>
-                      // </RoomProvider>
-
-
                     ) :
                       <div>
                         <Dialog.Title
@@ -356,7 +340,6 @@ export default function MatchButtonWrapper({
             </div>
           )}
         </Dialog>
-
       </Transition>
     </>
 
