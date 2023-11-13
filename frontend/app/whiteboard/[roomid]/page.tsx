@@ -38,7 +38,7 @@ export default function Whiteboard(
   const handleEndSession = () => {
     console.log(room)
     setEnd(true)
-    // connect()
+    connect()
     socket?.emit('message', { room: room, message: "partner wishes to end session, do you wish to proceed?" })
   }
 
