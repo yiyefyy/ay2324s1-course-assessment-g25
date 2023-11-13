@@ -25,3 +25,4 @@ export function Room(
       </ClientSideSuspense>
     </RoomProvider>
   );
+}
