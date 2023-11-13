@@ -5,7 +5,8 @@ import { NextRequest } from "next/server";
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CrossIcon } from '../icons/Cross'
-import { fetchPairByRoom } from "@/app/api/match/routes";
+import { fetchPairByRoom } from "@/app/api/match/routes"
+import io, { Socket } from 'socket.io-client';
 import { Loading } from '@/components/Loading';
 
 interface Question {
@@ -18,9 +19,11 @@ interface Question {
 }
 
 export default function QuestionSelectionWrapper({
-    roomId
+    roomId,
+    socket
 }: {
     roomId: string | string[];
+    socket: Socket | null;
 }) {
 
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -58,6 +61,11 @@ export default function QuestionSelectionWrapper({
     const BASE_URL = process.env.BASE_URL || 'http://localhost:8080'
 
     useEffect(() => {
+        socket?.on('partner-chose-question', ({ message }) => {
+            console.log("partner chose question received")
+            setChosen(true);
+            setChosenQuestion(message)
+        });        
         fetchPairByRoom(roomId)
         .then(async (result) => {
             try {
@@ -84,6 +92,7 @@ export default function QuestionSelectionWrapper({
 
     const handleConfirm = (index: any) => {
         setChosen(true)
+        socket?.emit('question-chosen', { room: roomId, message: chosenQuestion })
     };
 
     return (
@@ -103,7 +112,7 @@ export default function QuestionSelectionWrapper({
                 :
                 <div className="table-container">
                     <table className="min-w-full">
-                        <caption className="text-lg font-semibold mb-2">Select a question here!</caption>
+                        <caption className="font-semibold mb-2 font-dmserif">Please select your {complexity} question</caption>
                         <thead>
                             <tr className="border-b bg-white">
                                 <th className="py-2 text-left font-medium text-sm pl-1">ID</th>

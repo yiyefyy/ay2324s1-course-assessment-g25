@@ -62,6 +62,10 @@ const socket = io.on('connection', (socket) => {
   socket.on('partner-disconnect', ({room, message}) => {
     socket.broadcast.to(room).emit('partner-left', {message})
   })
+  socket.on('question-chosen', ({room, message}) => {
+    console.log("question chosen socket received", room)
+    socket.broadcast.to(room).emit('partner-chose-question', {message})
+  })
 });
 
 db.sequelize.sync().then(() => {

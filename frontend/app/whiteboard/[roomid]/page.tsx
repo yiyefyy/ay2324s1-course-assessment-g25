@@ -143,7 +143,10 @@ export default function Whiteboard(
       <div className='flex flex-row h-full mx-2 mt-2 '>
         <div className='w-5/12 '>
           <div className='bg-white rounded-lg overflow-auto mr-2 py-4 px-5 h-[calc(100vh-20rem)]'>
-            <QuestionSelectionWrapper roomId={room} />
+            {isStart
+            ? <QuestionSelectionWrapper roomId={room} socket={socket}/>
+            : <h1>Click on "startSession" to start coding!</h1>
+            }
           </div>
 
           <div className='bg-gray-500 rounded-lg overflow-auto mr-2 py-4 px-5 h-56 mt-4'>
