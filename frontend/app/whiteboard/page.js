@@ -4,6 +4,7 @@ import React from 'react';
 import io from 'socket.io-client';
 import { Room } from "./Room";
 import AIChatButton from "@/components/AIChatButton"
+import AIHintButton from "@/components/AIHintButton"
 import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
 
 export default function Whiteboard() {
@@ -50,13 +51,11 @@ export default function Whiteboard() {
               <p className="text-gray-300 mb-4">
                 Welcome! How can I assist you today?
               </p>
+              <p className="text-gray-300 mb-4">
+                Get a hint by entering the problem description or chat with AI
+              </p>
               <div className="flex justify-center gap-4">
-                {/* <button className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none">
-                  Generate Prompt
-                </button>
-                <button className="bg-green-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-600 focus:outline-none">
-                  Get Hint
-                </button> */}
+                <AIHintButton />
                 <AIChatButton />
               </div>
             </div>

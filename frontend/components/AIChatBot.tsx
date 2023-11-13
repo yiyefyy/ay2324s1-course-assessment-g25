@@ -1,6 +1,6 @@
 'use client'
 
-import { useChat } from 'ai/react';
+import { useChat, useCompletion } from 'ai/react';
 import { Bot, User, XCircle } from 'lucide-react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -49,7 +49,7 @@ export default function AIChatBot({open, onClose}: AIChatBotProps) {
                     </p>
                     {m.role == 'user' && <User className='mr-2 shrink-0'/>}
                     </div>
-                ))}
+                ))} 
             </div>
             <form onSubmit={handleSubmit} className='m-3 flex gap-1'>
                 <Input
