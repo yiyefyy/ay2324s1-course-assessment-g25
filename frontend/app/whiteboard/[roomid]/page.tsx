@@ -92,6 +92,7 @@ export default function Whiteboard(
     socket?.on('partner-left', ({ room, message }) => {
       setMessages(message)
       setIsOpen(true)
+      setIsEnd(true)
     })
     //handleEndSession();
     return socket
