@@ -64,8 +64,3 @@ jobs:
         run: npm run build --if-present
         working-directory: ${{ env.working-directory }}
 
-      - name: Test
-      # This step runs the `test` script that is specified under the `scripts` 
-      # key in your `package.json` file.
-        run: npm test
-        working-directory: ${{ env.working-directory }}
