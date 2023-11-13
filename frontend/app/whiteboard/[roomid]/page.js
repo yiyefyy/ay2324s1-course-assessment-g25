@@ -1,10 +1,9 @@
+import AIChatButton from "@/components/AIChatButton";
 import { CollaborativeEditor } from "@/components/CollaborativeEditor";
 import Image from 'next/image';
-import React from 'react';
-import io from 'socket.io-client';
-import { Room } from "./Room";
-import AIChatButton from "@/components/AIChatButton"
 import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
+import { Room } from "./Room";
+import io from 'socket.io-client';
 
 export default function Whiteboard() {
 
