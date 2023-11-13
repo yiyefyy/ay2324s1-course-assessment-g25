@@ -3,9 +3,10 @@
 import { GET } from '../app/api/v1/questions/route'
 import { NextRequest } from "next/server";
 import { Fragment, useState, useEffect } from 'react'
-import { DELETE, PUT } from '../app/api/v1/questions/route'
-import { Dialog, Transition, Listbox } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react'
 import { CrossIcon } from '../icons/Cross'
+import { fetchPairByRoom } from "@/app/api/match/routes";
+import { Loading } from '@/components/Loading';
 
 interface Question {
     title: string;
@@ -17,22 +18,24 @@ interface Question {
 }
 
 export default function QuestionSelectionWrapper({
-    complexity
+    roomId
 }: {
-    complexity: string | null;
+    roomId: string | string[];
 }) {
 
     const [questions, setQuestions] = useState<Question[]>([]);
     let [isOpen, setIsOpen] = useState(false)
     const [chosen, setChosen] = useState(false);
+    const [complexity, setComplexity] = useState("")
+    const [loaded, setLoaded] = useState(false)
 
     const question = {
-        "_id": "654289d66292a524af80e0ab",
-        "owner": "Deon",
-        "title": "Palindrome Checker",
-        "description": "Write a Python function to check if a given string is a palindrome. Palindromes are strings that read the same backward as forward.",
-        "category": "String Manipulation",
-        "complexity": "Easy",
+        "_id": "",
+        "owner": "",
+        "title": "",
+        "description": "",
+        "category": "",
+        "complexity": "",
         "__v": 0
     }
 
@@ -55,21 +58,23 @@ export default function QuestionSelectionWrapper({
     const BASE_URL = process.env.BASE_URL || 'http://localhost:8080'
 
     useEffect(() => {
-        const fetchData = async () => {
+        fetchPairByRoom(roomId)
+        .then(async (result) => {
             try {
-                const response = await GET(new NextRequest(BASE_URL + '/api/v1/questions?page=1&limit=10', { method: 'GET' }));
+                const response = await GET(new NextRequest(BASE_URL + '/api/v1/questions?page=1&limit=20', { method: 'GET' }));
                 const data = await response.json();
-                console.log(data)
-
-                const filteredData = data.filter((item: Question) => item.complexity === complexity || '');
-
+                const complex = result.complexity
+                const filteredData = data.filter((item: Question) => item.complexity.toLowerCase() === complex.toLowerCase() || '');
+                setComplexity(complex)
+                console.log("complexity in question selection wrapper:", complex, complexity, filteredData)
                 setQuestions(filteredData);
+                setLoaded(true);
             } catch (error: any) {
                 console.error('Error fetching data:', error.message);
             }
-        };
-        fetchData();
-    }, []);
+            console.log(result);
+        })
+    }, [])
 
     const handleSelect = async (index: any) => {
         openModal()
@@ -83,6 +88,9 @@ export default function QuestionSelectionWrapper({
 
     return (
         <div>
+        {loaded
+            ? 
+            (<div>
             {chosen ?
                 <div>
                     <h2 className="text-2xl font-semibold">{chosenQuestion.title}</h2>
@@ -180,6 +188,8 @@ export default function QuestionSelectionWrapper({
                 </div>
 
             }
+        </div>)
+        : (<Loading/>)}
         </div>
 
     )

@@ -21,7 +21,7 @@ async function fetchData(api: string, requestOptions = {}): Promise<any> {
   return results.res
 }
 
-export async function fetchPairByRoom(roomId: string): Promise<PAIR> {
+export async function fetchPairByRoom(roomId: string | string[]): Promise<PAIR> {
   const fetchPairApi = `${BASE_URL}/getByRoom/${roomId}`
   return fetchData(fetchPairApi)
 }

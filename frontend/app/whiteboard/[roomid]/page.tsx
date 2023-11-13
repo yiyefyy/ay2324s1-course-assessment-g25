@@ -8,6 +8,7 @@ import io, { Socket } from 'socket.io-client'
 import { Room } from "./Room";
 import { Modal, Button } from "react-bootstrap";
 import { useParams, useSearchParams } from "next/navigation";
+import { fetchPairByRoom } from "@/app/api/match/routes";
 import AIChatButton from "@/components/AIChatButton"
 import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
 import { useRouter } from 'next/navigation';
@@ -20,6 +21,7 @@ export default function Whiteboard(
   const params = useParams();
 
   // dummy question. input api here or wtv to call for correct question
+
   const question = {
     "_id": "654289d66292a524af80e0ab",
     "owner": "Deon",
@@ -44,14 +46,10 @@ export default function Whiteboard(
   const router = useRouter()
 
   const handleEndSession = () => {
-    //connect()
     console.log(room)
     setEnd(true)
     setIsSender(true)
     socket?.emit('message', { room: room, message: "partner wishes to end session, do you wish to proceed?" })
-
-    //router.push(`/`)
-    //socket?.disconnect()
   }
 
   useEffect(() => {
@@ -145,7 +143,7 @@ export default function Whiteboard(
       <div className='flex flex-row h-full mx-2 mt-2 '>
         <div className='w-5/12 '>
           <div className='bg-white rounded-lg overflow-auto mr-2 py-4 px-5 h-[calc(100vh-20rem)]'>
-            <QuestionSelectionWrapper complexity={"Easy"} />
+            <QuestionSelectionWrapper roomId={room} />
           </div>
 
           <div className='bg-gray-500 rounded-lg overflow-auto mr-2 py-4 px-5 h-56 mt-4'>

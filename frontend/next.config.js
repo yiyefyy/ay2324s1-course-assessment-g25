@@ -7,7 +7,7 @@ const nextConfig = {
   assetPrefix: pathPrefix,
   basePath: pathPrefix,
   // output: "export",
-  reactStrictMode: true,
+  reactStrictMode: false,
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.externals.push({
       'utf-8-validate': 'commonjs utf-8-validate',
