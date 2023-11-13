@@ -31,6 +31,7 @@ export default function QuestionSelectionWrapper({
     const [chosen, setChosen] = useState(false);
     const [complexity, setComplexity] = useState("")
     const [loaded, setLoaded] = useState(false)
+    let [isOpenNotif, setIsOpenNotif] = useState(false)
 
     const question = {
         "_id": "",
@@ -58,6 +59,10 @@ export default function QuestionSelectionWrapper({
         setIsOpen(true)
     }
 
+    function closeModalNotif() {
+        setIsOpenNotif(false)
+    }
+
     const BASE_URL = process.env.BASE_URL || 'http://localhost:8080'
 
     useEffect(() => {
@@ -65,6 +70,8 @@ export default function QuestionSelectionWrapper({
             console.log("partner chose question received")
             setChosen(true);
             setChosenQuestion(message)
+            setIsOpen(false)
+            setIsOpenNotif(true)
         });        
         fetchPairByRoom(roomId)
         .then(async (result) => {
@@ -102,6 +109,7 @@ export default function QuestionSelectionWrapper({
             (<div>
             {chosen ?
                 <div>
+                <div>
                     <h2 className="text-2xl font-semibold">{chosenQuestion.title}</h2>
                     <p className="text-gray-500 mt-2">
                         Category: {chosenQuestion.category} | Complexity: {chosenQuestion.complexity}
@@ -109,6 +117,52 @@ export default function QuestionSelectionWrapper({
                     <hr className="my-4" />
                     <p className="text-gray-700">{chosenQuestion.description}</p>
                 </div>
+                 <Transition appear show={isOpenNotif} as={Fragment}>
+                 <Dialog as="div" className="relative z-10" onClose={closeModalNotif}>
+                     <Transition.Child
+                         as={Fragment}
+                         enter="ease-out duration-300"
+                         enterFrom="opacity-0"
+                         enterTo="opacity-100"
+                         leave="ease-in duration-200"
+                         leaveFrom="opacity-100"
+                         leaveTo="opacity-0"
+                     >
+                         <div className="fixed inset-0 bg-black bg-opacity-25" />
+                     </Transition.Child>
+
+                     <div className="fixed inset-0 overflow-y-auto">
+                         <div className="flex min-h-full items-center justify-center p-4 text-center">
+                             <Transition.Child
+                                 as={Fragment}
+                                 enter="ease-out duration-300"
+                                 enterFrom="opacity-0 scale-95"
+                                 enterTo="opacity-100 scale-100"
+                                 leave="ease-in duration-200"
+                                 leaveFrom="opacity-100 scale-100"
+                                 leaveTo="opacity-0 scale-95"
+                             >
+                                 <Dialog.Panel className="w-1/2 mx-auto transform overflow-hidden rounded-2xl bg-theme bg-opacity-95 px-20 py-6 text-left align-middle shadow-xl transition-all">
+                                     <h1>Your partner has chosen:</h1>
+                                     <div className='bg-white bg-opacity-50 p-3 mt-4 rounded-2xl'>
+                                         <h2 className="text-lg font-semibold">{chosenQuestion.title} | Category: {chosenQuestion.category}</h2>
+                                         <p className="text-gray-700 mt-2">{chosenQuestion.description}</p>
+                                     </div>
+                                    
+                                     <button
+                                         className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-full font-medium"
+                                         onClick={closeModalNotif}
+                                     >
+                                         Okay
+                                     </button>
+                                 </Dialog.Panel>
+
+                             </Transition.Child>
+                         </div>
+                     </div>
+                 </Dialog>
+             </Transition>
+             </div>
                 :
                 <div className="table-container">
                     <table className="min-w-full">
@@ -194,6 +248,8 @@ export default function QuestionSelectionWrapper({
                             </div>
                         </Dialog>
                     </Transition>
+
+                   
                 </div>
 
             }
