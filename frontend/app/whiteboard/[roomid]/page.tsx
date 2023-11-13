@@ -223,26 +223,26 @@ export default function Whiteboard() {
                   <div>
                     {isEnd && (
                       <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-  <Dialog.Title className="text-lg font-medium leading-6 text-gray-900 pb-4">
-                        Partner wants to end session, would you like to
-                      </Dialog.Title>
-                      <div className="flex flex-row gap-2 w-full justify-between">
-                        <button
-                          onClick={handleStayClick}
-                          type="button"
-                          className="rounded-md border w-full border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-10"
-                        >
-                          Stay
-                        </button>
-                        <button
-                          onClick={handleConfirmEndSession}
-                          type="button"
-                          className="rounded-md border w-full border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 h-10"
-                        >
-                          End
-                        </button>
-                      </div>
-                    </Dialog.Panel>
+                        <Dialog.Title className="text-lg font-medium leading-6 text-gray-900 pb-4">
+                          Partner wants to end session, would you like to
+                        </Dialog.Title>
+                        <div className="flex flex-row gap-2 w-full justify-between">
+                          <button
+                            onClick={handleStayClick}
+                            type="button"
+                            className="rounded-md border w-full border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-10"
+                          >
+                            Stay
+                          </button>
+                          <button
+                            onClick={handleConfirmEndSession}
+                            type="button"
+                            className="rounded-md border w-full border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 h-10"
+                          >
+                            End
+                          </button>
+                        </div>
+                      </Dialog.Panel>
                     )}
                     {isSender && (
                       <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
@@ -266,21 +266,21 @@ export default function Whiteboard() {
                     )}
                     {stay ? (
                       <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-  <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
-    {messages}
-  </Dialog.Title>
-  <div className="mt-4">
-    <button
-      onClick={handleStay}
-      type="button"
-      className="rounded-md border w-full border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-10"
-      >
-      OK
-    </button>
-  </div>
-</Dialog.Panel>
+                        <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
+                          {messages}
+                        </Dialog.Title>
+                        <div className="mt-4">
+                          <button
+                            onClick={handleStay}
+                            type="button"
+                            className="rounded-md border w-full border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-10"
+                          >
+                            OK
+                          </button>
+                        </div>
+                      </Dialog.Panel>
 
-    
+
                     ) : (<div><Dialog.Panel></Dialog.Panel></div>)}
                   </div>
                 </Transition.Child>

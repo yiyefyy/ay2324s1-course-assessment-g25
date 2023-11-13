@@ -58,7 +58,7 @@ export default async function Home() {
           <h1 className='font-dmserif font-semibold text-7xl mb-5'>PeerPrep</h1>
           <h2 className='font-dmserif italic text-xl'>prep with peers for technical assessments</h2>
           <DifficultySelectionProvider>
-            <div id='matchRequestBox' className='flex items-center justify-between bg-white shadow-md py-4 px-8 rounded-md my-10'>
+          <div id='matchRequestBox' className='flex flex-wrap items-center justify-between bg-gray-200 bg-opacity-30 shadow-md py-4 px-8 rounded-md my-10'>
               <div className='flex items-center'>
                 <h1 className='font-dmserif font-semibold text-xl'>prepare for a </h1>
                 <DifficultySelectionWrapper />

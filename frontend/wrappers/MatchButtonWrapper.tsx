@@ -3,7 +3,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import io, { Socket } from 'socket.io-client'
-import { cancelMatch, deletePair, findMatch } from '../app/api/match/routes'
+import { cancelMatch, fetchPair, findMatch } from '../app/api/match/routes'
 
 import { Session } from 'next-auth'
 import { signIn } from "next-auth/react"
@@ -45,6 +45,7 @@ export default function MatchButtonWrapper({
   const [isTimerFinished, setIsTimerFinished] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [hasRedirected, setHasRedirected] = useState(false);
+  const [hasRoom, setHasRoom] = useState(false);
 
   function closeModal() {
     setIsOpen(false)
@@ -54,7 +55,6 @@ export default function MatchButtonWrapper({
     setIsOpen(true)
   }
 
-
   const router = useRouter()
   
   /* useEffect(() => {
@@ -63,7 +63,14 @@ export default function MatchButtonWrapper({
     }
   }, [roomId]); */
 
-  
+  useEffect(() => {
+    fetchPair(session?.user?.name ?? "").then((result) => {
+      if (result) {
+        console.log("session found in match button wrapper")
+        setHasRoom(true)
+      }
+  })
+  })  
 
   useEffect(() => {
     if (roomId && !hasRedirected) {
@@ -111,19 +118,12 @@ export default function MatchButtonWrapper({
     return newSocket;
   };
 
-  /* const handleGoToWhiteboard = () => {
-    const newSocket = io('http://localhost:8081');
-    //newSocket.emit('join-room', { room: roomId })
-    router.push(`/whiteboard/${roomId}`);
-  } */
-
   async function handleMatch() {
     console.log("handle match called", isConnected)
     try {
       const response = await GET(new NextRequest('http://localhost:8080' + '/api/v1/questions?page=1&limit=10', { method: 'GET' }));
       const data = await response.json();
       const filteredQuestions = data.filter((qn: Question) => qn.complexity === localStorage.getItem('selectedDifficulty'));
-
       setQuestions(filteredQuestions);
 
       const username = session?.user?.name ?? localStorage.getItem("name") ?? 'null';
@@ -225,11 +225,14 @@ export default function MatchButtonWrapper({
 
   return (
     <>
-      <button
-        onClick={handleButtonClick}
-        className="flex items-center bg-theme text-gray-800 font-dmserif font-medium text-lg border rounded py-2 px-5 shadow-md cursor-pointer font-dmserif transition-all duration-300 hover:shadow-lg active:scale-95">
-        {children}
-      </button>
+<button
+  onClick={handleButtonClick}
+  className={`flex items-center bg-theme text-gray-800 font-dmserif font-medium text-lg border rounded py-2 px-5 shadow-md font-dmserif ${hasRoom ? "cursor-not-allowed hover:bg-gray-300" : "cursor-pointer transition-all duration-300 hover:shadow-lg active:scale-95"}`}
+  disabled={hasRoom} 
+>
+  {hasRoom ? children : children}
+</button>
+
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={() => handleClickOutside()}>
           <Transition.Child
