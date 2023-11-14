@@ -34,7 +34,7 @@ export default function MatchButtonWrapper({
 
   let [isOpen, setIsOpen] = useState(false)
   const [seconds, setSeconds] = useState(30);
-  const { difficultySelected } = useSetDifficulty();
+  const { difficultySelected, setSessionExists } = useSetDifficulty();
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [otherMatch, setOtherMatch] = useState('');
@@ -68,6 +68,7 @@ export default function MatchButtonWrapper({
       if (result) {
         console.log("session found in match button wrapper")
         setHasRoom(true)
+        setSessionExists(result.roomId)
       }
   })
   })  

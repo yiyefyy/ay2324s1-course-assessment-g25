@@ -7,7 +7,7 @@ app.use(cors());
 
 const db = require("./models");
 const historyRouter = require("./routes/historyRouter");
-app.use("history", historyRouter);
+app.use("/history", historyRouter);
 
 const {errorHandler} = require("./middleware/errorHandler");
 app.use(errorHandler);
