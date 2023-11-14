@@ -15,7 +15,7 @@ const addQuestions = async (req, res, next) => {
             return;
         }
 
-        const count = await AttemptedQuestions.findAll({
+        const count = await AttemptedQuestions.findOne({
             where: {
                 roomId: roomId,
                 username: username,
@@ -24,7 +24,7 @@ const addQuestions = async (req, res, next) => {
 
 
         if (count instanceof AttemptedQuestions) {
-            res.status(400).json({ error: "Question has been attempted" });
+            res.status(400).json({ error: "Session has ended!" });
             return;
         }
 

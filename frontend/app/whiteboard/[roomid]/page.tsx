@@ -14,8 +14,6 @@ import { useRouter } from 'next/navigation';
 import { deletePair } from "@/app/api/match/routes";
 import { Dialog, Transition } from '@headlessui/react'
 import { addHistory } from "@/app/api/history/routes";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
 
 export default function Whiteboard() {
@@ -33,10 +31,14 @@ export default function Whiteboard() {
   let [isSender, setIsSender] = useState(false)
   let [confirmed, setConfirmed] = useState(false)
   let [stay, setStay] = useState(false)
-  const [question, setQuestion] = useState('')
+  const [questions, setQuestions] = useState('')
   const [name, setName] = useState('')
+  const [roomMessage, setRoomMessage] = useState('Click on "startSession" to start coding!')
+  const [openQuestion, setOpenQuestion] = useState(false)
+
   const room = params.roomid
 
+  var question: string
   const router = useRouter()
 
   const handleEndSession = () => {
@@ -60,7 +62,9 @@ export default function Whiteboard() {
   }, [isStart]);
 
   const connect = () => {
-    fetchPairByRoom(room).then(result => setQuestion(result.questionId))
+    setName(session?.user?.name ?? '')
+    fetchPairByRoom(room).then(result => { question = result.questionId, setQuestions(result.questionId)})
+    console.log("question is " + question)
     //socket.emit('join-room', { room: room })
     console.log("Socket connected" + socket?.connected)
     console.log("connect message")
@@ -72,6 +76,7 @@ export default function Whiteboard() {
     });
     socket?.on('confirmed', ({ message }) => {
       addHistory(room, session?.user?.name ?? '', question)
+      console.log(question)
       setIsOpen(true)
       setMessages(message)
       setConfirmed(true)
@@ -89,6 +94,20 @@ export default function Whiteboard() {
       setIsOpen(true)
       setIsEnd(true)
       setMessages(message)
+    })
+    socket?.on('get-question', ({message}) => {
+      question = message._id
+      setQuestions(message._id)
+      console.log("socket question: " + message._id)
+      console.log(question)
+    })
+    socket?.on('room-ready', ({room, message}) => {
+      setRoomMessage(message)
+      setOpenQuestion(true)
+    })
+    socket?.on('wait-for-partner', ({message}) => {
+      setOpenQuestion(false)
+      setRoomMessage(message)
     })
     //handleEndSession();
     return socket
@@ -116,7 +135,7 @@ export default function Whiteboard() {
     // Send a confirmation message to the backend
     socket?.emit('confirmEndSession', { room, message: "partner ended session" });
     socket?.disconnect()
-    addHistory(room, session?.user?.name ?? '', question)
+    addHistory(room, session?.user?.name ?? '', questions)
     router.push(`/`)
   };
  
@@ -141,9 +160,9 @@ export default function Whiteboard() {
       <div className='flex flex-row h-full mx-2 mt-2 '>
         <div className='w-5/12 '>
           <div className='bg-white rounded-lg overflow-auto mr-2 py-4 px-5 h-[calc(100vh-20rem)]'>
-            {isStart
+            {isStart && openQuestion
               ? <QuestionSelectionWrapper roomId={room} socket={socket} />
-              : <h1>Click on "startSession" to start coding!</h1>
+              : <h1>{roomMessage}</h1>
             }
           </div>
 
