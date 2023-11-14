@@ -1,10 +1,11 @@
 'use client'
 
-import { GET } from '../app/api/v1/questions/route'
+import { useSession } from 'next-auth/react';
 import { NextRequest } from "next/server";
 import { useEffect, useState } from 'react'
 import { fetchHistoryByUsername } from '@/app/api/history/routes';
 import { Session } from 'next-auth';
+import { GET } from '../app/api/v1/questions/route';
 
 interface Question {
   title: string;
