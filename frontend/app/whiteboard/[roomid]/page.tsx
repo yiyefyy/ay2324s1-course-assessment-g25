@@ -7,7 +7,7 @@ import React from 'react';
 import io, { Socket } from 'socket.io-client'
 import { Room } from "./Room";
 import { useParams, useSearchParams } from "next/navigation";
-import { fetchQuestionByRoomId } from "@/app/api/match/routes";
+import { fetchPairByRoom, fetchQuestionByRoomId } from "@/app/api/match/routes";
 import AIChatButton from "@/components/AIChatButton"
 import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
 import MatchButtonWrapper from "@/wrappers/MatchButtonWrapper";
@@ -74,7 +74,7 @@ export default function Whiteboard() {
   }, [isStart]);
 
   const connect = () => {
-    fetchQuestionByRoomId(room).then(result => setQuestion(result))
+    fetchPairByRoom(room).then(result => setQuestion(result.questionId))
     //socket.emit('join-room', { room: room })
     console.log("Socket connected" + socket?.connected)
     console.log("connect message")

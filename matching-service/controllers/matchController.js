@@ -106,8 +106,8 @@ const putQuestionByRoomId = async (req, res, next) => {
 
 const getQuestionByRoomId = async (req, res, next) => {
     try {
-        const roomId = req.body.params;
-        const Pair = await Pair.findOne({
+        const roomId = req.params.roomId;
+        const pair = await Pair.findOne({
             where: { roomId: roomId }
         });
 
@@ -115,9 +115,9 @@ const getQuestionByRoomId = async (req, res, next) => {
             return res.status(404).json({ error: "Pair not found" });
         }
 
-        if (pair.questionId == null) {
+        /* if (pair.questionId == null) {
             return res.status(404).json({ error: "Session does not have a questionId" });
-        }
+        } */
         res.status(200).json({res: pair.questionId})
     } catch (err) {
         next(err)
@@ -159,7 +159,7 @@ const deletePair = async (req, res, next) => {
                 roomId: id
             }
         })
-        res.status(200).json({ res: "pair is deleted" })
+        res.status(200).json({ res: 'pair is deleted' })
     } catch (err) {
         next(err)
     }
