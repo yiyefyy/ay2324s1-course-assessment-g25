@@ -64,13 +64,13 @@ export default function MatchButtonWrapper({
   }, [roomId]); */
 
   useEffect(() => {
-    /* fetchPair(session?.user?.name ?? "").then((result) => {
+    fetchPair(session?.user?.name ?? "").then((result) => {
       if (result) {
         console.log("session found in match button wrapper")
         setHasRoom(true)
         setSessionExists(result.roomId)
       }
-    }) */
+    })
   })
 
   useEffect(() => {
