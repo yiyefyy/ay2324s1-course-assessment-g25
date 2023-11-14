@@ -22,6 +22,7 @@ const addQuestions = async (req, res, next) => {
             },
         });
 
+
         if (count instanceof AttemptedQuestions) {
             res.status(400).json({ error: "Question has been attempted" });
             return;

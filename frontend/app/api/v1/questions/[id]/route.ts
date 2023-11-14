@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:8084'
 
-export async function GET_ID(request: NextRequest,
+export async function GET(request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const id = params.id

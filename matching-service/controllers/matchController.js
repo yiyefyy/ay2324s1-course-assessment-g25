@@ -143,6 +143,7 @@ const getQuestionByRoomId = async (req, res, next) => {
 } */
 
 const deletePair = async (req, res, next) => {
+    console.log('DELETE PAIR', req.params.roomId)
     try {
         const id = req.params.roomId
         const pair = await Pair.findOne({

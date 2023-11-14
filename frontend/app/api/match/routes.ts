@@ -8,7 +8,7 @@ export interface PAIR {
   username1: string,
   username2: string,
   complexity: string
-  questionId: string 
+  questionId: string,
 }
 
 async function fetchData(api: string, requestOptions = {}): Promise<any> {
@@ -26,6 +26,7 @@ export async function fetchPairByRoom(roomId: string | string[]): Promise<PAIR> 
 }
 
 export async function deletePair(roomId: string| string[]): Promise<void> {
+  console.log("delete pair called in routes")
   const fetchPairApi = `${BASE_URL}/deletePair/${roomId}`
   return fetchData(fetchPairApi)
 }

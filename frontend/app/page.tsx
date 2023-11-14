@@ -11,7 +11,7 @@ import UserIconWrapper from '../wrappers/UserIconWrapper';
 import WhiteboardButtonWrapper from '../wrappers/WhiteboardButtonWrapper';
 import { authOptions } from './api/auth/[...nextauth]/authOptions';
 import { Children } from 'react';
-
+import ExistingSessionWrapper from '@/wrappers/ExistingSessionWrapper';
 //import LOGO from '../public/logo.jpg';
 
 export default async function Home() {
@@ -55,10 +55,13 @@ export default async function Home() {
           }
         </div>
         <main className='my-10 mx-40'>
+        <DifficultySelectionProvider>
           <h1 className='font-dmserif font-semibold text-7xl mb-5'>PeerPrep</h1>
-          <h2 className='font-dmserif italic text-xl'>prep with peers for technical assessments</h2>
-          <DifficultySelectionProvider>
-            <div id='matchRequestBox' className='flex items-center justify-between bg-white shadow-md py-4 px-8 rounded-md my-10'>
+          <h2 className='font-dmserif italic text-xl mb-8'>prep with peers for technical assessments</h2>
+          <ExistingSessionWrapper/>
+
+
+            <div id='matchRequestBox' className='flex flex-wrap items-center justify-between bg-gray-200 bg-opacity-30 shadow-md py-4 px-8 rounded-md mb-10'>
               <div className='flex items-center'>
                 <h1 className='font-dmserif font-semibold text-xl'>prepare for a </h1>
                 <DifficultySelectionWrapper />
@@ -74,7 +77,7 @@ export default async function Home() {
               <div>
                 <div>
                   <WhiteboardButtonWrapper>
-                    <button>Go to Code Editor</button>
+                    {/* <button>Go to Code Editor</button> */}
                   </WhiteboardButtonWrapper>
                   <QuestionsTableWrapper children={undefined} session={session} />
                 </div>
