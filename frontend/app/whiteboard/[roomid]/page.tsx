@@ -61,7 +61,6 @@ export default function Whiteboard({
 
   useEffect(() => {
     setName(session?.user?.name ?? '')
-    fetchQuestionByRoomId(room).then(result => setQuestion(result))
     console.log(question)
     connect()
     const handleBeforeUnload = () => {
@@ -74,6 +73,7 @@ export default function Whiteboard({
   }, [isStart]);
 
   const connect = () => {
+    fetchQuestionByRoomId(room).then(result => setQuestion(result))
     //socket.emit('join-room', { room: room })
     console.log("Socket connected" + socket?.connected)
     console.log("connect message")
@@ -124,12 +124,11 @@ export default function Whiteboard({
   }
 
   const handleConfirmEndSession = () => {
+    deletePair(room)
     console.log("User confirmed end session");
     // Send a confirmation message to the backend
     socket?.emit('confirmEndSession', { room, message: "partner ended session" });
     socket?.disconnect()
-    const roomId = room
-    deletePair(roomId)
     addHistory(room, name, question)
     router.push(`/`)
   };

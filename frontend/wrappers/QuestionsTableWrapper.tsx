@@ -10,7 +10,23 @@ interface Question {
   title: string;
   complexity: string;
   category: string;
-  attemptedDate: Date
+  attemptedDate: string
+}
+
+interface Data {
+  title: string;
+  complexity: string;
+  category: string;
+  _id: string;
+  owner: string;
+  description: string
+}
+
+interface HISTORY {
+  roomId: '',
+  username: '',
+  attemptedDate: Date,
+  questionId: ''
 }
 
 export default function QuestionsTableWrapper({
@@ -28,18 +44,31 @@ export default function QuestionsTableWrapper({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(session?.user?.email )
+        console.log(session?.user?.email)
         const historyList = await fetchHistoryByUsername(session?.user?.name ?? '')
-        const response = await GET(new NextRequest(BASE_URL + '/api/v1/questions?page=1&limit=10', { method: 'GET' }));
+        console.log(historyList)
+        const response = await GET(new NextRequest(BASE_URL + '/api/v1/questions', { method: 'GET' }));
         const data = await response.json();
-        const filteredQuestions = data.map((question: { id: string; }) => {
-          const matchingHistoryItem = historyList.find(historyItem => historyItem.questionId === question.id);
-          if (matchingHistoryItem) {
-            return { ...question, attemptedDate: matchingHistoryItem.attemptedDate };
+        const questionList = historyList.map((historyItem) => {
+          const dataItem = data.find((qn: Data) => qn._id === historyItem.questionId || '');
+          console.log(dataItem)
+          const date = new Date(historyItem.attemptedDate.toString());
+          // Format the date in Singapore time (SGT)
+          const singaporeTime = date.toLocaleString('en-SG', {
+            timeZone: 'Asia/Singapore',
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+          });
+          return {
+            title: dataItem.title,
+            complexity: dataItem.complexity,
+            category: dataItem.category,
+            attemptedDate: singaporeTime,
           }
-          return question;
         });
-        setQuestions(filteredQuestions);
+        setQuestions(questionList)
+        console.log(questionList)
       } catch (error: any) {
         console.error('Error fetching data:', error.message);
       }
@@ -82,7 +111,7 @@ export default function QuestionsTableWrapper({
               <td className="py-1 ">{question.title || ''}</td>
               <td className="py-1 ">{question.complexity || ''}</td>
               <td className="py-1 ">{question.category || ''}</td>
-              <td className="py-1 ">{question.attemptedDate.toLocaleDateString() || ''}</td>
+              <td className="py-1 ">{question.attemptedDate || ''}</td>
               {/* <td className="py-1">
                 <button
                   className="delete-button bg-red-500 text-white px-3 py-1 rounded font-medium"
