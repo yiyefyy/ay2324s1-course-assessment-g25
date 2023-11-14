@@ -10,19 +10,20 @@ import { useParams, useSearchParams } from "next/navigation";
 import { fetchQuestionByRoomId } from "@/app/api/match/routes";
 import AIChatButton from "@/components/AIChatButton"
 import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
+import MatchButtonWrapper from "@/wrappers/MatchButtonWrapper";
 import { useRouter } from 'next/navigation';
 import { deletePair } from "@/app/api/match/routes";
 import { Dialog, Transition } from '@headlessui/react'
 import { addHistory } from "@/app/api/history/routes";
-import { Session } from 'next-auth'
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import { getServerSession } from 'next-auth';
+import EndSessionButton from "@/wrappers/EndSessionButton";
 
-export default function Whiteboard({
-  children,
-  session
-}: {
-  children: React.ReactNode;
-  session: Session | null;
-}) {
+export default function Whiteboard() {
+  
+  const session: any = async () => {
+    return await getServerSession(authOptions);
+  }
   const params = useParams();
 
   // dummy question. input api here or wtv to call for correct question
@@ -61,7 +62,7 @@ export default function Whiteboard({
 
   useEffect(() => {
     setName(session?.user?.name ?? '')
-    console.log(question)
+    //console.log(question)
     connect()
     const handleBeforeUnload = () => {
       socket?.emit('partner-disconnect', { room, message: "Partner is disconnected" });
@@ -105,7 +106,7 @@ export default function Whiteboard({
     })
     //handleEndSession();
     return socket
-  }
+  } 
 
   function closeModal() {
     setIsOpen(false)
@@ -131,8 +132,8 @@ export default function Whiteboard({
     socket?.disconnect()
     addHistory(room, name, question)
     router.push(`/`)
-  };
-
+  }; 
+ 
   const handleStart = () => {
     const socket = io('http://localhost:8081');
     setSocket(socket)
@@ -303,6 +304,6 @@ export default function Whiteboard({
       </div>
     </div >
   );
-
 }
+
 

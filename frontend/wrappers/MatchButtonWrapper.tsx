@@ -95,7 +95,7 @@ export default function MatchButtonWrapper({
     if (!hasRedirected && roomId) {
       newSocket.emit('join-room', { room: roomId })
       console.log('in redirect')
-      router.push(`/whiteboard/${roomId}`);
+      router.push(`/whiteboard/${roomId}/${session?.user?.name}`);
       setHasRedirected(true);
     }
 
@@ -139,7 +139,7 @@ export default function MatchButtonWrapper({
       //handle error
     }
   }
-  
+
 
   async function handleCancelMatch() {
     try {

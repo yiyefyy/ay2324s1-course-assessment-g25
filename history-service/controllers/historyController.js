@@ -17,7 +17,7 @@ const addQuestions = async (req, res, next) => {
 
         const count = await AttemptedQuestions.findAll({
             where: {
-                questionId: questionId,
+                roomId: roomId,
                 username: username,
             },
         });
