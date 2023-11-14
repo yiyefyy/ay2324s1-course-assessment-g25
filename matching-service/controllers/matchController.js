@@ -11,7 +11,6 @@ const getPairByUsername = async (req, res, next) => {
                     { username1: username },
                     { username2: username }
                 ],
-                isDone: true
             }
         })
         if (pair instanceof Pair) {
@@ -53,12 +52,14 @@ const getAllPairs = async (req, res, next) => {
 const getRoomId = async (req, res, next) => {
     try {
         const username = req.params.username
-        const pair = await Pair.findOne({where: {
-            [Op.or]: [
-                { username1: username },
-                { username2: username }
-            ]
-        }})
+        const pair = await Pair.findOne({
+            where: {
+                [Op.or]: [
+                    { username1: username },
+                    { username2: username }
+                ]
+            }
+        })
         res.status(200).json({ res: pair.roomId })
     } catch (err) {
         next(err)
@@ -81,6 +82,28 @@ const addPair = async (req, res, next) => {
     }
 }
 
+const putQuestionByRoomId = async (req, res, next) => {
+    try {
+      const { roomId, questionId } = req.body;
+  
+      const pair = await Pair.findOne({
+        where: { roomId: roomId }
+      });
+  
+      if (!pair) {
+        return res.status(404).json({ error: "Pair not found" });
+      }
+  
+      pair.questionId = questionId;
+  
+      await pair.save();
+  
+      res.status(200).json({ success: true, pair: pair });
+    } catch (err) {
+      next(err);
+    }
+  };
+
 /* const endSession = async (req, res, next) => {
     try {
         const id = req.params.roomId;
@@ -100,14 +123,12 @@ const addPair = async (req, res, next) => {
 } */
 
 const deletePair = async (req, res, next) => {
+    console.log('DELETE PAIR', req.params.roomId)
     try {
-        const username = req.params.username
+        const id = req.params.roomId
         const pair = await Pair.findOne({
             where: {
-                [Op.or]: [
-                    { username1: username },
-                    { username2: username }
-                ]
+                roomId: id
             }
         })
         if (!pair) {
@@ -115,12 +136,10 @@ const deletePair = async (req, res, next) => {
         }
         await Pair.destroy({
             where: {
-                [Op.or]: [
-                    { username1: username },
-                    { username2: username }
-                ]
+                roomId: id
             }
         })
+        res.status(200).json({res: "pair is deleted"})
     } catch (err) {
         next(err)
     }
@@ -132,7 +151,8 @@ module.exports = {
     getAllPairs,
     addPair,
     getPairByRoomId,
-    getRoomId
+    getRoomId,
+    putQuestionByRoomId
 }
 
 

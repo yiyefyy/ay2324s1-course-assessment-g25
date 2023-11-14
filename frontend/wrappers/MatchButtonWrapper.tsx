@@ -3,7 +3,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import io, { Socket } from 'socket.io-client'
-import { cancelMatch, deletePair, findMatch } from '../app/api/match/routes'
+import { cancelMatch, fetchPair, findMatch } from '../app/api/match/routes'
 
 import { Session } from 'next-auth'
 import { signIn } from "next-auth/react"
@@ -11,6 +11,7 @@ import { NextRequest } from 'next/server'
 import { GET } from '../app/api/v1/questions/route'
 import { PrismaClientValidationError } from '@prisma/client/runtime/library'
 import { useSetDifficulty } from './DifficultySelectionContext'
+import { useRouter } from 'next/navigation';
 
 interface Question {
   title: string;
@@ -33,11 +34,18 @@ export default function MatchButtonWrapper({
 
   let [isOpen, setIsOpen] = useState(false)
   const [seconds, setSeconds] = useState(30);
-  const { difficultySelected } = useSetDifficulty();
-  /* const [pair, setPair] = useState<PAIR>({
-    username: '',
-    complexity: 'easy'
-  }); */
+  const { difficultySelected, setSessionExists } = useSetDifficulty();
+
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [otherMatch, setOtherMatch] = useState('');
+  const [roomId, setRoomId] = useState<string|null>(null);
+  const [isPairCreated, setIsPairCreated] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const [name, setName] = useState(session?.user?.name ?? 'null')
+  const [isTimerFinished, setIsTimerFinished] = useState(false);
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [hasRedirected, setHasRedirected] = useState(false);
+  const [hasRoom, setHasRoom] = useState(false);
 
   function closeModal() {
     setIsOpen(false)
@@ -47,13 +55,30 @@ export default function MatchButtonWrapper({
     setIsOpen(true)
   }
 
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [otherMatch, setOtherMatch] = useState('');
-  const [isPairCreated, setIsPairCreated] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
-  const [name, setName] = useState(session?.user?.name ?? localStorage.getItem("name") ?? 'null')
-  const [isTimerFinished, setIsTimerFinished] = useState(false);
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const router = useRouter()
+  
+  /* useEffect(() => {
+    if (roomId) { // Check if roomId is valid
+      router.push(`/whiteboard/${roomId}`);
+    }
+  }, [roomId]); */
+
+  useEffect(() => {
+    fetchPair(session?.user?.name ?? "").then((result) => {
+      if (result) {
+        console.log("session found in match button wrapper")
+        setHasRoom(true)
+        setSessionExists(result.roomId)
+      }
+  })
+  })  
+
+  useEffect(() => {
+    if (roomId && !hasRedirected) {
+      router.push(`/whiteboard/${roomId}`);
+      setHasRedirected(true);
+    }
+  }, [roomId, hasRedirected]);
 
   const connect = () => {
     const newSocket = io('http://localhost:8081');
@@ -62,16 +87,26 @@ export default function MatchButtonWrapper({
       console.log("socket connected");
       setSocket(newSocket);
     });
-    var roomId: any;
+    var roomId: string;
     newSocket.on('match-found', (msg) => {
       setName((msg.username2 === session?.user?.name) ? msg.username2: msg.username1)
       const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
-      roomId = msg.roomId;
+      roomId = msg.room;
+      setRoomId(roomId)
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
-      /* socket.emit('join-room', "joined room: ${roomId}");
-      localStorage.setItem('roomId', roomId); */
+      console.log(roomId)
+       // new
+
+    console.log(hasRedirected, roomId)
+    if (!hasRedirected && roomId) {
+      newSocket.emit('join-room', { room: roomId })
+      console.log('in redirect')
+      router.push(`/whiteboard/${roomId}`);
+      setHasRedirected(true);
+    }
+
       newSocket.disconnect();
     });
     newSocket.on("disconnect", () => {
@@ -80,7 +115,7 @@ export default function MatchButtonWrapper({
     /* socket.on('join-room', function(io){
       io.join(roomId);
     }) */
-    
+
     return newSocket;
   };
 
@@ -90,7 +125,6 @@ export default function MatchButtonWrapper({
       const response = await GET(new NextRequest('http://localhost:8080' + '/api/v1/questions?page=1&limit=10', { method: 'GET' }));
       const data = await response.json();
       const filteredQuestions = data.filter((qn: Question) => qn.complexity === localStorage.getItem('selectedDifficulty'));
-
       setQuestions(filteredQuestions);
 
       const username = session?.user?.name ?? localStorage.getItem("name") ?? 'null';
@@ -106,6 +140,7 @@ export default function MatchButtonWrapper({
       //handle error
     }
   }
+  
 
   async function handleCancelMatch() {
     try {
@@ -139,7 +174,7 @@ export default function MatchButtonWrapper({
     setOtherMatch('')
     if (socket != null) {
       socket.disconnect();
-    }    
+    }
     closeModal()
     setSeconds(30)
   }
@@ -191,11 +226,14 @@ export default function MatchButtonWrapper({
 
   return (
     <>
-      <button
-        onClick={handleButtonClick}
-        className="flex items-center bg-theme text-gray-800 font-dmserif font-medium text-lg border rounded py-2 px-5 shadow-md cursor-pointer font-dmserif transition-all duration-300 hover:shadow-lg active:scale-95">
-        {children}
-      </button>
+<button
+  onClick={handleButtonClick}
+  className={`flex items-center bg-theme text-gray-800 font-dmserif font-medium text-lg border rounded py-2 px-5 shadow-md font-dmserif ${hasRoom ? "cursor-not-allowed hover:bg-gray-300" : "cursor-pointer transition-all duration-300 hover:shadow-lg active:scale-95"}`}
+  disabled={hasRoom} 
+>
+  {hasRoom ? children : children}
+</button>
+
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={() => handleClickOutside()}>
           <Transition.Child
@@ -266,51 +304,46 @@ export default function MatchButtonWrapper({
                 >
                   <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                     {isPairCreated ? (
-                      <Dialog.Title
-                        as="h3"
-                        className="text-lg font-medium leading-6 text-gray-900"
-                      >
-                        You have been matched with {otherMatch}
-                      </Dialog.Title>
+                      <div>
+                        <Dialog.Title
+                          as="h3"
+                          className="text-lg font-medium leading-6 text-gray-900"
+                        >
+                          You have been matched with {otherMatch}
+                        </Dialog.Title>
+                        </div>
+                    ) :
+                      <div>
+                        <Dialog.Title
+                          as="h3"
+                          className="text-lg font-medium leading-6 text-gray-900"
+                        >
+                          Matching you with a peer...
+                        </Dialog.Title>
 
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-500">
+                            {seconds} seconds left
+                          </p>
 
-                      // <RoomProvider id="my-room" initialPresence={{}}>
-                      //   <ClientSideSuspense fallback="Loading…">
-                      //     {() => <Editor />}
-                      //   </ClientSideSuspense>
-                      // </RoomProvider>
+                        </div>
 
-
-                    ) : <Dialog.Title
-                      as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900"
-                    >
-                      Matching you with a peer...
-                    </Dialog.Title>}
-
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        {seconds} seconds left
-                      </p>
-
-                    </div>
-
-                    <div className="mt-4">
-                      <button
-                        type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                        onClick={handleCloseClick}
-                      >
-                        I'm impatient
-                      </button>
-                    </div>
+                        <div className="mt-4">
+                          <button
+                            type="button"
+                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                            onClick={handleCloseClick}
+                          >
+                            I'm impatient
+                          </button>
+                        </div>
+                      </div>}
                   </Dialog.Panel>
                 </Transition.Child>
               </div>
             </div>
           )}
         </Dialog>
-
       </Transition>
     </>
 
