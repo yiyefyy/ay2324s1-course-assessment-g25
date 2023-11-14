@@ -7,9 +7,8 @@ export interface PAIR {
   roomId: string,
   username1: string,
   username2: string,
-  complexity: string,
-  isDone: boolean
-  /*   question: string */
+  complexity: string
+  questionId: string,
 }
 
 async function fetchData(api: string, requestOptions = {}): Promise<any> {
@@ -21,13 +20,14 @@ async function fetchData(api: string, requestOptions = {}): Promise<any> {
   return results.res
 }
 
-export async function fetchPairByRoom(roomId: string): Promise<PAIR> {
-  const fetchPairApi = `${BASE_URL}/getPair/${roomId}`
+export async function fetchPairByRoom(roomId: string | string[]): Promise<PAIR> {
+  const fetchPairApi = `${BASE_URL}/getByRoom/${roomId}`
   return fetchData(fetchPairApi)
 }
 
-export async function deletePair(username: string): Promise<void> {
-  const fetchPairApi = `${BASE_URL}/getPair/${username}`
+export async function deletePair(roomId: string| string[]): Promise<void> {
+  console.log("delete pair called in routes")
+  const fetchPairApi = `${BASE_URL}/deletePair/${roomId}`
   return fetchData(fetchPairApi)
 }
 
@@ -41,7 +41,19 @@ export async function fetchAllPairs(): Promise<PAIR[]> {
 }
 
 export async function fetchRoomId(username: string): Promise<String> {
-  return fetchData(`${BASE_URL}/${username}`)
+  return fetchData(`${BASE_URL}/getRoomId/${username}`)
+}
+
+export async function putQuestionByRoomId(roomId: string | string[], questionId: string): Promise<PAIR> {
+  const putQuestionApi = `${BASE_URL}/editByRoom/${roomId}`;
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ roomId, questionId }),
+  };
+  return fetchData(putQuestionApi, requestOptions);
 }
 
 export const findMatch = (username: string, complexity: string) => {

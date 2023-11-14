@@ -29,7 +29,6 @@ const io = new Server(server, {
 const socket = io.on('connection', (socket) => {
 
   console.log('User is connected');
-
   socket.on('find-match', ({ username, complexity }) => {
     console.log("socket find-match received")
     findMatch(username, complexity);
@@ -45,9 +44,30 @@ const socket = io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('A user disconnected');
   });
+  socket.on('join-room', ({ room }) => {
+    socket.join(room)
+    console.log("joined room: " + room)
+  })
+  socket.on('message', ({ room, message }) => {
+    console.log("send message " + room)
+    socket.broadcast.to(room).emit('end-session', { message })
+  })
+  socket?.on('confirmEndSession', ({room, message}) => {
+    console.log("confirm end")
+    socket.broadcast.to(room).emit('confirmed', {message})
+  })
+  socket?.on('stay-session', ({room, message}) => {
+    socket.broadcast.to(room).emit('partner-stay', {message})
+  })
+  socket.on('partner-disconnect', ({room, message}) => {
+    socket.broadcast.to(room).emit('partner-left', {message})
+  })
+  socket.on('question-chosen', ({room, message}) => {
+    console.log("question chosen socket received", room)
+    socket.broadcast.to(room).emit('partner-chose-question', {message})
+  })
 });
 
-const localIPAddress = '0.0.0.0'
 db.sequelize.sync().then(() => {
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
@@ -70,6 +90,11 @@ function roomId() {
 var connected = false;
 var pushed = false;
 
+const endSession = async (room, message) => {
+  console.log("send message " + room)
+  socket.to(room).emit('end-session', { message })
+}
+
 const findMatch = async (username, complexity) => {
   console.log("find match called" + queue);
   let interval;
@@ -79,7 +104,7 @@ const findMatch = async (username, complexity) => {
       if (otherUser != null) {
         console.log(queue);
         const room = roomId();
-        
+
         // make a POST request to create a new room using the room id
         /* const response = await fetch(`http://localhost:3001/api/v1/rooms`, {
           method: 'POST',
@@ -88,11 +113,11 @@ const findMatch = async (username, complexity) => {
           },
           body: JSON.stringify({
             "id": room,
-            "defaultAccesses": [ "room:write" ],
+            "defaultAccesses": ["room:write"],
             "metadata": { "color": "blue" }
           }),
-        })
-        console.log(await response.json()) */
+        }) */
+        //console.log(await response.json())
 
         socket.emit('match-found', { username1: username, username2: otherUser.username, complexity, room });
         console.log(`you have been matched with ${otherUser.username}`);
