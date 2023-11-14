@@ -55,16 +55,17 @@ export default function Whiteboard({
   const handleEndSession = () => {
     setIsSender(true)
     setEnd(true)
-    socket?.emit('message', { room: room, message: "partner wishes to end session, do you wish to proceed?" })
+    socket?.emit('message', { room: room, message: "Partner wishes to end session, do you wish to proceed?" })
     console.log(room, isSender)
   }
 
   useEffect(() => {
     setName(session?.user?.name ?? '')
     fetchQuestionByRoomId(room).then(result => setQuestion(result))
+    console.log(question)
     connect()
     const handleBeforeUnload = () => {
-      socket?.emit('partner-disconnect', { room, message: "partner is disconnected" });
+      socket?.emit('partner-disconnect', { room, message: "Partner is disconnected" });
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
@@ -98,9 +99,9 @@ export default function Whiteboard({
       //closeModal()
     })
     socket?.on('partner-left', ({ room, message }) => {
-      setMessages(message)
       setIsOpen(true)
       setIsEnd(true)
+      setMessages(message)
     })
     //handleEndSession();
     return socket
@@ -237,7 +238,7 @@ export default function Whiteboard({
                     {isEnd ? (
                       <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                         <Dialog.Title className="text-lg font-medium leading-6 text-gray-900 pb-4">
-                          Partner wants to end session, would you like to
+                          {messages}
                         </Dialog.Title>
                         <div className="flex flex-row gap-2 w-full justify-between">
                           <button

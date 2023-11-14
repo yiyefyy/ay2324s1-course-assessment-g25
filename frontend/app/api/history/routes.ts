@@ -1,5 +1,3 @@
-import { PrismaPromise } from "@prisma/client/runtime/library"
-
 const BASE_URL = 'http://localhost:8000/history'
 
 interface HISTORY {
