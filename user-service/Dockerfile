@@ -16,6 +16,8 @@ RUN npm install
 # CI mode
 RUN npm ci
 
+RUN npx kill-port 8080
+
 # Expose user service to port 8080.
 EXPOSE 8080
 

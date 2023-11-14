@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:17-alpine
 
 WORKDIR /app
 
@@ -15,7 +15,6 @@ RUN npm ci
 
 # Copy the rest of the source code into the container.
 COPY . .
-
 
 # Liveblocks uses port 3000 for the front end.
 # But local host will use port 3001 for collaboration service.

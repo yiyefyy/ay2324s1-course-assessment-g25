@@ -13,13 +13,13 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link
-          href="/favicon.ico"
+          href="/favicon.png"
           rel="icon"
           sizes="32x32"
           type="image/png"
         />
         <link
-          href="/favicon.ico"
+          href="/favicon.png"
           rel="icon"
           sizes="16x16"
           type="image/png"

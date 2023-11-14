@@ -50,8 +50,10 @@ export const authOptions: NextAuthOptions = {
         // If the user doesn't provide an email or password, return null.
         if (!email || !password) return null;
 
+////////////////////////////////////////////////////////////////////////////////////////////
+        // Frontend container doesn't work here 
         // Otherwise, check the database for a user with the provided email and password.
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirstOrThrow({
           where: { email: email }
         })
 

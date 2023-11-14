@@ -37,10 +37,15 @@ cd kubernetes
 4. Deploy to kubernetes!
 
 ```bash
- kubectl apply -k .
+kubectl apply -k .
 ```
 
 5. MUST DO: config Port Forwarding for all services!
 
 6. You can now access PeerPrep [here](http://localhost:3000/).
 
+7. When you are done, delete the cluster.
+
+```bash
+kubectl delete -k .
+```

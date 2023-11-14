@@ -10,6 +10,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { IconContext } from 'react-icons/lib';
+import UserIconWrapper from '../../wrappers/UserIconWrapper';
 
 export default function Profile() {
     const [sidebar, setsidebar] = useState(false);
@@ -72,14 +73,14 @@ export default function Profile() {
     return (
         <div className="bg-white min-h-screen">
             <IconContext.Provider value={{ color: '#000000' }}>
-                <div className="bg-green-50 flex justify-start items-center h-20">
+                <div className="bg-theme flex justify-between items-center h-20 px-5">
                     <div className='flex items-center spcae-x-3' >
                         <Link href="#" className="ml-7 mr-2 text-black text-2xl">
                             <FaIcons.FaBars onClick={showSideBar} />
                         </Link>
                         <p className="flex items-center px-4 py-3 text-xl text-black font-semibold">View Profile</p>
                     </div>
-                    <nav className={sidebar ? "bg-green-50 w-64 h-screen fixed top-0 left-0 transform transition-transform duration-300 translate-x-0 text-black" : "bg-gray-300 w-64 h-screen fixed top-0 left-0 -translate-x-full transition-transform duration-800 flex justify-center text-white"}>
+                    <nav className={sidebar ? "bg-theme w-64 h-screen fixed top-0 left-0 transform transition-transform duration-300 translate-x-0 text-black" : "bg-gray-300 w-64 h-screen fixed top-0 left-0 -translate-x-full transition-transform duration-800 flex justify-center text-white"}>
                         <ul className="w-full" onClick={showSideBar}>
                             <li className="w-screen h-20 flex items-center">
                                 <Link href='#' className="ml-8 text-black text-2xl">
@@ -104,12 +105,12 @@ export default function Profile() {
                 <div className="bg-white  overflow-hidden">
                     <div className="p-7">
                         {/* User Information */}
-                        <h1 className="text-lg font-semibold mb-2">Hi, {storedName}</h1>
+                        <h1 className="text-lg font-semibold mb-2">     You can change your profile here. {storedName}</h1>
 
                         {/* Contact Information */}
                         <div className="mt-4">
                             <p className="text-black">
-                                <span className="font-semibold">Email:</span>{" "}
+                                <span className="font-semibold"></span>{" "}
                                 {storedEmail}
                             </p>
                         </div>
@@ -149,7 +150,7 @@ export default function Profile() {
                                     <p className="flex hover:underline"> {editProfile ? 'Save' : ''} </p>
                                 </button>
                             </div>
-                            <button className="p-1 text-red-700 pt-4 ml-14 list-none no-underline text-xs  flex;" onClick={handleDelete}>
+                            <button className="p-1 text-red-700 pt-4 ml-14 font-semibold list-none no-underline text-sm  flex;" onClick={handleDelete}>
                                 <p className="flex hover:underline">{editProfile ? '' : 'Delete Account'}</p>
                             </button>
                         </>

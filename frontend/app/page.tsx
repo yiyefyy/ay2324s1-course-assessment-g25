@@ -12,8 +12,6 @@ import WhiteboardButtonWrapper from '../wrappers/WhiteboardButtonWrapper';
 import { authOptions } from './api/auth/[...nextauth]/authOptions';
 import ExistingSessionWrapper from '@/wrappers/ExistingSessionWrapper';
 
-//import LOGO from '../public/logo.jpg';
-
 
 export default async function Home() {
   const session: any = await getServerSession(authOptions);
@@ -77,9 +75,6 @@ export default async function Home() {
               // show question interface if logged in
               <div>
                 <div>
-                  <WhiteboardButtonWrapper>
-                    {/* <button>Go to Code Editor</button> */}
-                  </WhiteboardButtonWrapper>
                   <QuestionsTableWrapper />
                 </div>
               </div>

@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:17-alpine
 
 WORKDIR /app
 
@@ -16,11 +16,11 @@ RUN npm ci
 # Copy the rest of the source code into the container.
 COPY . .
 
-# Generate Prisma client code
+# # Generate Prisma client code
 RUN npx prisma generate
 
-# kill all processes running on port 3000 since frontend need to use prot 3000.
-RUN npx kill-port 3000
+# # kill all processes running on port 3000 since frontend need to use prot 3000.
+# RUN npx kill-port 3000
 
 # Expose front end port 3000.
 EXPOSE 3000

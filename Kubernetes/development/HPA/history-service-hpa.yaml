@@ -2,13 +2,13 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: matching-service-hpa
+  name: history-service-hpa
   namespace: development
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: matching-service-development-dev
+    name: history-service-development-dev
   minReplicas: 1
   maxReplicas: 5
   targetCPUUtilizationPercentage: 60

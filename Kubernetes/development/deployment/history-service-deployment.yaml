@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: matching-service-deployment-dev
+  name: history-service-deployment-dev
   namespace: development
 spec:
     replicas: 1
     selector:
       matchLabels:
-        app: matching-service
+        app: history-service
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -16,13 +16,13 @@ spec:
     template:
       metadata:
         labels:
-          app: matching-service
+          app: history-service
       spec:
         containers:
-        - image: wxy1203/3219assignment-matching-service:v2
-          name: matching-service-container
+        - image: wxy1203/3219assignment-history-service:v3
+          name: history-service-container
           ports:
-          - containerPort: 8081
+          - containerPort: 8000
           resources:
             requests:
               memory: "150Mi" # Request 150MB of memory
@@ -34,7 +34,7 @@ spec:
             - name: PORT
               valueFrom:
                 configMapKeyRef:
-                  name: user-service-config-dev
+                  name: history-service-config-dev
                   key: PORT
 
 status: {} # Empty status section

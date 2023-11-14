@@ -18,6 +18,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link
+          href="/favicon.png"
+          rel="icon"
+          sizes="32x32"
+          type="image/png"
+        />
+        <link
+          href="/favicon.png"
+          rel="icon"
+          sizes="16x16"
+          type="image/png"
+        />
+      </head>
       <body className={inter.className}>
         <SessionProviderWrapper>
           {children}
