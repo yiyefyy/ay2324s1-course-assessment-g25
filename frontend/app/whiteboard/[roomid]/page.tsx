@@ -85,10 +85,11 @@ export default function Whiteboard() {
       setIsEnd(true)
     });
     socket?.on('confirmed', ({ message }) => {
+      addHistory(room, session?.user?.name ?? '', question)
+      console.log("session user name " + session.user.name)
       setIsOpen(true)
       setMessages(message)
       setConfirmed(true)
-      addHistory(room, name, question)
       router.push('/')
     })
     socket?.on('partner-stay', ({ message }) => {
@@ -130,7 +131,7 @@ export default function Whiteboard() {
     // Send a confirmation message to the backend
     socket?.emit('confirmEndSession', { room, message: "partner ended session" });
     socket?.disconnect()
-    addHistory(room, name, question)
+    addHistory(room, session?.user?.name ?? '', question)
     router.push(`/`)
   };
  
