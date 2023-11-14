@@ -57,12 +57,6 @@ export default function MatchButtonWrapper({
 
   const router = useRouter()
 
-  /* useEffect(() => {
-    if (roomId) { // Check if roomId is valid
-      router.push(`/whiteboard/${roomId}`);
-    }
-  }, [roomId]); */
-
   useEffect(() => {
     fetchPair(session?.user?.name ?? "").then((result) => {
       if (result) {
@@ -70,7 +64,9 @@ export default function MatchButtonWrapper({
         setHasRoom(true)
         setSessionExists(result.roomId)
       }
-    })
+    }).catch((err) => {
+      setHasRoom(false)
+    } )
   })
 
   useEffect(() => {
