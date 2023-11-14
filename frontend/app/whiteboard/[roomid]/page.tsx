@@ -17,7 +17,6 @@ import { Dialog, Transition } from '@headlessui/react'
 import { addHistory } from "@/app/api/history/routes";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { getServerSession } from 'next-auth';
-import EndSessionButton from "@/wrappers/EndSessionButton";
 
 export default function Whiteboard() {
   
