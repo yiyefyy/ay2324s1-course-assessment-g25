@@ -1,7 +1,7 @@
 'use client'
 
 import { GET } from '../app/api/v1/questions/route'
-import { GET_ID } from '../app/api/v1/questions/[id]/route'
+import { GET as GET_ID } from '../app/api/v1/questions/[id]/route'
 import { NextRequest } from "next/server";
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
