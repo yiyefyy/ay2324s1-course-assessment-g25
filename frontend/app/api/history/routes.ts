@@ -21,7 +21,7 @@ async function fetchData(api: string, requestOptions = {}): Promise<any> {
 export async function addHistory(roomId: string | string[], username: string, questionId: string): Promise<HISTORY> {
     const addHistoryApi = `${BASE_URL}/add`
     const requestOptions = {
-        method: 'CREATE',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
