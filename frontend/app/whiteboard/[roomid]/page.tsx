@@ -10,32 +10,19 @@ import { useParams, useSearchParams } from "next/navigation";
 import { fetchPairByRoom, fetchQuestionByRoomId } from "@/app/api/match/routes";
 import AIChatButton from "@/components/AIChatButton"
 import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
-import MatchButtonWrapper from "@/wrappers/MatchButtonWrapper";
 import { useRouter } from 'next/navigation';
 import { deletePair } from "@/app/api/match/routes";
 import { Dialog, Transition } from '@headlessui/react'
 import { addHistory } from "@/app/api/history/routes";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { getServerSession } from 'next-auth';
+import { useSession } from 'next-auth/react';
 
 export default function Whiteboard() {
   
-  const session: any = async () => {
-    return await getServerSession(authOptions);
-  }
+  const { data: session, status } = useSession();
+  console.log("session name " + session?.user?.name)
   const params = useParams();
-
-  // dummy question. input api here or wtv to call for correct question
-
-  /* const question = {
-    "_id": "654289d66292a524af80e0ab",
-    "owner": "Deon",
-    "title": "Palindrome Checker",
-    "description": "Write a Python function to check if a given string is a palindrome. Palindromes are strings that read the same backward as forward.",
-    "category": "String Manipulation",
-    "complexity": "Easy",
-    "__v": 0
-  } */
 
   let [isOpen, setIsOpen] = useState(false)
   let [isEnd, setIsEnd] = useState(false)
@@ -85,7 +72,6 @@ export default function Whiteboard() {
     });
     socket?.on('confirmed', ({ message }) => {
       addHistory(room, session?.user?.name ?? '', question)
-      console.log("session user name " + session.user.name)
       setIsOpen(true)
       setMessages(message)
       setConfirmed(true)
