@@ -132,7 +132,7 @@ export default function Whiteboard() {
     socket?.disconnect()
     addHistory(room, name, question)
     router.push(`/`)
-  }; 
+  };
  
   const handleStart = () => {
     const socket = io('http://localhost:8081');
@@ -210,6 +210,8 @@ export default function Whiteboard() {
             </div>
           </div>
           )}
+          {/* {isEnd? 
+          (<EndSessionButton roomId={room} session={session} socket={socket} isEnd={isEnd}></EndSessionButton>):<></> } */}
         <Transition appear show={isOpen} as={Fragment}>
           <Dialog as="div" className="relative z-10" onClose={() => { }}>
             <Transition.Child
@@ -304,6 +306,7 @@ export default function Whiteboard() {
       </div>
     </div >
   );
+
 }
 
 

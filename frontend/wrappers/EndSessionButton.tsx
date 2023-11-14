@@ -15,11 +15,13 @@ import { Session } from 'next-auth'
 export default function EndSessionButton({
     roomId,
     socket,
-    session
+    session,
+    isEnd
 }: {
     roomId: string | string[];
     socket: Socket | null;
     session: Session | null;
+    isEnd: boolean | null
 }) {
 
     // dummy question. input api here or wtv to call for correct question
@@ -35,8 +37,8 @@ export default function EndSessionButton({
     } */
 
     let [isOpen, setIsOpen] = useState(true)
-    let [isEnd, setIsEnd] = useState(false)
-    let [end, setEnd] = useState(false)
+    let [end, setIsEnd] = useState(isEnd)
+    //let [end, setEnd] = useState(false)
     const [messages, setMessages] = useState([]);
 
     let [isStart, setIsStart] = useState(false)
@@ -163,7 +165,7 @@ export default function EndSessionButton({
                             leaveTo="opacity-0 scale-95"
                         >
                             <div>
-                                {isEnd ? (
+                                {end ? (
                                     <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                         <Dialog.Title className="text-lg font-medium leading-6 text-gray-900 pb-4">
                                             {messages}
