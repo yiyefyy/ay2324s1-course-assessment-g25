@@ -26,8 +26,9 @@ const sequelize = new Sequelize(
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+db.attemptedQuestion = require('../models/attemptedQuestions')(sequelize, Sequelize);
 
-fs
+/* fs
   .readdirSync(__dirname)
   .filter(file => {
     return (
@@ -50,7 +51,7 @@ fs
   })
   .catch((error) => {
     console.error('Error synchronizing the database:', error);
-  });
+  }); */
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {

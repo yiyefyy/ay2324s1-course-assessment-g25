@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         }
     }, {
-        tableName: 'history',
+        tableName: 'attemptedquestions',
         timestamps: false, // If you don't want Sequelize to manage createdAt and updatedAt columns
         indexes: [
             {
