@@ -8,6 +8,6 @@ export const UserSideBar = [
     },
     {
         title: 'Delete Account',
-        path: '../sign_in',
+        path: '../delete',
     }
 ]
