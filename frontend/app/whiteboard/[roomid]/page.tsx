@@ -42,6 +42,7 @@ export default function Whiteboard() {
   const router = useRouter()
 
   const handleEndSession = () => {
+    setIsOpen(true)
     setIsSender(true)
     setEnd(true)
     socket?.emit('message', { room: room, message: "Partner wishes to end session, do you wish to proceed?" })
