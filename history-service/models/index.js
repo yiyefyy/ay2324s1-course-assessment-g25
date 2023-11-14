@@ -42,7 +42,7 @@ fs
     db[model.name] = model;
   });
 
-  sequelize.sync()
+  sequelize.sync({ force: true })
   .then(() => {
     console.log('Database synchronized successfully.');
     

@@ -55,6 +55,10 @@ export async function putQuestionByRoomId(roomId: string | string[], questionId:
   return fetchData(putQuestionApi, requestOptions);
 }
 
+export async function fetchQuestionByRoomId(roomId: string | string[]): Promise<string> {
+  return fetchData(`${BASE_URL}/getQuestionId/${roomId}`)
+}
+
 export const findMatch = (username: string, complexity: string) => {
   const data = {username, complexity};
   socket.emit('find-match', data);

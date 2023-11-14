@@ -3,8 +3,8 @@ const historyController = require("../controllers/historyController");
 const historyRouter = express.Router();
 
 historyRouter.post("/add", historyController.addQuestions);
-historyRouter.get("./:username", historyController.getEventByUser);
-historyRouter.get("./roomId", historyController.getEventByRoomId);
-historyRouter.get("./questionId", historyController.getEventByQuestionId);
+historyRouter.get("./byUser/:username", historyController.getHistoryByUser);
+historyRouter.get("./byRoomId/roomId", historyController.getHistoryByRoomId);
+historyRouter.get("./byQuestionId/questionId", historyController.getHistoryByQuestionId);
 
 module.exports = historyRouter;

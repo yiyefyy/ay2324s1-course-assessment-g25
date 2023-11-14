@@ -3,19 +3,21 @@ const { Op } = require('sequelize');
 
 const addQuestions = async (req, res, next) => {
     try {
-        const { roomId, username, questionId, attempedDate } = req.body;
+        const { roomId, username, questionId } = req.body;
+
+        const now = new Date();
+        const singaporeTime = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Singapore' });
+        const attempedDate = singaporeTime.format(now);
 
         if (!roomId, !username, !questionId, !attempedDate) {
             res.status(400).json({ error: "Missing field" });
             return;
         }
 
-        const count = await Events.count({
+        const count = await AttemptedQuestions.count({
             where: {
-                [Op.or]: [
-                    { roomId: roomtId,
-                    username: username },
-                ],
+                questionId: questionId,
+                username: username,
             },
         });
 
@@ -24,25 +26,25 @@ const addQuestions = async (req, res, next) => {
             return;
         }
 
-        const AttemptedQuestion = await AttemptedQuestions.create({
+        const attemptedQuestion = await AttemptedQuestions.create({
             roomId: roomId,
             username: username,
             questionId: questionId,
             attempedDate: attempedDate
         });
 
-        res.status(201).json({ res: AttemptedQuestion });
+        res.status(201).json({ res: attemptedQuestion });
     } catch (err) {
         next(err);
     }
 };
 
-const getEventByUser = async (req, res, next) => {
+const getHistoryByUser = async (req, res, next) => {
     try {
         const username = req.params.username;
-        const questionList = await Events.findAll({where: {username}});
+        const questionList = await AttemptedQuestions.findAll({ where: { username } });
         if (!questionList) {
-            res.status(404).json({ error: "Event does not exist!" });
+            res.status(404).json({ error: "Questions does not exist!" });
             return;
         }
         res.status(200).json({ res: questionList });
@@ -51,10 +53,10 @@ const getEventByUser = async (req, res, next) => {
     }
 }
 
-const getEventByRoomId = async (req, res, next) => {
+const getHistoryByRoomId = async (req, res, next) => {
     try {
         const roomId = req.params.roomId;
-        const questionList = await Events.findAll({where: {roomId}});
+        const questionList = await AttemptedQuestions.findAll({ where: { roomId } });
         if (!questionList) {
             res.status(404).json({ error: "Event does not exist!" });
             return;
@@ -65,10 +67,10 @@ const getEventByRoomId = async (req, res, next) => {
     }
 }
 
-const getEventByQuestionId = async (req, res, next) => {
+const getHistoryByQuestionId = async (req, res, next) => {
     try {
         const questionId = req.params.questionId;
-        const questionList = await Events.findAll({where: {questionId}});
+        const questionList = await Events.findAll({ where: { questionId } });
         if (!questionList) {
             res.status(404).json({ error: "Event does not exist!" });
             return;
@@ -80,8 +82,8 @@ const getEventByQuestionId = async (req, res, next) => {
 }
 
 module.exports = {
-    getEventByQuestionId,
-    getEventByRoomId,
-    getEventByUser,
+    getHistoryByQuestionId,
+    getHistoryByRoomId,
+    getHistoryByUser,
     addQuestions
 }

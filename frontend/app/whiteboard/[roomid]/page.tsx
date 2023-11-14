@@ -6,21 +6,28 @@ import Image from 'next/image';
 import React from 'react';
 import io, { Socket } from 'socket.io-client'
 import { Room } from "./Room";
-import { Modal, Button } from "react-bootstrap";
 import { useParams, useSearchParams } from "next/navigation";
-import { fetchPairByRoom } from "@/app/api/match/routes";
+import { fetchQuestionByRoomId } from "@/app/api/match/routes";
 import AIChatButton from "@/components/AIChatButton"
 import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
 import { useRouter } from 'next/navigation';
 import { deletePair } from "@/app/api/match/routes";
 import { Dialog, Transition } from '@headlessui/react'
+import { addHistory } from "@/app/api/history/routes";
+import { Session } from 'next-auth'
 
-export default function Whiteboard() {
+export default function Whiteboard({
+  children,
+  session
+}: {
+  children: React.ReactNode;
+  session: Session | null;
+}) {
   const params = useParams();
 
   // dummy question. input api here or wtv to call for correct question
 
-  const question = {
+  /* const question = {
     "_id": "654289d66292a524af80e0ab",
     "owner": "Deon",
     "title": "Palindrome Checker",
@@ -28,7 +35,7 @@ export default function Whiteboard() {
     "category": "String Manipulation",
     "complexity": "Easy",
     "__v": 0
-  }
+  } */
 
   let [isOpen, setIsOpen] = useState(false)
   let [isEnd, setIsEnd] = useState(false)
@@ -39,6 +46,8 @@ export default function Whiteboard() {
   let [isSender, setIsSender] = useState(false)
   let [confirmed, setConfirmed] = useState(false)
   let [stay, setStay] = useState(false)
+  const [question, setQuestion] = useState('')
+  const [name, setName] = useState('')
   const room = params.roomid
 
   const router = useRouter()
@@ -51,6 +60,8 @@ export default function Whiteboard() {
   }
 
   useEffect(() => {
+    setName(session?.user?.name ?? '')
+    fetchQuestionByRoomId(room).then(result => setQuestion(result))
     connect()
     const handleBeforeUnload = () => {
       socket?.emit('partner-disconnect', { room, message: "partner is disconnected" });
@@ -75,6 +86,7 @@ export default function Whiteboard() {
       setIsOpen(true)
       setMessages(message)
       setConfirmed(true)
+      addHistory(room, name, question)
       router.push('/')
     })
     socket?.on('partner-stay', ({ message }) => {
@@ -117,6 +129,7 @@ export default function Whiteboard() {
     socket?.disconnect()
     const roomId = room
     deletePair(roomId)
+    addHistory(room, name, question)
     router.push(`/`)
   };
 
@@ -221,30 +234,30 @@ export default function Whiteboard() {
                   leaveTo="opacity-0 scale-95"
                 >
                   <div>
-                    {isEnd && (
+                    {isEnd ? (
                       <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-  <Dialog.Title className="text-lg font-medium leading-6 text-gray-900 pb-4">
-                        Partner wants to end session, would you like to
-                      </Dialog.Title>
-                      <div className="flex flex-row gap-2 w-full justify-between">
-                        <button
-                          onClick={handleStayClick}
-                          type="button"
-                          className="rounded-md border w-full border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-10"
-                        >
-                          Stay
-                        </button>
-                        <button
-                          onClick={handleConfirmEndSession}
-                          type="button"
-                          className="rounded-md border w-full border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 h-10"
-                        >
-                          End
-                        </button>
-                      </div>
-                    </Dialog.Panel>
-                    )}
-                    {isSender && (
+                        <Dialog.Title className="text-lg font-medium leading-6 text-gray-900 pb-4">
+                          Partner wants to end session, would you like to
+                        </Dialog.Title>
+                        <div className="flex flex-row gap-2 w-full justify-between">
+                          <button
+                            onClick={handleStayClick}
+                            type="button"
+                            className="rounded-md border w-full border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-10"
+                          >
+                            Stay
+                          </button>
+                          <button
+                            onClick={handleConfirmEndSession}
+                            type="button"
+                            className="rounded-md border w-full border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 h-10"
+                          >
+                            End
+                          </button>
+                        </div>
+                      </Dialog.Panel>
+                    ): <></>}
+                    {isSender? (
                       <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                         <Dialog.Title
                           as="h3"
@@ -254,33 +267,32 @@ export default function Whiteboard() {
                         </Dialog.Title>
                         <div>
                           {confirmed ? (
-                            <button
-                              onClick={handleConfirmEndSession}
-                              type="button"
-                              className="rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-12"
-                            >
-                              Confirm end
-                            </button>) : (<div></div>)}
+                            <Dialog.Title
+                            as="h3"
+                            className="text-lg font-medium leading-6 text-gray-900"
+                          >
+                            {messages}
+                          </Dialog.Title>) : (<div></div>)}
                         </div>
                       </Dialog.Panel>
-                    )}
+                    ): <></>}
                     {stay ? (
                       <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-  <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
-    {messages}
-  </Dialog.Title>
-  <div className="mt-4">
-    <button
-      onClick={handleStay}
-      type="button"
-      className="rounded-md border w-full border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-10"
-      >
-      OK
-    </button>
-  </div>
-</Dialog.Panel>
+                        <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
+                          {messages}
+                        </Dialog.Title>
+                        <div className="mt-4">
+                          <button
+                            onClick={handleStay}
+                            type="button"
+                            className="rounded-md border w-full border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-10"
+                          >
+                            OK
+                          </button>
+                        </div>
+                      </Dialog.Panel>
 
-    
+
                     ) : (<div><Dialog.Panel></Dialog.Panel></div>)}
                   </div>
                 </Transition.Child>
