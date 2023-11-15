@@ -10,10 +10,9 @@ import SignUpButtonWrapper from '../wrappers/SignUpWrapper';
 import UserIconWrapper from '../wrappers/UserIconWrapper';
 import WhiteboardButtonWrapper from '../wrappers/WhiteboardButtonWrapper';
 import { authOptions } from './api/auth/[...nextauth]/authOptions';
+import { Children } from 'react';
 import ExistingSessionWrapper from '@/wrappers/ExistingSessionWrapper';
-
 //import LOGO from '../public/logo.jpg';
-
 
 export default async function Home() {
   const session: any = await getServerSession(authOptions);
@@ -80,7 +79,7 @@ export default async function Home() {
                   <WhiteboardButtonWrapper>
                     {/* <button>Go to Code Editor</button> */}
                   </WhiteboardButtonWrapper>
-                  <QuestionsTableWrapper />
+                  <QuestionsTableWrapper children={undefined} session={session} />
                 </div>
               </div>
               :

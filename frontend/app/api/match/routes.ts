@@ -27,8 +27,15 @@ export async function fetchPairByRoom(roomId: string | string[]): Promise<PAIR> 
 
 export async function deletePair(roomId: string| string[]): Promise<void> {
   console.log("delete pair called in routes")
-  const fetchPairApi = `${BASE_URL}/deletePair/${roomId}`
-  return fetchData(fetchPairApi)
+  const deletePairApi = `${BASE_URL}/deletePair/${roomId}`
+  const requestOptions = {
+    method: "DELETE"
+  };
+  const response = await fetch(deletePairApi, requestOptions)
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.error)
+  }
 }
 
 export async function fetchPair(username: string): Promise<PAIR> {
@@ -54,6 +61,10 @@ export async function putQuestionByRoomId(roomId: string | string[], questionId:
     body: JSON.stringify({ roomId, questionId }),
   };
   return fetchData(putQuestionApi, requestOptions);
+}
+
+export async function fetchQuestionByRoomId(roomId: string | string[]): Promise<String> {
+  return fetchData(`${BASE_URL}/getQuestionId/${roomId}`)
 }
 
 export const findMatch = (username: string, complexity: string) => {

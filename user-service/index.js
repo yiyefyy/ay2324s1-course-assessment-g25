@@ -11,7 +11,7 @@ import 'dotenv/config.js';
 
 import cors from 'cors';
 import express from 'express';
-import userRouter from './api/v1/userRouter.js';
+//import userRouter from './api/v1/userRouter.js';
 
 // Create an express app
 const app = express();
@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Configure the app to use the user router for all requests to /api/v1/users
-app.use('/api/v1/users', userRouter);
+//app.use('/api/v1/users', userRouter);
 
 // Configure the app to use the defined port or 8080
 const PORT = process.env.PORT || 8080;

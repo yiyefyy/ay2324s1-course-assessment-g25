@@ -47,6 +47,18 @@ const socket = io.on('connection', (socket) => {
   socket.on('join-room', ({ room }) => {
     socket.join(room)
     console.log("joined room: " + room)
+    const getNumberOfClientsInRoom = (room) => {
+      const clientsInRoom = io.sockets.adapter.rooms.get(room);
+      return clientsInRoom ? clientsInRoom.size : 0;
+    };
+    const numberOfClients = getNumberOfClientsInRoom(room);
+    if (numberOfClients === 2) {
+      const message = 'The room is now ready!'
+      io.in(room).emit('room-ready',{ message });
+    } else {
+      const message = 'Wait for your partner...'
+      io.in(room).emit('wait-for-partner', {message})
+    }
   })
   socket.on('message', ({ room, message }) => {
     console.log("send message " + room)
@@ -65,6 +77,7 @@ const socket = io.on('connection', (socket) => {
   socket.on('question-chosen', ({room, message}) => {
     console.log("question chosen socket received", room)
     socket.broadcast.to(room).emit('partner-chose-question', {message})
+    io.in(room).emit('get-question', {message})
   })
 });
 

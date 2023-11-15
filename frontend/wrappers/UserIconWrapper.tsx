@@ -48,7 +48,7 @@ export default function UserIconWrapper({
                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                   >
                     <EditIcon className='mr-1'/>
-                    Edit profile
+                    View profile
                   </button></Link>
                 )}
               </Menu.Item>

@@ -84,25 +84,45 @@ const addPair = async (req, res, next) => {
 
 const putQuestionByRoomId = async (req, res, next) => {
     try {
-      const { roomId, questionId } = req.body;
-  
-      const pair = await Pair.findOne({
-        where: { roomId: roomId }
-      });
-  
-      if (!pair) {
-        return res.status(404).json({ error: "Pair not found" });
-      }
-  
-      pair.questionId = questionId;
-  
-      await pair.save();
-  
-      res.status(200).json({ success: true, pair: pair });
+        const { roomId, questionId } = req.body;
+
+        const pair = await Pair.findOne({
+            where: { roomId: roomId }
+        });
+
+        if (!pair) {
+            return res.status(404).json({ error: "Pair not found" });
+        }
+
+        pair.questionId = questionId;
+
+        await pair.save();
+
+        res.status(200).json({ success: true, pair: pair });
     } catch (err) {
-      next(err);
+        next(err);
     }
-  };
+};
+
+const getQuestionByRoomId = async (req, res, next) => {
+    try {
+        const roomId = req.params.roomId;
+        const pair = await Pair.findOne({
+            where: { roomId: roomId }
+        });
+
+        if (!pair) {
+            return res.status(404).json({ error: "Pair not found" });
+        }
+
+        /* if (pair.questionId == null) {
+            return res.status(404).json({ error: "Session does not have a questionId" });
+        } */
+        res.status(200).json({res: pair.questionId})
+    } catch (err) {
+        next(err)
+    }
+}
 
 /* const endSession = async (req, res, next) => {
     try {
@@ -139,7 +159,7 @@ const deletePair = async (req, res, next) => {
                 roomId: id
             }
         })
-        res.status(200).json({res: "pair is deleted"})
+        res.status(200).json({ res: 'pair is deleted' })
     } catch (err) {
         next(err)
     }
@@ -152,7 +172,8 @@ module.exports = {
     addPair,
     getPairByRoomId,
     getRoomId,
-    putQuestionByRoomId
+    putQuestionByRoomId,
+    getQuestionByRoomId
 }
 
 
