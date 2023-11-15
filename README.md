@@ -26,6 +26,8 @@ PeerPrep is designed to simplify the technical interview preparation process. So
 
 - Graceful Termination: Users can gracefully terminate their collaborative sessions when they are done.
 
+- More detailed functional and non-functional requirement are in the Project Report under team repo.
+
 
 ## Tech Stack <a name="tech-stack"></a>
 PeerPrep is built using a modern tech stack to ensure robustness and scalability:
@@ -74,11 +76,63 @@ Check out [Docker Desktop Installation](https://www.docker.com/products/docker-d
 3. With Docker Desktop and Our Assignment folder, enter:
 
 ```bash
-    git clone https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g25.git
-    cd ay2324s1-course-assessment-g25
     docker-compose up
 ```
-Your PeerPrep images and containers are set up!
+Or you can go into each service folder and run the npm to start the service:
+
+Frontend:
+
+```bash
+    cd frontend
+    npm install
+    npm ci
+    npm run dev
+```
+
+Collaboration Service:
+
+```bash
+    cd collaboration-service
+    npm install
+    npm ci
+    npm run dev
+```
+
+History Service:
+
+```bash
+    cd history-service
+    npm install
+    npm ci
+    npm run start
+```
+
+Matching Service:
+
+```bash
+    cd matching-service
+    npm install
+    npm ci
+    npm start
+```
+
+Question Service:
+
+```bash
+    cd question-service
+    npm install
+    npm ci
+    npm run dev
+```
+
+User Service:
+
+```bash
+    cd user-service
+    npm install
+    npm ci
+    npm run dev
+```
 
 4. Once the containers are up and running, you can access your PeerPrep environment by opening a web browser and navigating to [local host](http://localhost:3000/). 
 

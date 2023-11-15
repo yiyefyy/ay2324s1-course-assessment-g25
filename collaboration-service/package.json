@@ -3,11 +3,13 @@
   "description": "This example shows how to build a collaborative text editor with Liveblocks, Yjs, CodeMirror, and Next.js.",
   "license": "Apache-2.0",
   "private": true,
+
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "dependencies": {
     "@codemirror/lang-java": "^6.0.1",

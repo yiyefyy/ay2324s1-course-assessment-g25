@@ -16,6 +16,9 @@ RUN npm install
 # CI mode
 RUN npm ci
 
+# kill all processes running on port 8000 since history service need to use prot 8000.
+RUN npx kill-port 8000
+
 # Expose history service to port 8000.
 EXPOSE 8000
 

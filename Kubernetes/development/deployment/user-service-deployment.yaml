@@ -19,17 +19,17 @@ spec:
           app: user-service
       spec:
         containers:
-        - image: wxy1203/3219assignment-user-service:v2
+        - image: wxy1203/user-service:v0
           name: user-service-container
           ports:
           - containerPort: 8080
           resources:
             requests:
-              memory: "3Gi" # Request 3GB of memory
-              cpu: "700m" # Request 0.7 CPU
+              memory: "150Mi" # Request 150MB of memory
+              cpu: "100m" # Request 0.1 CPU
             limits:
-              memory: "4Gi" # Limit memory to 4GB
-              cpu: "1000m" # Limit CPU to 1 CPU
+              memory: "200Mi" # Limit memory to 200MB
+              cpu: "200m" # Limit CPU to 0.2 CPU
           env:
             - name: PORT
               valueFrom:

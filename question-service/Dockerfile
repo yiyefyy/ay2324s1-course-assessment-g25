@@ -16,6 +16,9 @@ RUN npm install
 # CI mode
 RUN npm ci
 
+# Kill port 8084 if it is already in use.
+RUN npx kill-port 8084
+
 # Expose question service to port 8084.
 EXPOSE 8084
 
