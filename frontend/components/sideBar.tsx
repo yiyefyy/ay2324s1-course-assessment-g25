@@ -12,23 +12,5 @@ export const SideBar = [
         path: '../manageQuestions',
         icon: <IoIcons.IoIosPaper/>
 
-    },
-    /* {
-        title: 'View profile',
-        path: '../profile',
-        icon: <IoIcons.IoIosPaper />,
-    },
-    {
-        title: 'Support',
-        path: '../homepage',
-        icon: <IoIcons.IoMdHelpCircle />,
-    },
-    {
-        title: 'Logout',
-        path: '../sign_in',
-    }, */
-    {
-        title: 'Delete Account',
-        path: '../delete',
     }
 ]
