@@ -19,7 +19,7 @@ spec:
           app: question-service
       spec:
         containers:
-        - image: wxy1203/3219assignment-question-service:v2
+        - image: wxy1203/question-service:v0
           name: question-service-container
           ports:
           - containerPort: 8084

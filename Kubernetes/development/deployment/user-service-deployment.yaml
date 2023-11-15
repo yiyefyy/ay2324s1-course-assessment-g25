@@ -19,7 +19,7 @@ spec:
           app: user-service
       spec:
         containers:
-        - image: wxy1203/3219assignment-user-service:v2
+        - image: wxy1203/user-service:v0
           name: user-service-container
           ports:
           - containerPort: 8080

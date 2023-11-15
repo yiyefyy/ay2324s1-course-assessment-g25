@@ -19,7 +19,7 @@ spec:
           app: matching-service
       spec:
         containers:
-        - image: wxy1203/3219assignment-matching-service:v2
+        - image: wxy1203/matching-service:v0
           name: matching-service-container
           ports:
           - containerPort: 8081

@@ -19,7 +19,7 @@ spec:
           app: collaboration-service
       spec:
         containers:
-        - image: wxy1203/3219assignment-collaboration-service:v2
+        - image: wxy1203/collaboration-service:v0
           name: collaboration-service-container
           ports:
           - containerPort: 3000

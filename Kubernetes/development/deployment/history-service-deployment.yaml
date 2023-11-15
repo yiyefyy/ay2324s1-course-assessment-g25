@@ -19,7 +19,7 @@ spec:
           app: history-service
       spec:
         containers:
-        - image: wxy1203/3219assignment-history-service:v3
+        - image: wxy1203/history-service:v0
           name: history-service-container
           ports:
           - containerPort: 8000
