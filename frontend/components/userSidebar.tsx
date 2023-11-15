@@ -5,9 +5,5 @@ export const UserSideBar = [
         title: 'Home',
         path: '../',
         icon: <AiIcons.AiFillHome />,
-    },
-    {
-        title: 'Delete Account',
-        path: '../delete',
     }
 ]
