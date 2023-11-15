@@ -6,29 +6,21 @@ import Image from 'next/image';
 import React from 'react';
 import io, { Socket } from 'socket.io-client'
 import { Room } from "./Room";
-import { Modal, Button } from "react-bootstrap";
 import { useParams, useSearchParams } from "next/navigation";
-import { fetchPairByRoom } from "@/app/api/match/routes";
+import { fetchPairByRoom, fetchQuestionByRoomId } from "@/app/api/match/routes";
 import AIChatButton from "@/components/AIChatButton"
 import QuestionSelectionWrapper from "@/wrappers/QuestionSelectionWrapper";
 import { useRouter } from 'next/navigation';
 import { deletePair } from "@/app/api/match/routes";
 import { Dialog, Transition } from '@headlessui/react'
+import { addHistory } from "@/app/api/history/routes";
+import { useSession } from 'next-auth/react';
 
 export default function Whiteboard() {
+  
+  const { data: session, status } = useSession();
+  console.log("session name " + session?.user?.name)
   const params = useParams();
-
-  // dummy question. input api here or wtv to call for correct question
-
-  const question = {
-    "_id": "654289d66292a524af80e0ab",
-    "owner": "Deon",
-    "title": "Palindrome Checker",
-    "description": "Write a Python function to check if a given string is a palindrome. Palindromes are strings that read the same backward as forward.",
-    "category": "String Manipulation",
-    "complexity": "Easy",
-    "__v": 0
-  }
 
   let [isOpen, setIsOpen] = useState(false)
   let [isEnd, setIsEnd] = useState(false)
@@ -39,21 +31,30 @@ export default function Whiteboard() {
   let [isSender, setIsSender] = useState(false)
   let [confirmed, setConfirmed] = useState(false)
   let [stay, setStay] = useState(false)
+  const [questions, setQuestions] = useState('')
+  const [name, setName] = useState('')
+  const [roomMessage, setRoomMessage] = useState('Click on "startSession" to start coding!')
+  const [openQuestion, setOpenQuestion] = useState(false)
+
   const room = params.roomid
 
+  var question: string
   const router = useRouter()
 
   const handleEndSession = () => {
+    setIsOpen(true)
     setIsSender(true)
     setEnd(true)
-    socket?.emit('message', { room: room, message: "partner wishes to end session, do you wish to proceed?" })
+    socket?.emit('message', { room: room, message: "Partner wishes to end session, do you wish to proceed?" })
     console.log(room, isSender)
   }
 
   useEffect(() => {
+    setName(session?.user?.name ?? '')
+    //console.log(question)
     connect()
     const handleBeforeUnload = () => {
-      socket?.emit('partner-disconnect', { room, message: "partner is disconnected" });
+      socket?.emit('partner-disconnect', { room, message: "Partner is disconnected" });
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
@@ -62,6 +63,9 @@ export default function Whiteboard() {
   }, [isStart]);
 
   const connect = () => {
+    setName(session?.user?.name ?? '')
+    fetchPairByRoom(room).then(result => { question = result.questionId, setQuestions(result.questionId)})
+    console.log("question is " + question)
     //socket.emit('join-room', { room: room })
     console.log("Socket connected" + socket?.connected)
     console.log("connect message")
@@ -72,6 +76,8 @@ export default function Whiteboard() {
       setIsEnd(true)
     });
     socket?.on('confirmed', ({ message }) => {
+      addHistory(room, session?.user?.name ?? '', question)
+      console.log(question)
       setIsOpen(true)
       setMessages(message)
       setConfirmed(true)
@@ -86,13 +92,27 @@ export default function Whiteboard() {
       //closeModal()
     })
     socket?.on('partner-left', ({ room, message }) => {
-      setMessages(message)
       setIsOpen(true)
       setIsEnd(true)
+      setMessages(message)
+    })
+    socket?.on('get-question', ({message}) => {
+      question = message._id
+      setQuestions(message._id)
+      console.log("socket question: " + message._id)
+      console.log(question)
+    })
+    socket?.on('room-ready', ({room, message}) => {
+      setRoomMessage(message)
+      setOpenQuestion(true)
+    })
+    socket?.on('wait-for-partner', ({message}) => {
+      setOpenQuestion(false)
+      setRoomMessage(message)
     })
     //handleEndSession();
     return socket
-  }
+  } 
 
   function closeModal() {
     setIsOpen(false)
@@ -111,15 +131,15 @@ export default function Whiteboard() {
   }
 
   const handleConfirmEndSession = () => {
+    deletePair(room)
     console.log("User confirmed end session");
     // Send a confirmation message to the backend
     socket?.emit('confirmEndSession', { room, message: "partner ended session" });
     socket?.disconnect()
-    const roomId = room
-    deletePair(roomId)
+    addHistory(room, session?.user?.name ?? '', questions)
     router.push(`/`)
   };
-
+ 
   const handleStart = () => {
     const socket = io('http://localhost:8081');
     setSocket(socket)
@@ -141,9 +161,9 @@ export default function Whiteboard() {
       <div className='flex flex-row h-full mx-2 mt-2 '>
         <div className='w-5/12 '>
           <div className='bg-white rounded-lg overflow-auto mr-2 py-4 px-5 h-[calc(100vh-20rem)]'>
-            {isStart
+            {isStart && openQuestion
               ? <QuestionSelectionWrapper roomId={room} socket={socket} />
-              : <h1>Click on "startSession" to start coding!</h1>
+              : <h1>{roomMessage}</h1>
             }
           </div>
 
@@ -196,6 +216,8 @@ export default function Whiteboard() {
             </div>
           </div>
           )}
+          {/* {isEnd? 
+          (<EndSessionButton roomId={room} session={session} socket={socket} isEnd={isEnd}></EndSessionButton>):<></> } */}
         <Transition appear show={isOpen} as={Fragment}>
           <Dialog as="div" className="relative z-10" onClose={() => { }}>
             <Transition.Child
@@ -221,10 +243,10 @@ export default function Whiteboard() {
                   leaveTo="opacity-0 scale-95"
                 >
                   <div>
-                    {isEnd && (
+                    {isEnd ? (
                       <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                         <Dialog.Title className="text-lg font-medium leading-6 text-gray-900 pb-4">
-                          Partner wants to end session, would you like to
+                          {messages}
                         </Dialog.Title>
                         <div className="flex flex-row gap-2 w-full justify-between">
                           <button
@@ -243,9 +265,9 @@ export default function Whiteboard() {
                           </button>
                         </div>
                       </Dialog.Panel>
-                    )}
-                    {isSender && (
-                      <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                    ): <></>}
+                    {isSender? (
+                          <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                         <Dialog.Title
                           as="h3"
                           className="text-lg font-medium leading-6 text-gray-900 pb-4"
@@ -254,16 +276,15 @@ export default function Whiteboard() {
                         </Dialog.Title>
                         <div>
                           {confirmed ? (
-                            <button
-                              onClick={handleConfirmEndSession}
-                              type="button"
-                              className="rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 h-12"
-                            >
-                              Confirm end
-                            </button>) : (<div></div>)}
+                            <Dialog.Title
+                            as="h3"
+                            className="text-lg font-medium leading-6 text-gray-900"
+                          >
+                            {messages}
+                          </Dialog.Title>) : (<div></div>)}
                         </div>
                       </Dialog.Panel>
-                    )}
+                    ): <></>}
                     {stay ? (
                       <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                         <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
@@ -293,4 +314,5 @@ export default function Whiteboard() {
   );
 
 }
+
 

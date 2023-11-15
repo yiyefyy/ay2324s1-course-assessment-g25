@@ -7,22 +7,24 @@ const addQuestions = async (req, res, next) => {
 
         const now = new Date();
         const singaporeTime = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Singapore' });
-        const attempedDate = singaporeTime.format(now);
 
-        if (!roomId, !username, !questionId, !attempedDate) {
+        console.log(`${singaporeTime.format(now)}`)
+
+        if (!roomId, !username, !questionId) {
             res.status(400).json({ error: "Missing field" });
             return;
         }
 
-        const count = await AttemptedQuestions.count({
+        const count = await AttemptedQuestions.findOne({
             where: {
-                questionId: questionId,
+                roomId: roomId,
                 username: username,
             },
         });
 
-        if (count !== null) {
-            res.status(400).json({ error: "Question has been attempted" });
+
+        if (count instanceof AttemptedQuestions) {
+            res.status(400).json({ error: "Session has ended!" });
             return;
         }
 
@@ -30,7 +32,6 @@ const addQuestions = async (req, res, next) => {
             roomId: roomId,
             username: username,
             questionId: questionId,
-            attempedDate: attempedDate
         });
 
         res.status(200).json({ res: attemptedQuestion });
@@ -42,9 +43,9 @@ const addQuestions = async (req, res, next) => {
 const getHistoryByUser = async (req, res, next) => {
     try {
         const username = req.params.username;
-        const questionList = await AttemptedQuestions.findAll({ where: { username } });
+        const questionList = await AttemptedQuestions.findAll({ where: { username: username } });
         if (!questionList) {
-            res.status(404).json({ error: "Questions does not exist!" });
+            res.status(404).json({ error: "Question does not exist!" });
             return;
         }
         res.status(200).json({ res: questionList });
@@ -56,9 +57,9 @@ const getHistoryByUser = async (req, res, next) => {
 const getHistoryByRoomId = async (req, res, next) => {
     try {
         const roomId = req.params.roomId;
-        const questionList = await AttemptedQuestions.findAll({ where: { roomId } });
+        const questionList = await AttemptedQuestions.findAll({ where: { roomId: roomId } });
         if (!questionList) {
-            res.status(404).json({ error: "AttemptedQuestions does not exist!" });
+            res.status(404).json({ error: "Question does not exist!" });
             return;
         }
         res.status(200).json({ res: questionList });
@@ -70,9 +71,9 @@ const getHistoryByRoomId = async (req, res, next) => {
 const getHistoryByQuestionId = async (req, res, next) => {
     try {
         const questionId = req.params.questionId;
-        const questionList = await AttemptedQuestions.findAll({ where: { questionId } });
+        const questionList = await AttemptedQuestions.findAll({ where: { questionId: questionId } });
         if (!questionList) {
-            res.status(404).json({ error: "AttemptedQuestions does not exist!" });
+            res.status(404).json({ error: "Question does not exist!" });
             return;
         }
         res.status(200).json({ res: questionList });

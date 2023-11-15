@@ -29,6 +29,6 @@ export const SideBar = [
     }, */
     {
         title: 'Delete Account',
-        path: '../sign_in',
+        path: '../delete',
     }
 ]

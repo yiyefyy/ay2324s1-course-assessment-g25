@@ -38,7 +38,7 @@ export default function MatchButtonWrapper({
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [otherMatch, setOtherMatch] = useState('');
-  const [roomId, setRoomId] = useState<string|null>(null);
+  const [roomId, setRoomId] = useState<string | null>(null);
   const [isPairCreated, setIsPairCreated] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [name, setName] = useState(session?.user?.name ?? 'null')
@@ -56,12 +56,6 @@ export default function MatchButtonWrapper({
   }
 
   const router = useRouter()
-  
-  /* useEffect(() => {
-    if (roomId) { // Check if roomId is valid
-      router.push(`/whiteboard/${roomId}`);
-    }
-  }, [roomId]); */
 
   useEffect(() => {
     fetchPair(session?.user?.name ?? "").then((result) => {
@@ -70,8 +64,10 @@ export default function MatchButtonWrapper({
         setHasRoom(true)
         setSessionExists(result.roomId)
       }
+    }).catch((err) => {
+      setHasRoom(false)
+    } )
   })
-  })  
 
   useEffect(() => {
     if (roomId && !hasRedirected) {
@@ -89,23 +85,23 @@ export default function MatchButtonWrapper({
     });
     var roomId: string;
     newSocket.on('match-found', (msg) => {
-      setName((msg.username2 === session?.user?.name) ? msg.username2: msg.username1)
-      const match = (msg.username2 === session?.user?.name) ? msg.username1: msg.username2;
+      setName((msg.username2 === session?.user?.name) ? msg.username2 : msg.username1)
+      const match = (msg.username2 === session?.user?.name) ? msg.username1 : msg.username2;
       roomId = msg.room;
       setRoomId(roomId)
       setIsPairCreated(true);
       setOtherMatch(match);
       console.log(`Match found with: ${match}`);
       console.log(roomId)
-       // new
+      // new
 
-    console.log(hasRedirected, roomId)
-    if (!hasRedirected && roomId) {
-      newSocket.emit('join-room', { room: roomId })
-      console.log('in redirect')
-      router.push(`/whiteboard/${roomId}`);
-      setHasRedirected(true);
-    }
+      console.log(hasRedirected, roomId)
+      if (!hasRedirected && roomId) {
+        newSocket.emit('join-room', { room: roomId })
+        console.log('in redirect')
+        router.push(`/whiteboard/${roomId}`);
+        setHasRedirected(true);
+      }
 
       newSocket.disconnect();
     });
@@ -140,7 +136,7 @@ export default function MatchButtonWrapper({
       //handle error
     }
   }
-  
+
 
   async function handleCancelMatch() {
     try {
@@ -226,13 +222,13 @@ export default function MatchButtonWrapper({
 
   return (
     <>
-<button
-  onClick={handleButtonClick}
-  className={`flex items-center bg-theme text-gray-800 font-dmserif font-medium text-lg border rounded py-2 px-5 shadow-md font-dmserif ${hasRoom ? "cursor-not-allowed hover:bg-gray-300" : "cursor-pointer transition-all duration-300 hover:shadow-lg active:scale-95"}`}
-  disabled={hasRoom} 
->
-  {hasRoom ? children : children}
-</button>
+      <button
+        onClick={handleButtonClick}
+        className={`flex items-center bg-theme text-gray-800 font-dmserif font-medium text-lg border rounded py-2 px-5 shadow-md font-dmserif ${hasRoom ? "cursor-not-allowed hover:bg-gray-300" : "cursor-pointer transition-all duration-300 hover:shadow-lg active:scale-95"}`}
+        disabled={hasRoom}
+      >
+        {hasRoom ? children : children}
+      </button>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={() => handleClickOutside()}>
@@ -311,7 +307,7 @@ export default function MatchButtonWrapper({
                         >
                           You have been matched with {otherMatch}
                         </Dialog.Title>
-                        </div>
+                      </div>
                     ) :
                       <div>
                         <Dialog.Title
