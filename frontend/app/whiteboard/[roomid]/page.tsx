@@ -15,6 +15,7 @@ import { deletePair } from "@/app/api/match/routes";
 import { Dialog, Transition } from '@headlessui/react'
 import { addHistory } from "@/app/api/history/routes";
 import { useSession } from 'next-auth/react';
+import AIHintButton from "@/components/AIHintButton";
 
 export default function Whiteboard() {
   
@@ -173,13 +174,11 @@ export default function Whiteboard() {
               <p className="text-gray-300 mb-4">
                 Welcome! How can I assist you today?
               </p>
+              <p className="text-gray-300 mb-4">
+                Get a hint by entering the problem description or chat with AI
+              </p>
               <div className="flex justify-center gap-4">
-                {/* <button className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none">
-                  Generate Prompt
-                </button>
-                <button className="bg-green-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-600 focus:outline-none">
-                  Get Hint
-                </button> */}
+                <AIHintButton />
                 <AIChatButton />
               </div>
             </div>
